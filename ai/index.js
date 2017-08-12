@@ -4,6 +4,7 @@
 'use strict';
 
 const convert = require('convert-units');
+export let output;
 
 exports.momo = (req, res) => {
   let {fromNumber, fromName, toName} = req.body.result.parameters;
@@ -15,7 +16,7 @@ exports.momo = (req, res) => {
     else return name
   });
   const toNumber = convert(fromNumber).from(fromName).to(toName);
-  const output = `${fromNumber} ${fromName} is ${toNumber} ${toName}`;
+  output = `${fromNumber} ${fromName} is ${toNumber} ${toName}`;
 
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify({ 'speech': output, 'displayText': output }))
