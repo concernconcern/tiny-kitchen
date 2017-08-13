@@ -17,7 +17,6 @@ Momo.initialize({
     mode:"normal", // This parameter is not required as it will be normal by default
     continuous: true,
 
-
 });
 
 /**
@@ -59,6 +58,7 @@ class UserHome extends React.Component{
       }
         )}
 <Step text={recipeSteps[this.state.i]} />
+
     </div>
   );
   }
