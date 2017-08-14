@@ -12,47 +12,42 @@ router.get('/', (req, res, next) => {
 
 // POST /api/followers/
 router.post('/', (req, res, next) => {
-  Follower.findOrCreate(req.body)
+  Follower.create(req.body)
   .then(follower => res.json(follower))
   .catch(next);
 });
 
 
 // GET /api/followers/:userId (fetch who follows a user)
-router.get('/:recipeId', (req, res, next) => {
+router.get('/:userId', (req, res, next) => {
   const id = req.params.userId;
   Follower.findAll({
-    where: {id},
-    attributes: ['id', 'email', 'firstName', 'lastName', 'picture_url']
+    where: {userId: id},
+    attributes: ['id']
   })
   .then(followers => res.json(followers))
   .catch(next);
 });
 
 // GET /api/followers/follow/:userId (fetch who a user follows)
-router.get('/:userId', (req, res, next) => {
+router.get('/follow/:userId', (req, res, next) => {
   const id = req.params.userId;
   Follower.findAll({
     where: {followerId: id},
-    attributes: ['id', 'email', 'firstName', 'lastName', 'picture_url']
+    attributes: ['id']
   })
   .then(followees => res.json(followees))
   .catch(next);
 });
 
-// DELETE /api/friends/:userId/:friendId
-router.delete('/:userId', (req, res, next) => {
-  const id = req.params.userId;
-  const friendId = req.params.friendId;
+// DELETE /api/follower/:userId/:followId (Unfollow someone!)
+router.delete('/:userId/:followId', (req, res, next) => {
+  const followerId = req.params.userId;
+  const userId = req.params.followId; //who you are following
   Follower.findOne({
-    where: {id, friendId}
+    where: {userId, followerId}
   })
-  .then(friend => friend.destroy())
-  .catch(next);
-
-  Follower.findOne({
-    where: {id: friendId, friendId: id}
-  })
-  .then(friend => friend.destroy())
+  .then(follow => follow.destroy())
+  .then(res.send('Unfollowed ' + userId))
   .catch(next);
 });

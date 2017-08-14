@@ -32,6 +32,7 @@ router.put('/:recipeId', (req, res, next) => {
   const id = req.params.recipeId;
   Recipe.findById(id)
   .then(recipe => recipe.update(req.body))
+  .then(() => res.json(req.body))
   .catch(next);
 });
 
@@ -40,5 +41,6 @@ router.delete('/:recipeId', (req, res, next) => {
   const id = req.params.recipeId;
   Recipe.findById(id)
   .then(recipe => recipe.destroy())
+  .then(res.send('Recipe destroyed'))
   .catch(next);
 });

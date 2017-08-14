@@ -16,22 +16,48 @@ router.post('/', (req, res, next) => {
   .catch(next);
 });
 
-// GET /api/recipeboxes/:recipeId
-router.get('/:recipeId', (req, res, next) => {
-  const id = req.params.recipeId;
-  RecipeBox.findOne({
+//GET single recipe
+router.get('/:id', (req, res, next) => {
+  const id = req.params.id;
+  RecipeBox.findAll({
     where: {id},
-    attributes: ['id', 'email', 'firstName', 'lastName', 'picture_url']
+    attributes: ['userId']
   })
   .then(recipe => res.json(recipe))
   .catch(next);
 });
+
+// GET /api/recipeboxes/:recipeId
+//get all users with this recipe in recipe box
+router.get('/:recipeId', (req, res, next) => {
+  const id = req.params.recipeId;
+  RecipeBox.findAll({
+    where: {recipeId: id},
+    attributes: ['userId']
+  })
+  .then(recipe => res.json(recipe))
+  .catch(next);
+});
+
+// GET /api/recipeboxes/:userId
+//get all recipes in a user'srecipe box
+router.get('/:userId', (req, res, next) => {
+  const id = req.params.recipeId;
+  RecipeBox.findAll({
+    where: {userId: id},
+    attributes: ['recipeId']
+  })
+  .then(recipe => res.json(recipe))
+  .catch(next);
+});
+
 
 // PUT /api/recipeboxes/:recipeId
 router.put('/:recipeId', (req, res, next) => {
   const id = req.params.recipeId;
   RecipeBox.findById(id)
   .then(recipe => recipe.update(req.body))
+  .then(res.json(req.body))
   .catch(next);
 });
 
@@ -40,5 +66,6 @@ router.delete('/:recipeId', (req, res, next) => {
   const id = req.params.recipeId;
   RecipeBox.findById(id)
   .then(recipe => recipe.destroy())
+  .then(res.send('RecipeBox entry destroyed'))
   .catch(next);
 });
