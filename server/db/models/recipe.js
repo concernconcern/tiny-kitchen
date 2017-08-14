@@ -13,14 +13,14 @@ const Recipe = db.define('recipe', {
     unique: true
   },
   picture_url: {
-    type: Sequelize.ARRAY(Sequelize.STRING)
+    type: Sequelize.STRING
   },
   ingredients: {
-    type: Sequelize.ARRAY(Sequelize.STRING),
+    type: Sequelize.ARRAY(Sequelize.TEXT),
     allowNull: false
   },
   directions: {
-    type: Sequelize.ARRAY(Sequelize.STRING),
+    type: Sequelize.ARRAY(Sequelize.TEXT),
     allowNull: false
   },
   rating: {

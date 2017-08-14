@@ -5,7 +5,7 @@ const RecipeBox = require('./recipe_box');
 Recipe.belongsToMany(User, {through: RecipeBox});
 User.belongsToMany(Recipe, {through: RecipeBox});
 
-User.belongsToMany(User, {as: 'follower', through: 'follows'}); //creates friends join table
+User.belongsToMany(User, { as: 'follower', through: 'follows' }); //creates friends join table
 
 
 module.exports = {
