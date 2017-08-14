@@ -8,6 +8,7 @@ import { Main, Login, Signup, UserHome, ViewRecipe, CookingAI } from './componen
 
 
 
+
 /**
  * COMPONENT
  */
@@ -23,7 +24,6 @@ class Routes extends Component {
       <Router history={history}>
         <Main>
           <Switch>
-            {/* Routes placed here are available to all visitors */}
             <Route path='/login' component={Login} />
             <Route path='/signup' component={Signup} />
             <Route path='/recipe/:id' component={ViewRecipe} />

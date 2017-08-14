@@ -1,18 +1,23 @@
-const User = require('./user')
+const User = require('./user');
+const Recipe = require('./recipe');
+const RecipeBox = require('./recipe_box');
 
-/**
- * If we had any associations to make, this would be a great place to put them!
- * ex. if we had another model called BlogPost, we might say:
- *
- *    BlogPost.belongsTo(User)
- */
+/*
+JB:
+This is where we should use a many-to-many association to associate users with recipes through the Recipe Box.
+By declaring Recipe.belongsToMany(User, {through: RecipeBox}) and User.belongsToMany(Recipe, {through: RecipeBox}), this will
+tell Sequelize to use RecipeBox as the association table between the two models.
+*/
 
-/**
- * We'll export all of our models here, so that any time a module needs a model,
- * we can just require it from 'db/models'
- * for example, we can say: const {User} = require('../db/models')
- * instead of: const User = require('../db/models/user')
- */
+// Recipe.belongsTo(RecipeBox)
+RecipeBox.belongsTo(Recipe);
+RecipeBox.belongsTo(User);
+
+User.belongsToMany(User, {as: 'follower', through: 'follows'}); //creates friends join table
+
+
 module.exports = {
-  User
+  User,
+  Recipe,
+  RecipeBox
 }
