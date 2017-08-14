@@ -11,6 +11,8 @@ router.get('/', (req, res, next) => {
 });
 
 // POST /api/followers/
+// JB: potentially change this to use Sequelize association method to associate two users
+// see belongsToMany Sequelize docs: http://docs.sequelizejs.com/class/lib/associations/belongs-to-many.js~BelongsToMany.html
 router.post('/', (req, res, next) => {
   Follower.create(req.body)
   .then(follower => res.json(follower))
