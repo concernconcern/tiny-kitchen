@@ -4,11 +4,11 @@ import {connect} from 'react-redux'
 import Artyom from 'artyom.js';
 import Step from './Step';
 import {fetchOutput} from '../store'
-const Mochi = new Artyom();
 
 //dummy recipe
 let recipeIngredients = ['1 cup flour', '3 flowers', '9 gallons vodka'];
 let recipeSteps = ['Mix flour and flowers', 'Blend with vodka', 'Let sit for 2 hours', 'Step 4', 'Step 5', 'Alright thats enough'];
+const Mochi = new Artyom();
 
 Mochi.initialize({
   lang:"en-GB",
@@ -17,14 +17,12 @@ Mochi.initialize({
   speed:0.9, // Talk a little bit slow
   mode:"normal", // This parameter is not required as it will be normal by default
   continuous: true,
-
   soundex: true
 })
 .then(console.log('initialized mochi'))
 .catch((err) => {
     console.error("mochi couldn't be initialized: ", err);
 })
-
 /**
  * COMPONENT
  */
@@ -51,11 +49,16 @@ class CookingAI extends React.Component{
 
     let num = this.state.i;
 
+    console.log('component mounted');
 
-      Mochi.on(['what is *'], true).then((i, wildcard) => {
+      Mochi.on(['*'], true).then((i, wildcard) => {
         console.log('wildcard: ', wildcard)
-         this.sendUserInput('what is ' + wildcard)
+         this.sendUserInput(wildcard)
       })
+      // Mochi.on(['set *'], true).then((i, wildcard) => {
+      //   console.log('wildcard: ', wildcard)
+      //    this.sendUserInput(wildcard)
+      // })
 
 
 

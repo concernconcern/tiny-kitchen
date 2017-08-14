@@ -4,20 +4,31 @@
 'use strict';
 
 const convert = require('convert-units');
-export let output;
 
 exports.momo = (req, res) => {
-  let {fromNumber, fromName, toName} = req.body.result.parameters;
-  //change names to acceptable input for convert function
-  [fromName, toName] = [fromName, toName].map(name => {
-    if (name === 'tbsp'|| name === 'fl oz'){
-      return name = name === 'tbsp' ? 'Tbs' : 'fl-oz'
-    }
-    else return name
-  });
-  const toNumber = convert(fromNumber).from(fromName).to(toName);
-  output = `${fromNumber} ${fromName} is ${toNumber} ${toName}`;
+  const action = req.body.result.action;
+  const parameters = req.body.result.parameters;
+  let output;
+  switch(action){
+    case 'convert':
+      let {fromNumber, fromName, toName} = parameters;
+      //change names to acceptable input for convert function
+      [fromName, toName] = [fromName, toName].map(name => {
+        if (name === 'tbsp'|| name === 'fl oz'){
+          return name = name === 'tbsp' ? 'Tbs' : 'fl-oz'
+        }
+        else return name
+      });
+      const toNumber = convert(fromNumber).from(fromName).to(toName);
+      output = `${fromNumber} ${fromName} is ${toNumber} ${toName}`;
+      break;
 
+    case 'setTimer':
+      let duration = parameters.duration;
+      output = `timer set for ${duration.amount} ${duration.unit}`;
+      break;
+
+  }
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify({ 'speech': output, 'displayText': output }))
     .catch((error) => {
