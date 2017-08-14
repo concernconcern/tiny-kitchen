@@ -10,7 +10,6 @@ class ViewRecipe extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.match.params.id)
     this.props.getRecipe(this.props.match.params.id);
   }
 
@@ -19,17 +18,17 @@ class ViewRecipe extends React.Component {
     console.log(recipe);
     return (
       <Wrapper >
-        <RecipeImg src="https://nytimes.com/images/2017/08/16/dining/16pairingweb/16pairingweb-articleLarge.jpg" />
+        <RecipeImg src={recipe.picture_url} />
         <RecipeText>
           <Title>{recipe && recipe.title}</Title>
-          {/* <List>
-            {recipe && recipe.ingredients.map(ingredient => {
-              return <li>{ingredient}</li>
-            })}</List>
+          <Title secondary>Ingredients</Title>
           <List>
-            {recipe && recipe.directions.map(direction => {
-              return <li>{direction}</li>
-            })}</List> */}
+            {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
+          </List>
+          <Title secondary>Directions</Title>
+          <List directions>
+            {recipe.directions && recipe.directions.map((direction, i) => <li key={i}>{direction}</li>)}
+          </List>
         </RecipeText>
       </Wrapper>
     )

@@ -11,15 +11,15 @@ const Recipe = db.define('recipe', {
     allowNull: false,
     unique: true
   },
-  picture_urls: {
-    type: Sequelize.ARRAY(Sequelize.STRING)
+  picture_url: {
+    type: Sequelize.STRING
   },
   ingredients: {
-    type: Sequelize.ARRAY(Sequelize.STRING),
+    type: Sequelize.ARRAY(Sequelize.TEXT),
     allowNull: false
   },
   directions: {
-    type: Sequelize.ARRAY(Sequelize.STRING),
+    type: Sequelize.ARRAY(Sequelize.TEXT),
     allowNull: false
   }
 })

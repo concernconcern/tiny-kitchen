@@ -13,11 +13,13 @@ export const RecipeImg = styled.img`
 `
 export const RecipeText = styled.div`
   height: 90vh;
-  width: 50vh;
-  padding: 20px;
+  width: 50vw;
+  padding: 25px;
 `
 export const Title = styled.h1`
- font-size: 40px;
+ font-size: ${props => props.secondary ? '25px' : '50px'};
+ color: ${props => props.secondary ? 'grey' : 'black'};
+ padding: ${props => props.secondary ? '20px' : '0 0 20px 0'};
  margin: 0;
  font-family: 'Playfair Display', serif;
 `
@@ -44,6 +46,7 @@ export const Links = styled.h1`
  justify-content: space-around;
 `
 export const List = styled.ul`
-    color: grey;
-    padding: 10px;
+  color: grey;
+  margin: 0 25px;
+  list-style-type: ${props => props.directions ? 'decimal' : 'square'};
 `

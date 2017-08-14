@@ -13,7 +13,7 @@ tell Sequelize to use RecipeBox as the association table between the two models.
 RecipeBox.belongsTo(Recipe);
 RecipeBox.belongsTo(User);
 
-User.belongsToMany(User, {as: 'follower', through: 'follows'}); //creates friends join table
+User.belongsToMany(User, { as: 'follower', through: 'follows' }); //creates friends join table
 
 
 module.exports = {
