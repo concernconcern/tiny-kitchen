@@ -3,6 +3,7 @@ const Recipe = db.model('recipe');
 const axios = require('axios');
 const Promise = require('bluebird');
 const getJsonFromUrl = require('./server/recipe-to-json');
+require('./secrets');
 
 function getRecipes(){
   return axios.get(`https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.NYT_KEY}&query=recipe`)
