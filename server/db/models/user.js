@@ -27,6 +27,9 @@ const User = db.define('user', {
   },
   googleId: {
     type: Sequelize.STRING
+  },
+  is_Admin: {
+    type: Sequelize.BOOLEAN
   }
 })
 
