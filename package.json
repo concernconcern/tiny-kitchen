@@ -30,8 +30,6 @@
     "express": "^4.14.1",
     "express-session": "^1.15.1",
     "history": "^4.6.3",
-    "htm-to-json": "^0.1.4",
-    "html-json": "^1.0.2",
     "html2json": "^1.0.2",
     "morgan": "^1.8.1",
     "passport": "^0.3.2",
