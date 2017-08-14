@@ -7,19 +7,35 @@ module.exports = router
 router.use('/recipe-sources', require('./recipe-sources'))
 
 router.get('/', (req, res, next) => {
-  axios.get('http://www.seriouseats.com/recipes/2017/08/blackberry-cake-recipe.html')
+  axios.get('http://allrecipes.co.uk/recipe/527/chicken-korma.aspx')
   .then(apiRes => {
     const rawHtml = apiRes.data;
     const sanitizedHtml = sanitizeHtml(rawHtml, {
-      allowedTags: [ 'ul', 'ol', 'li'],
-      allowedAttributes: []
-    }).replace(/\n/g, ' ').replace(/ +/g, ' ').replace(/\r |\t/g, '').replace(/&amp;/g, '&');
+      allowedTags: ['title', 'img', 'ul', 'ol', 'li'],
+      allowedAttributes: {
+        'img': ['src', 'data-src']
+      }
+    }).replace(/\n| +/g, ' ').replace(/\r |\t/g, '').replace(/&amp;/g, '&');
     
-    // find the first index where the first tag after 'list' keyword is an ordered or unordered list
-    function findList(html, list){
+    function findTitle(html){
+      const idx1 = html.indexOf('<title>');
+      const idx2 = html.indexOf('</title>');
+      return html.slice(idx1 + 7, idx2);
+    }
+
+    function findImage(html){
+      const idx1 = html.indexOf('<img');
+      const imgString = html.slice(idx1);
+      const idx2 = imgString.indexOf('/>')
+      const imgUrl = html2json(imgString.slice(0, idx2 + 2)).child[0].attr.src;
+      return imgUrl;
+    }
+
+    // find the first index where the first tag after 'listName' keyword is an ordered or unordered list
+    function findList(html, listName){
       for (let i = 0; i < sanitizedHtml.length; i++){
         let substring = sanitizedHtml.slice(i);
-        if (substring.startsWith(list)){
+        if (substring.startsWith(listName)){
           for (let j = 0; j < substring.length; j++){
             if (substring[j] === '<') {
               if (substring[j+1] === 'o' || substring[j+1] === 'u') return i;
@@ -32,6 +48,7 @@ router.get('/', (req, res, next) => {
     
     // NEED TO CREATE LOGIC TO CONTROL FOR CONSECUTIVE LISTS WITHIN A SECTION (e.g. allrecipes.co.uk)
     
+    // trim html string to only the specified section (e.g. Ingredients, Preparation, etc.)
     function clipSection(html, section){
       if (!findList(html, section)) return;
       let clip = html.slice(findList(html, section));
@@ -44,12 +61,7 @@ router.get('/', (req, res, next) => {
       return clip;
     };
     
-    const instructionsKeywords = ['Preparation', 'Instructions', 'Method', 'Directions'];
-    
-    // run clipSection for first instruction keyword that is followed by ordered or unordered list
-    const instructions = html2json(clipSection(sanitizedHtml, instructionsKeywords.find(el => !!findList(sanitizedHtml, el))));
-    const ingredients = html2json(clipSection(sanitizedHtml, 'Ingredients'));
-    
+    // convert ingredients and directions sections to array
     function createArray(section){
       const list = section.child.find(el => el.tag === 'ul' || el.tag === 'ol');
       const elements = list.child.reduce((acc, el) => {
@@ -60,16 +72,35 @@ router.get('/', (req, res, next) => {
       }, [])
       return elements;
     }
+
+    // GET TITLE AND PICTURE URL
+    const title = findTitle(sanitizedHtml);
+    const picture_url = findImage(sanitizedHtml);
+    
+    // GET INGREDIENTS
+    let ingredients = html2json(clipSection(sanitizedHtml, 'Ingredients'));
+    ingredients = createArray(ingredients);
+    
+    // run clipSection for the first instruction keyword that is followed by ordered or unordered list
+    const directionsKeywords = ['Preparation', 'Instructions', 'Method', 'Directions'];
+    let directions = html2json(clipSection(sanitizedHtml, directionsKeywords.find(el => !!findList(sanitizedHtml, el))));
+    directions = createArray(directions);
+    
     
     const obj = {
-      title: '',
-      picture: '',
-      ingredients: createArray(ingredients),
-      directions: createArray(instructions)
+      title,
+      source_url: '', // pull this url from the initial API request
+      picture_url,
+      ingredients,
+      directions
     }
     
     res.json(obj);
   })
+})
+
+router.get('/bigoven', (req, res, next) => {
+  res.send('Hello');
 })
 
 router.use((req, res, next) => {
