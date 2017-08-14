@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
+
 const Recipe = db.define('recipe', {
   title: {
     type: Sequelize.STRING,
@@ -11,10 +12,7 @@ const Recipe = db.define('recipe', {
     allowNull: false,
     unique: true
   },
-  default_picture_url: {
-    type: Sequelize.STRING
-  },
-  picture_urls: {
+  picture_url: {
     type: Sequelize.ARRAY(Sequelize.STRING)
   },
   ingredients: {
