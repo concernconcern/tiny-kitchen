@@ -1,19 +1,37 @@
 const db = require('./server/db');
-const Recipe = db.model('recipes');
+const Recipe = db.model('recipe');
 const axios = require('axios');
+const Promise = require('bluebird');
+const getJsonFromUrl = require('./server/recipe-to-json');
 
-function buildRecipes(){
-  return axios.get(`/api/recipe-sources/nytimes`)
-  .then(res => {
-    let promises = [];
-    const recipes = res.data;
+function getRecipes(){
+  return axios.get(`https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.NYT_KEY}&query=recipe`)
+  .then(apiRes => {
+    const recipes = apiRes.data.response.docs;
+
+    const promises = [];
     recipes.forEach(recipe => {
-      promises.push(Recipe.build(recipe));
+      let promise = getJsonFromUrl(recipe.web_url, 'https://nytimes.com/' + recipe.multimedia[1].url);
+      promises.push(promise)
     })
-    return promises;
+
+    return Promise.all(promises)
+    .then(data => {
+      return data;
+    })
   })
 }
 
+function buildRecipes(){
+  return getRecipes()
+  .then(recipesData => {
+    let promises = [];
+    recipesData.forEach(recipe => {
+      promises.push(Recipe.build(recipe));
+    });
+    return promises;
+  })
+}
 
 function saveRecipes(){
   return Promise.map(buildRecipes(), function(recipe) {
@@ -22,7 +40,7 @@ function saveRecipes(){
 }
 
 function seed() {
-  let arr = [buildRecipes()];
+  let arr = [saveRecipes()];
   return Promise.all(arr);
 }
 
