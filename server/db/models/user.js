@@ -3,6 +3,17 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const User = db.define('user', {
+  first_name: {
+    type: Sequelize.STRING,
+    // allowNull: false
+  },
+  last_name: {
+    type: Sequelize.STRING,
+    // allowNull: false
+  },
+  picture_url: {
+    type: Sequelize.STRING
+  },
   email: {
     type: Sequelize.STRING,
     unique: true,
@@ -16,10 +27,13 @@ const User = db.define('user', {
   },
   googleId: {
     type: Sequelize.STRING
+  },
+  is_admin: {
+    type: Sequelize.BOOLEAN
   }
 })
 
-module.exports = User
+module.exports = User;
 
 /**
  * instanceMethods
