@@ -1,5 +1,6 @@
 import axios from 'axios'
 import history from '../history'
+import convert from 'convert-units';
 //import apiai from 'apiai';
 
 //const apiAi = apiai("32a6925a368448038ed4e3899b5422ca");
@@ -56,8 +57,17 @@ export const fetchOutput = (userInput) =>
   dispatch => {
     axios(makeRequestConfig(userInput))
     .then(res => {
-      console.log(res.data.result.fulfillment.displayText)
-      dispatch(getOutput(res.data.result.fulfillment.displayText))
+      const output = res.data.result.fulfillment.displayText
+      console.log(output)
+      dispatch(getOutput(output));
+      if (res.data.result.action === 'setTimer'){
+        const {amount, unit} = res.data.result.parameters.duration
+        const timeInMs = convert(amount).from(unit).to('ms')
+
+        setTimeout(function(){
+          dispatch(getOutput('times up'))
+        }, timeInMs)
+      }
     })
     .catch(err => console.log(err))
 }

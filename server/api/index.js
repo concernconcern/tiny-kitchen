@@ -3,8 +3,6 @@ module.exports = router;
 
 router.use('/users', require('./users'));
 router.use('/recipes', require('./recipes'));
-router.use('/recipeboxes', require('./recipeboxes'));
- router.use('/followers', require('./followers'));
 
 router.use((req, res, next) => {
   const error = new Error('Not Found');

@@ -1,5 +1,7 @@
 const router = require('express').Router();
-const { Recipe } = require('../db/models');
+const db = require('../db/db');
+const Recipe = db.model('recipe');
+const RecipeBox = db.model('recipebox');
 module.exports = router;
 
 // GET /api/recipes
@@ -42,4 +44,15 @@ router.delete('/:recipeId', (req, res, next) => {
     .then(recipe => recipe.destroy())
     .then(res.send('Recipe destroyed'))
     .catch(next);
+});
+
+/* RECIPE BOX */
+// GET /api/recipes/:recipeId/recipebox (get users that have put recipe in their recipeBox)
+router.get('/:recipeId/recipebox', (req, res, next) => {
+  const recipeId = req.params.recipeId;
+  RecipeBox.findAll({
+    where: {recipeId}
+  })
+  .then(users => res.json(users))
+  .catch(next);
 });
