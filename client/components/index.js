@@ -6,4 +6,4 @@
 export {default as Main} from './main'
 export {default as UserHome} from './user-home'
 export {Login, Signup} from './auth-form'
-export {default as SingleRecipe} from './SingleRecipe'
+export {default as CookingAI} from './CookingAI'

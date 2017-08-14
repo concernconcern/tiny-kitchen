@@ -28,7 +28,7 @@ Mochi.initialize({
 /**
  * COMPONENT
  */
-class SingleRecipe extends React.Component{
+class CookingAI extends React.Component{
   constructor(props){
     super(props)
     this.state = {
@@ -38,20 +38,16 @@ class SingleRecipe extends React.Component{
   }
 
   componentDidUpdate(){
-    console.log('component updated')
-    console.log('mochisays ', this.props.mochiSays)
     if (this.props.mochiSays !== '')
       Mochi.say(this.props.mochiSays)
   }
 
   sendUserInput(userInput){
-    console.log('sending userInput', userInput)
     return this.props.submitUserInput(userInput)
   }
 
 
   render(){
-    console.log('loaded SingleRecipe.js')
 
     let num = this.state.i;
 
@@ -108,4 +104,4 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default connect(mapState, mapDispatch)(SingleRecipe)
+export default connect(mapState, mapDispatch)(CookingAI)
