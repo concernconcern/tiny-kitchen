@@ -1,5 +1,7 @@
 const router = require('express').Router();
-const {Recipe} = require('../db/models');
+const db = require('../db/db');
+const Recipe = db.model('recipe');
+const RecipeBox = db.model('recipebox');
 module.exports = router;
 
 // GET /api/recipes
@@ -12,35 +14,45 @@ router.get('/', (req, res, next) => {
 // POST /api/recipes
 router.post('/', (req, res, next) => {
   Recipe.create(req.body)
-  .then(recipe => res.json(recipe))
-  .catch(next);
+    .then(recipe => res.json(recipe))
+    .catch(next);
 });
 
 // GET /api/recipes/:recipeId
 router.get('/:recipeId', (req, res, next) => {
   const id = req.params.recipeId;
   Recipe.findOne({
-    where: {id},
-    attributes: ['id', 'email', 'firstName', 'lastName', 'picture_url']
+    where: { id }
   })
-  .then(recipe => res.json(recipe))
-  .catch(next);
+    .then(recipe => res.json(recipe))
+    .catch(next);
 });
 
 // PUT /api/recipes/:recipeId
 router.put('/:recipeId', (req, res, next) => {
   const id = req.params.recipeId;
   Recipe.findById(id)
-  .then(recipe => recipe.update(req.body))
-  .then(() => res.json(req.body))
-  .catch(next);
+    .then(recipe => recipe.update(req.body))
+    .then(() => res.json(req.body))
+    .catch(next);
 });
 
 // DELETE /api/recipes/:recipeId
 router.delete('/:recipeId', (req, res, next) => {
   const id = req.params.recipeId;
   Recipe.findById(id)
-  .then(recipe => recipe.destroy())
-  .then(res.send('Recipe destroyed'))
+    .then(recipe => recipe.destroy())
+    .then(res.send('Recipe destroyed'))
+    .catch(next);
+});
+
+/* RECIPE BOX */
+// GET /api/recipes/:recipeId/recipebox (get users that have put recipe in their recipeBox)
+router.get('/:recipeId/recipebox', (req, res, next) => {
+  const recipeId = req.params.recipeId;
+  RecipeBox.findAll({
+    where: {recipeId}
+  })
+  .then(users => res.json(users))
   .catch(next);
 });
