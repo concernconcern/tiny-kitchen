@@ -27,7 +27,7 @@ const getOutput = output => ({type: GET_OUTPUT, output})
  * THUNK CREATORS
  *The query endpoint is used to process natural language in the form of text. The query requests *return structured data in JSON format with an action and parameters for that action
  */
- const token = '32a6925a368448038ed4e3899b5422ca'
+ const token = require('../../secrets')
 
  // curl 'https://api.api.ai/api/query?v=20150910&query=what%20is%20one%20tablespoon%20to%20teaspoons&lang=en&sessionId=8c434103-e94e-47d8-b06f-3886fa2e5541&timezone=America/New_York' -H 'Authorization:Bearer 32a6925a368448038ed4e3899b5422ca'
 

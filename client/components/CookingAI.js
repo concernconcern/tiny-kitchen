@@ -38,8 +38,10 @@ class CookingAI extends React.Component{
   }
 
   componentDidUpdate(){
-    if (this.props.mochiSays !== '')
+    if (this.props.mochiSays !== ''){
+      console.log('mochi: ', this.props.mochiSays)
       Mochi.say(this.props.mochiSays)
+    }
   }
 
   sendUserInput(userInput){
