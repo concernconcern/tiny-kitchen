@@ -27,10 +27,13 @@ const User = db.define('user', {
   },
   googleId: {
     type: Sequelize.STRING
+  },
+  is_admin: {
+    type: Sequelize.BOOLEAN
   }
 })
 
-module.exports = User
+module.exports = User;
 
 /**
  * instanceMethods
