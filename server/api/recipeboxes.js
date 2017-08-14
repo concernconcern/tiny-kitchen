@@ -10,6 +10,7 @@ router.get('/', (req, res, next) => {
 });
 
 // POST /api/recipeboxes
+// JB: potentially change this to use Sequelize association method to associate user instance with a recipe instance
 router.post('/', (req, res, next) => {
   RecipeBox.create(req.body)
   .then(recipe => res.json(recipe))
