@@ -6,8 +6,8 @@ module.exports = router
 
 router.use('/recipe-sources', require('./recipe-sources'))
 
-router.get('/', (req, res, next) => {
-  axios.get('http://allrecipes.co.uk/recipe/527/chicken-korma.aspx')
+function getJsonFromUrl(source_url, picture_url){
+  return axios.get(source_url)
   .then(apiRes => {
     const rawHtml = apiRes.data;
     const sanitizedHtml = sanitizeHtml(rawHtml, {
@@ -15,7 +15,7 @@ router.get('/', (req, res, next) => {
       allowedAttributes: {
         'img': ['src', 'data-src']
       }
-    }).replace(/\n| +/g, ' ').replace(/\r |\t/g, '').replace(/&amp;/g, '&');
+    }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&');
     
     function findTitle(html){
       const idx1 = html.indexOf('<title>');
@@ -23,6 +23,7 @@ router.get('/', (req, res, next) => {
       return html.slice(idx1 + 7, idx2);
     }
 
+    // find image if not provided by the API response
     function findImage(html){
       const idx1 = html.indexOf('<img');
       const imgString = html.slice(idx1);
@@ -75,7 +76,9 @@ router.get('/', (req, res, next) => {
 
     // GET TITLE AND PICTURE URL
     const title = findTitle(sanitizedHtml);
-    const picture_url = findImage(sanitizedHtml);
+
+    // Not needed for NY TIMES response - uncomment where necessary
+    // const picture_url = findImage(sanitizedHtml);
     
     // GET INGREDIENTS
     let ingredients = html2json(clipSection(sanitizedHtml, 'Ingredients'));
@@ -89,18 +92,53 @@ router.get('/', (req, res, next) => {
     
     const obj = {
       title,
-      source_url: '', // pull this url from the initial API request
+      source_url,
       picture_url,
       ingredients,
       directions
     }
     
-    res.json(obj);
+    return obj;
   })
-})
+}
 
-router.get('/bigoven', (req, res, next) => {
-  res.send('Hello');
+// router.get('/food2fork', (req, res, next) => {
+//   console.log('food 2 fork key', process.env.FOOD2FORK_KEY);
+//   axios.get(`http://food2fork.com/api/search?key=${process.env.FOOD2FORK_KEY}&page=1`)
+//   .then(apiRes => {
+//     const { recipes } = apiRes.data;
+//     const recipeUrls = recipes.map(recipe => recipe.source_url);
+
+//     const promises = [];
+//     recipeUrls.forEach(url => {
+//       let promise = getJsonFromUrl(url);
+//       promises.push(promise)
+//     })
+
+//     Promise.all(promises)
+//     .then(data => {
+//       res.send(data);
+//     })
+//   })
+// })
+
+router.get('/nytimes', (req, res, next) => {
+  axios.get(`https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.NYT_KEY}&query=recipe`)
+  .then(apiRes => {
+    // res.send(apiRes.data);
+    const recipes = apiRes.data.response.docs;
+
+    const promises = [];
+    recipes.forEach(recipe => {
+      let promise = getJsonFromUrl(recipe.web_url, 'https://nytimes.com/' + recipe.multimedia[1].url);
+      promises.push(promise)
+    })
+
+    Promise.all(promises)
+    .then(data => {
+      res.send(data);
+    })
+  })
 })
 
 router.use((req, res, next) => {
