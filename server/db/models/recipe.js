@@ -26,7 +26,7 @@ const Recipe = db.define('recipe', {
     allowNull: false
   },
   rating: {
-    type: Sequelize.FLOAT(11, 11),
+    type: Sequelize.FLOAT(1,1),
     defaultValue: 0,
     validate: {
       min: 0.0,
