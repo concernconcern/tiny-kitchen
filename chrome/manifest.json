@@ -12,11 +12,12 @@
   //   "js": ["content.js"]
   // }],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["jquery.js", "background.js"],
     "persistent": false
   },
   "permissions": [
     "activeTab",
-    "tabs"
+    "tabs",
+    "http://localhost:8080/"
   ]
 }
