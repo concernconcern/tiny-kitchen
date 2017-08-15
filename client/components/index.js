@@ -7,6 +7,7 @@ export { default as Main } from './main'
 export { default as UserHome } from './user-home'
 export { default as ViewRecipe } from './ViewRecipe'
 export { default as Navbar } from './Navbar'
+export { default as AddRecipe } from './AddRecipe'
 export { Login, Signup } from './auth-form'
 export { default as CookingAI } from './CookingAI'
 export { default as CookRecipe } from './CookRecipe';
