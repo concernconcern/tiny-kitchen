@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { Router } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
 import PropTypes from 'prop-types'
-// import history from './history'
-import { Main, Login, Signup, UserHome, ViewRecipe, CookingAI, AddRecipe } from './components'
+import history from './history'
+import { Main, Login, Signup, UserHome, ViewRecipe, CookingAI, CookRecipe, AddRecipe } from './components'
 import { me } from './store'
 import createBrowserHistory from 'history/createBrowserHistory';
 let history = createBrowserHistory();
@@ -27,8 +27,9 @@ class Routes extends Component {
           <Switch>
             <Route path='/login' component={Login} />
             <Route path='/signup' component={Signup} />
-            <Route path='/recipe/:id' component={ViewRecipe} />
+            <Route exact path='/recipe/:id' component={ViewRecipe} />
             <Route path='/add-recipe' component={AddRecipe} />
+            <Route exact path='/recipe/:id/cook' component={CookRecipe} />
           </Switch>
         </Main>
       </Router>

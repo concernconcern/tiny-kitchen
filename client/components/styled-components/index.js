@@ -50,6 +50,7 @@ export const List = styled.ul`
   margin: 0 25px;
   list-style-type: ${props => props.directions ? 'decimal' : 'square'};
 `
+
 export const Input = styled.input`
   font-family: ${props => props.title ? 'Playfair Display, serif' : ''};
   font-size: ${props => props.title ? '50px' : '12px'};
@@ -67,4 +68,25 @@ export const TextArea = styled.textarea`
   width: 30vw;
   margin: 5px;
   height: 100px;
+`
+//Ingredients on the CookRecipe Component
+export const IngredientsView = styled.div`
+  height: 80vh;
+  flex: 1;
+  display: flex;
+  padding: 25px;
+  flex-direction: ${props => props.column ? 'column' : 'row'};
+`
+export const CurrentStep = styled.div`
+  height: 80vh;
+  flex: 2;
+  padding: 25px;
+  display: flex;
+  flex-direction: ${props => props.column ? 'column' : 'row'};
+`
+export const NextStep = styled.div`
+  padding: 25px;
+`
+export const ControlPanel = styled.div`
+  padding: 25px;
 `
