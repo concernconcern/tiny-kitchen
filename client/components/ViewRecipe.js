@@ -20,7 +20,14 @@ class ViewRecipe extends React.Component {
       <Wrapper >
         <RecipeImg src={recipe.picture_url} />
         <RecipeText>
-          <Title>{recipe && recipe.title}</Title>
+
+          <Title>{recipe && recipe.title}
+            &nbsp; &nbsp;
+             <Link to={`/recipe/${recipe.id}/cook`} className="btn btn-info btn-lg">
+              <span className="glyphicon glyphicon-play" />
+            </Link>
+
+          </Title>
           <Title secondary>Ingredients</Title>
           <List>
             {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}

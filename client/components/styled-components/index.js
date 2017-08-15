@@ -50,3 +50,27 @@ export const List = styled.ul`
   margin: 0 25px;
   list-style-type: ${props => props.directions ? 'decimal' : 'square'};
 `
+//Ingredients on the CookRecipe Component
+export const IngredientsView = styled.div`
+  height: 80vh;
+  width: 30vh;
+
+  background-color: purple;
+`
+export const CurrentStep = styled.div`
+  height: 80vh;
+  width: 70vh;
+  background-color: green;
+`
+export const NextStep = styled.div`
+  height: 20vh;
+  width: 70vh;
+  padding: 25px;
+  background-color: red;
+`
+export const ControlPanel = styled.div`
+  height: 20vh;
+  width: 30vh;
+  padding: 25px;
+  background-color: yellow;
+`

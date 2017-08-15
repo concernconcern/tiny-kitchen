@@ -4,7 +4,7 @@ import { Router } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import history from './history'
-import { Main, Login, Signup, UserHome, ViewRecipe, CookingAI } from './components'
+import { Main, Login, Signup, UserHome, ViewRecipe, CookingAI, CookRecipe } from './components'
 import { me } from './store'
 
 
@@ -26,7 +26,8 @@ class Routes extends Component {
           <Switch>
             <Route path='/login' component={Login} />
             <Route path='/signup' component={Signup} />
-            <Route path='/recipe/:id' component={ViewRecipe} />
+            <Route exact path='/recipe/:id' component={ViewRecipe} />
+            <Route exact path='/recipe/:id/cook' component={CookRecipe} />
           </Switch>
         </Main>
       </Router>
