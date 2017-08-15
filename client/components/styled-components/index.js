@@ -53,24 +53,21 @@ export const List = styled.ul`
 //Ingredients on the CookRecipe Component
 export const IngredientsView = styled.div`
   height: 80vh;
-  width: 30vh;
-
-  background-color: purple;
+  flex: 1;
+  display: flex;
+  padding: 25px;
+  flex-direction: ${props => props.column ? 'column' : 'row'};
 `
 export const CurrentStep = styled.div`
   height: 80vh;
-  width: 70vh;
-  background-color: green;
+  flex: 2;
+  padding: 25px;
+  display: flex;
+  flex-direction: ${props => props.column ? 'column' : 'row'};
 `
 export const NextStep = styled.div`
-  height: 20vh;
-  width: 70vh;
   padding: 25px;
-  background-color: red;
 `
 export const ControlPanel = styled.div`
-  height: 20vh;
-  width: 30vh;
   padding: 25px;
-  background-color: yellow;
 `

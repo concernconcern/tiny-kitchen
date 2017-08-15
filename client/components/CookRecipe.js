@@ -32,45 +32,78 @@ class CookRecipe extends React.Component{
       currentStep: 0
     };
     this.step = this.step.bind(this);
+    this.sendUserInput = this.sendUserInput.bind(this);
+  }
+
+  componentDidUpdate(){
+    if (this.props.mochiSays !== ''){
+      console.log('mochi: ', this.props.mochiSays)
+      Mochi.say(this.props.mochiSays)
+    }
+  }
+
+  sendUserInput(userInput){
+    return this.props.submitUserInput(userInput)
   }
 
   componentDidMount(){
     this.props.getRecipe(this.props.match.params.id);
   }
 
-  step(event) {
-    if (event.target.value === 'forward') this.setState({currentStep: this.state.currentStep + 1});
+  step(event, bool) {
+    if (event && event.target.value === 'forward' || bool) this.setState({currentStep: this.state.currentStep + 1});
     else this.setState({currentStep: this.state.currentStep - 1});
   }
 
   render(){
+    Mochi.on(['*'], true).then((i, wildcard) => {
+      console.log('wildcard: ', wildcard)
+      if (wildcard === 'next' || wildcard === 'next step'){
+        console.log('you said next')
+        this.step(null, true);
+        Mochi.say(this.props.recipe.directions[this.state.currentStep]);
+      }
+      else if (wildcard === 'go back' || wildcard === 'back' || wildcard === 'previous'){
+        console.log('you want to go back')
+        this.step(null, false);
+        Mochi.say(this.props.recipe.directions[this.state.currentStep]);
+      }
+      else
+        this.sendUserInput(wildcard)
+    })
+
     console.log('RECIPE', this.props.recipe);
     let recipe = this.props.recipe;
     return (
 
       <Wrapper>
-        <CurrentStep>
+        <CurrentStep column>
           <Title> Step {this.state.currentStep + 1}: <br />
           {recipe.directions && recipe.directions[this.state.currentStep]}
           </Title>
-        </CurrentStep>
-        <NextStep>
-        <p> Up next... {recipe.directions && recipe.directions[this.state.currentStep + 1]} </p>
+
+          <NextStep>
+            <p><b>Up next...</b> {recipe.directions && recipe.directions[this.state.currentStep + 1]} </p>
         </NextStep>
-        <IngredientsView>
+        </CurrentStep>
+
+        <IngredientsView column>
+          <Title secondary> Ingredients </Title>
             <List>
             {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
           </List>
-        </IngredientsView>
-        <ControlPanel>
-          <button type="button" className="btn btn-info btn-lg" value="back" onClick={this.step}>
-            <span className="glyphicon glyphicon-step-backward"   />
-          </button>
+          <ControlPanel>
+            <button type="button" className="btn btn-info btn-lg" value="back" onClick={this.step}>
+              <span className="glyphicon glyphicon-step-backward" />
+            </button>
+            &nbsp; &nbsp;
+           <button type="button" className="btn btn-info btn-lg" value="forward" onClick={this.step} >
+              <span className="glyphicon glyphicon-step-forward" />
+            </button>
+          </ControlPanel>
 
-          <button type="button" className="btn btn-info btn-lg" value="forward" onClick={this.step} >
-            <span className="glyphicon glyphicon-step-forward"  />
-          </button>
-        </ControlPanel>
+        </IngredientsView>
+
       </Wrapper>
 
     );
@@ -79,15 +112,20 @@ class CookRecipe extends React.Component{
 
 const mapState = (state) => {
   return {
-    recipe: state.recipe
+    recipe: state.recipe,
+    mochiSays: state.ai
   };
 };
 const mapDispatch = (dispatch) => {
   return {
-    getRecipe: id => dispatch(action.getRecipe(id))
+    getRecipe: id => dispatch(action.getRecipe(id)),
+    submitUserInput(userInput){
+      return dispatch(fetchOutput(userInput))
+    }
   };
 };
 
 export default connect(mapState, mapDispatch)(CookRecipe);
+
 
 
