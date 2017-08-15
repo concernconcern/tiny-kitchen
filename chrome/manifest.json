@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+
+  "name": "Tiny Kitchen",
+  "description": "Integration with the Tiny Kitchen web app",
+  "version": "1.0",
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  // "content_scripts": [{
+  //   "matches": ["<all_urls>"],
+  //   "js": ["content.js"]
+  // }],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "permissions": [
+    "activeTab",
+    "tabs"
+  ]
+}
