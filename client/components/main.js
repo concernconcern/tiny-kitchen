@@ -11,11 +11,11 @@ import Navbar from './Navbar'
  *  rendered out by the component's `children`.
  */
 const Main = (props) => {
-  const { children, handleClick, isLoggedIn, navbar } = props
+  const { children, handleClick, isLoggedIn, cooking } = props
 
   return (
     <div>
-      {navbar ? (<Navbar handleClick={handleClick} isLoggedIn />) : null }
+      {!cooking ? (<Navbar handleClick={handleClick} isLoggedIn />) : null }
       {children}
     </div>
   )
@@ -27,7 +27,7 @@ const Main = (props) => {
 const mapState = (state) => {
   return {
     isLoggedIn: !!state.user.id,
-    navbar: state.navbar
+    cooking: state.cooking
   }
 }
 
