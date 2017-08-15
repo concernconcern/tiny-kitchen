@@ -5,11 +5,18 @@ module.exports = router
 
 router.use('/recipe-sources', require('./recipe-sources'))
 
+router.post('/', (req, res, next) => {
+  const url = req.body.url;
+  getJsonFromUrl(url)
+  .then(recipe => {
+    res.send(getJsonFromUrl);
+  })
+})
+
 router.get('/nytimes', (req, res, next) => {
   console.log('new york times');
   axios.get(`https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.NYT_KEY}&query=recipe`)
   .then(apiRes => {
-    // res.send(apiRes.data);
     const recipes = apiRes.data.response.docs;
 
     const promises = [];
