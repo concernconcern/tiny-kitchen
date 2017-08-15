@@ -29,7 +29,8 @@ class CookRecipe extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      currentStep: 0
+      currentStep: 0,
+      stopped: false
     };
     this.step = this.step.bind(this);
     this.sendUserInput = this.sendUserInput.bind(this);
@@ -47,14 +48,6 @@ class CookRecipe extends React.Component{
 
   componentDidMount(){
     this.props.getRecipe(this.props.match.params.id);
-  }
-
-  step(event, bool) {
-    if (event && event.target.value === 'forward' || bool) this.setState({currentStep: this.state.currentStep + 1});
-    else this.setState({currentStep: this.state.currentStep - 1});
-  }
-
-  render(){
     Mochi.on(['*'], true).then((i, wildcard) => {
       if (wildcard === 'next' || wildcard === 'next step'){
         this.step(null, true);
@@ -64,9 +57,26 @@ class CookRecipe extends React.Component{
         this.step(null, false);
         Mochi.say(this.props.recipe.directions[this.state.currentStep]);
       }
+      else if (wildcard === 'stop' || wildcard === 'pause') {
+        Mochi.shutUp()
+      }
       else
         this.sendUserInput(wildcard)
     })
+  }
+
+  step(event, bool) {
+    Mochi.shutUp()
+    if (event && event.target.value === 'forward' || bool)
+      this.setState({currentStep: this.state.currentStep + 1});
+    else if (event && event.target.value === 'back' || !bool)
+      this.setState({currentStep: this.state.currentStep - 1});
+    else
+      return
+  }
+
+  render(){
+
 
     let recipe = this.props.recipe;
     return (
@@ -92,6 +102,10 @@ class CookRecipe extends React.Component{
               <span className="glyphicon glyphicon-step-backward" />
             </button>
             &nbsp; &nbsp;
+            <button type="button" className="btn btn-info btn-lg" onClick={this.step}>
+              <span className={Mochi.isSpeaking ? "glyphicon glyphicon-pause" : "glyphicon glyphicon-play"} />
+            </button>
+            &nbsp; &nbsp;
            <button type="button" className="btn btn-info btn-lg" value="forward" onClick={this.step} >
               <span className="glyphicon glyphicon-step-forward" />
             </button>
@@ -108,7 +122,7 @@ class CookRecipe extends React.Component{
 const mapState = (state) => {
   return {
     recipe: state.recipe,
-    mochiSays: state.ai
+    mochiSays: state.ai,
   };
 };
 const mapDispatch = (dispatch) => {
