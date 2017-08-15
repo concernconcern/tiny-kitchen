@@ -70,7 +70,6 @@ export const TextArea = styled.textarea`
   margin: 5px;
   height: 100px;
 `
-<<<<<<< HEAD
 export const Form = styled.form`
 padding: 20px;
 display:flex;
@@ -92,7 +91,7 @@ height: 50px;
  font-family: 'Playfair Display', serif;
 width: 400px;
 `
-=======
+
 //Ingredients on the CookRecipe Component
 export const IngredientsView = styled.div`
   height: 80vh;
@@ -114,4 +113,3 @@ export const NextStep = styled.div`
 export const ControlPanel = styled.div`
   padding: 25px;
 `
->>>>>>> 92f3b83cbc19b8aece6fcc18940964c6448555c8
