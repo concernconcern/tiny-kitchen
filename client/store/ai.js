@@ -1,12 +1,7 @@
 import axios from 'axios'
 import history from '../history'
 import convert from 'convert-units';
-//import apiai from 'apiai';
 
-//const apiAi = apiai("32a6925a368448038ed4e3899b5422ca");
-
-
-// const client = new ApiAiClient({accessToken: '32a6925a368448038ed4e3899b5422ca'})
 
 /**
  * ACTION TYPES
@@ -30,7 +25,6 @@ const getOutput = output => ({type: GET_OUTPUT, output})
  */
  const token = require('../../secrets')
 
- // curl 'https://api.api.ai/api/query?v=20150910&query=what%20is%20one%20tablespoon%20to%20teaspoons&lang=en&sessionId=8c434103-e94e-47d8-b06f-3886fa2e5541&timezone=America/New_York' -H 'Authorization:Bearer 32a6925a368448038ed4e3899b5422ca'
 
 const makeRequestConfig = (userInput) => {
   return {

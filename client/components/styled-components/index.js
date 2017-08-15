@@ -50,3 +50,24 @@ export const List = styled.ul`
   margin: 0 25px;
   list-style-type: ${props => props.directions ? 'decimal' : 'square'};
 `
+//Ingredients on the CookRecipe Component
+export const IngredientsView = styled.div`
+  height: 80vh;
+  flex: 1;
+  display: flex;
+  padding: 25px;
+  flex-direction: ${props => props.column ? 'column' : 'row'};
+`
+export const CurrentStep = styled.div`
+  height: 80vh;
+  flex: 2;
+  padding: 25px;
+  display: flex;
+  flex-direction: ${props => props.column ? 'column' : 'row'};
+`
+export const NextStep = styled.div`
+  padding: 25px;
+`
+export const ControlPanel = styled.div`
+  padding: 25px;
+`
