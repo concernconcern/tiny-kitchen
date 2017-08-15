@@ -6,9 +6,6 @@ import PropTypes from 'prop-types'
 import history from './history'
 import { Main, Login, Signup, UserHome, ViewRecipe, CookingAI, CookRecipe, AddRecipe } from './components'
 import { me } from './store'
-import createBrowserHistory from 'history/createBrowserHistory';
-let history = createBrowserHistory();
-
 
 /**`
  * COMPONENT
