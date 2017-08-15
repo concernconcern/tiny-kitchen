@@ -10,4 +10,6 @@ export { default as Navbar } from './Navbar'
 export { default as AddRecipe } from './AddRecipe'
 export { Login, Signup } from './auth-form'
 export { default as CookingAI } from './CookingAI'
+export { default as AllRecipes } from './AllRecipes'
+export { default as Tile } from './Tile'
 export { default as CookRecipe } from './CookRecipe';

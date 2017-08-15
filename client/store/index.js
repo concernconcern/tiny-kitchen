@@ -3,13 +3,15 @@ import createLogger from 'redux-logger'
 import thunkMiddleware from 'redux-thunk'
 import user from './user'
 import recipe from './recipe'
+import recipes from './recipes'
 import ai from './ai'
 import cooking from './cooking'
-const reducer = combineReducers({ user, recipe, ai, cooking})
+const reducer = combineReducers({ user, recipe, ai, cooking, recipes})
 const middleware = applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
 const store = createStore(reducer, middleware)
 
 export default store
+export * from './recipes'
 export * from './recipe'
 export * from './user'
 export * from './ai'

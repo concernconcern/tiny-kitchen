@@ -52,6 +52,18 @@ export const List = styled.ul`
   list-style-type: ${props => props.directions ? 'decimal' : 'square'};
 `
 
+export const Tiles = styled.div`
+  display: flex;
+  width: 100vw;
+  flex-wrap: wrap;
+`
+export const TileTitle = styled.h2`
+  font-size: 30px;
+  color: white;
+  padding: 0px 20px;
+  margin: 0px;
+  font-family: 'Playfair Display', serif;
+`
 export const Input = styled.input`
   font-family: ${props => props.title ? 'Playfair Display, serif' : ''};
   font-size: ${props => props.title ? '50px' : '12px'}; 
