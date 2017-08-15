@@ -37,7 +37,6 @@ class CookRecipe extends React.Component{
 
   componentDidUpdate(){
     if (this.props.mochiSays !== ''){
-      console.log('mochi: ', this.props.mochiSays)
       Mochi.say(this.props.mochiSays)
     }
   }
@@ -57,14 +56,11 @@ class CookRecipe extends React.Component{
 
   render(){
     Mochi.on(['*'], true).then((i, wildcard) => {
-      console.log('wildcard: ', wildcard)
       if (wildcard === 'next' || wildcard === 'next step'){
-        console.log('you said next')
         this.step(null, true);
         Mochi.say(this.props.recipe.directions[this.state.currentStep]);
       }
       else if (wildcard === 'go back' || wildcard === 'back' || wildcard === 'previous'){
-        console.log('you want to go back')
         this.step(null, false);
         Mochi.say(this.props.recipe.directions[this.state.currentStep]);
       }
@@ -72,7 +68,6 @@ class CookRecipe extends React.Component{
         this.sendUserInput(wildcard)
     })
 
-    console.log('RECIPE', this.props.recipe);
     let recipe = this.props.recipe;
     return (
 
