@@ -54,6 +54,8 @@ class CookRecipe extends React.Component{
     else this.setState({currentStep: this.state.currentStep - 1});
   }
 
+
+
   render(){
     Mochi.on(['*'], true).then((i, wildcard) => {
       if (wildcard === 'next' || wildcard === 'next step'){
@@ -69,16 +71,17 @@ class CookRecipe extends React.Component{
     })
 
     let recipe = this.props.recipe;
+    let step = this.props.step;
     return (
 
       <Wrapper>
         <CurrentStep column>
-          <Title> Step {this.state.currentStep + 1}: <br />
-          {recipe.directions && recipe.directions[this.state.currentStep]}
+          <Title> Step {step + 1}: <br />
+          {recipe.directions && recipe.directions[step]}
           </Title>
 
           <NextStep>
-            <p><b>Up next...</b> {recipe.directions && recipe.directions[this.state.currentStep + 1]} </p>
+            <p><b>Up next...</b> {recipe.directions && recipe.directions[step + 1]} </p>
         </NextStep>
         </CurrentStep>
 
@@ -88,11 +91,11 @@ class CookRecipe extends React.Component{
             {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
           </List>
           <ControlPanel>
-            <button type="button" className="btn btn-info btn-lg" value="back" onClick={this.step}>
+            <button type="button" className="btn btn-info btn-lg" value="back" onClick={this.props.goBackward}>
               <span className="glyphicon glyphicon-step-backward" />
             </button>
             &nbsp; &nbsp;
-           <button type="button" className="btn btn-info btn-lg" value="forward" onClick={this.step} >
+           <button type="button" className="btn btn-info btn-lg" value="forward" onClick={this.props.goForward} >
               <span className="glyphicon glyphicon-step-forward" />
             </button>
           </ControlPanel>
@@ -108,7 +111,9 @@ class CookRecipe extends React.Component{
 const mapState = (state) => {
   return {
     recipe: state.recipe,
-    mochiSays: state.ai
+    mochiSays: state.ai,
+    step: state.currentStep
+
   };
 };
 const mapDispatch = (dispatch) => {
@@ -116,6 +121,13 @@ const mapDispatch = (dispatch) => {
     getRecipe: id => dispatch(action.getRecipe(id)),
     submitUserInput(userInput){
       return dispatch(fetchOutput(userInput))
+    },
+    goForward() {
+      console.log('go forward');
+      return dispatch(action.forward());
+    },
+    goBackward() {
+      return dispatch(action.backward());
     }
   };
 };
