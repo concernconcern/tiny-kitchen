@@ -5,7 +5,8 @@ import user from './user'
 import recipe from './recipe'
 import recipes from './recipes'
 import ai from './ai'
-const reducer = combineReducers({ user, recipe, recipes })
+import cooking from './cooking'
+const reducer = combineReducers({ user, recipe, ai, cooking, recipes})
 const middleware = applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
 const store = createStore(reducer, middleware)
 
@@ -14,3 +15,4 @@ export * from './recipes'
 export * from './recipe'
 export * from './user'
 export * from './ai'
+export * from './cooking'

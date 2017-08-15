@@ -63,3 +63,42 @@ export const TileTitle = styled.h2`
   margin: 0px;
   font-family: 'Playfair Display', serif;
 `
+export const Input = styled.input`
+  font-family: ${props => props.title ? 'Playfair Display, serif' : ''};
+  font-size: ${props => props.title ? '50px' : '12px'};
+  color: ${props => props.title ? 'black' : 'grey'};  
+  width: ${props => props.title ? '100vh' : '300px'};
+  height: auto;
+  display: block;
+  margin: 5px;
+`
+export const Box = styled.div`
+  width:  40vw;
+`
+export const TextArea = styled.textarea`
+    display: block;
+  width: 30vw;
+  margin: 5px;
+  height: 100px;
+`
+//Ingredients on the CookRecipe Component
+export const IngredientsView = styled.div`
+  height: 80vh;
+  flex: 1;
+  display: flex;
+  padding: 25px;
+  flex-direction: ${props => props.column ? 'column' : 'row'};
+`
+export const CurrentStep = styled.div`
+  height: 80vh;
+  flex: 2;
+  padding: 25px;
+  display: flex;
+  flex-direction: ${props => props.column ? 'column' : 'row'};
+`
+export const NextStep = styled.div`
+  padding: 25px;
+`
+export const ControlPanel = styled.div`
+  padding: 25px;
+`

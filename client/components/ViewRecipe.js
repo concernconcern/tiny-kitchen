@@ -14,13 +14,20 @@ class ViewRecipe extends React.Component {
   }
 
   render() {
-    const recipe = this.props.recipe;
+    const {recipe, handleClick} = this.props;
     console.log(recipe);
     return (
       <Wrapper >
         <RecipeImg src={recipe.picture_url} />
         <RecipeText>
-          <Title>{recipe && recipe.title}</Title>
+
+          <Title>{recipe && recipe.title}
+            &nbsp; &nbsp;
+             <Link to={`/recipe/${recipe.id}/cook`} className="btn btn-info btn-lg" onClick={handleClick}>
+              <span className="glyphicon glyphicon-play" />
+            </Link>
+
+          </Title>
           <Title secondary>Ingredients</Title>
           <List>
             {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
@@ -45,7 +52,11 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    getRecipe: id => dispatch(action.getRecipe(id))
+    getRecipe: id => dispatch(action.getRecipe(id)),
+    handleClick(evt) {
+      console.log(action.getCooking)
+      dispatch(action.getCooking(true))
+    }
   }
 }
 
