@@ -4,7 +4,10 @@ chrome.browserAction.onClicked.addListener(function (tab) {
   chrome.tabs.query(
     { currentWindow: true, active: true },
     function (tabArray) {
-      var success = function (data) { alert(data.title) }
+      var success =
+        function (data) {
+          chrome.tabs.create({ url: "http://localhost:8080/add-recipe" })
+        }
       $.ajax({
         type: "POST",
         url: "http://localhost:8080/api/recipe-sources",
