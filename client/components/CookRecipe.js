@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import Artyom from 'artyom.js';
+import { withRouter, Link } from 'react-router-dom';
 import Step from './Step';
 import {fetchOutput} from '../store';
 import {Wrapper, IngredientsView, CurrentStep, NextStep, ControlPanel, Title, List} from './styled-components';
@@ -29,7 +30,7 @@ class CookRecipe extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      currentStep: 0
+
     };
     this.step = this.step.bind(this);
     this.sendUserInput = this.sendUserInput.bind(this);
@@ -47,6 +48,7 @@ class CookRecipe extends React.Component{
 
   componentDidMount(){
     this.props.getRecipe(this.props.match.params.id);
+    this.props.isCooking(true);
   }
 
   step(event, bool) {
@@ -72,32 +74,43 @@ class CookRecipe extends React.Component{
 
     let recipe = this.props.recipe;
     let step = this.props.step;
+    let backDisable = false; let forwardDisable = false;
+    if (step === -1) backDisable = true;
+    if (step === recipe.directions.length - 1) forwardDisable = true;
     return (
 
       <Wrapper>
         <CurrentStep column>
-          <Title> Step {step + 1}: <br />
+          {(step > -1) ? <Title> Step {step + 1}: <br />
           {recipe.directions && recipe.directions[step]}
-          </Title>
+          </Title> : <Title> Ready to get cooking? Hit the play button! </Title>}
+
 
           <NextStep>
+           {forwardDisable ? <p><b> Eat up! </b></p> :
             <p><b>Up next...</b> {recipe.directions && recipe.directions[step + 1]} </p>
+           }
         </NextStep>
         </CurrentStep>
 
         <IngredientsView column>
+
           <Title secondary> Ingredients </Title>
             <List>
             {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
           </List>
           <ControlPanel>
-            <button type="button" className="btn btn-info btn-lg" value="back" onClick={this.props.goBackward}>
+            <button disabled={backDisable} className="btn btn-info btn-lg" value="back" onClick={this.props.goBackward}>
               <span className="glyphicon glyphicon-step-backward" />
             </button>
             &nbsp; &nbsp;
-           <button type="button" className="btn btn-info btn-lg" value="forward" onClick={this.props.goForward} >
+           <button disabled={forwardDisable} className="btn btn-info btn-lg" value="forward" onClick={this.props.goForward} >
               <span className="glyphicon glyphicon-step-forward" />
             </button>
+            &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; {/*need better spacing solution*/}
+            <Link to={`/recipe/${recipe.id}`} className="btn btn-info btn-lg">
+              <span className="glyphicon glyphicon-remove-sign" /> Exit
+            </Link>
           </ControlPanel>
 
         </IngredientsView>
@@ -118,12 +131,12 @@ const mapState = (state) => {
 };
 const mapDispatch = (dispatch) => {
   return {
+    isCooking: bool => dispatch(action.getCooking(bool)),
     getRecipe: id => dispatch(action.getRecipe(id)),
     submitUserInput(userInput){
       return dispatch(fetchOutput(userInput))
     },
     goForward() {
-      console.log('go forward');
       return dispatch(action.forward());
     },
     goBackward() {

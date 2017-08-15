@@ -1,7 +1,7 @@
 
 // Action Types
 const FORWARD = 'FORWARD';
-const BACKWARD = 'BACKWARD;'
+const BACKWARD = 'BACKWARD';
 
 //Initial State
 const currentStep = -1;

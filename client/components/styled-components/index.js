@@ -15,6 +15,7 @@ export const RecipeText = styled.div`
   height: 90vh;
   width: 50vw;
   padding: 25px;
+  overflow: scroll;
 `
 export const Title = styled.h1`
  font-size: ${props => props.secondary ? '25px' : '50px'};
@@ -54,7 +55,7 @@ export const List = styled.ul`
 export const Input = styled.input`
   font-family: ${props => props.title ? 'Playfair Display, serif' : ''};
   font-size: ${props => props.title ? '50px' : '12px'};
-  color: ${props => props.title ? 'black' : 'grey'};  
+  color: ${props => props.title ? 'black' : 'grey'};
   width: ${props => props.title ? '100vh' : '300px'};
   height: auto;
   display: block;
