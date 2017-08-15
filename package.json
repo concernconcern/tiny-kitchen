@@ -25,6 +25,7 @@
     "axios": "^0.15.3",
     "bluebird": "^3.5.0",
     "body-parser": "^1.16.1",
+    "chance": "^1.0.10",
     "connect-session-sequelize": "^4.1.0",
     "convert-units": "^2.3.1",
     "express": "^4.14.1",
