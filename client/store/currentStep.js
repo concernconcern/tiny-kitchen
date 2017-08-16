@@ -1,22 +1,19 @@
 
 // Action Types
-const FORWARD = 'FORWARD';
-const BACKWARD = 'BACKWARD';
+const GET_STEP = 'GET_STEP';
 
 //Initial State
 const currentStep = 0;
 
 // Action Creators
-export const forward = () => ({type: FORWARD});
-export const backward = () => ({type: BACKWARD});
+export const getStep = (step) => ({type: GET_STEP, step});
 
 // Reducer
 export default function(state = currentStep, action){
   console.log('step reducer');
   switch (action.type) {
-    case FORWARD:
-      return state + 1;
-    case BACKWARD: return state - 1;
+    case GET_STEP:
+      return action.step;
     default: return state;
   }
 }

@@ -8,7 +8,14 @@ const GET_RECIPE_SUCCESS = 'GET_RECIPE_SUCCESS'
 /**
  * INITIAL STATE
  */
-const recipe = {}
+const recipe = {
+  title: '',
+  source_url: '',
+  picture_url: '',
+  ingredients: [],
+  directions: [],
+  rating: 0.0
+}
 
 /**
  * ACTION CREATORS

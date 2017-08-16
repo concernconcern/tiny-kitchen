@@ -15,6 +15,7 @@ export const RecipeText = styled.div`
   height: 90vh;
   width: 50vw;
   padding: 25px;
+  overflow: scroll;
 `
 export const Title = styled.h1`
  font-size: ${props => props.secondary ? '25px' : '50px'};

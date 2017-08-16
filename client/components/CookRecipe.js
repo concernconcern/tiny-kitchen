@@ -2,27 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import Artyom from 'artyom.js';
+import { withRouter, Link } from 'react-router-dom';
 import Step from './Step';
 import {fetchOutput} from '../store';
 import {Wrapper, IngredientsView, CurrentStep, NextStep, ControlPanel, Title, List} from './styled-components';
 import * as action from '../store';
-
-
-const Mochi = new Artyom();
-
-Mochi.initialize({
-  lang:"en-GB",
-  debug:true, // Show what recognizes in the Console
-  listen:true, // Start listening after this
-  speed:0.9, // Talk a little bit slow
-  mode:"normal", // This parameter is not required as it will be normal by default
-  continuous: true,
-  soundex: true
-})
-.then(console.log('initialized mochi'))
-.catch((err) => {
-    console.error("mochi couldn't be initialized: ", err);
-})
+import Mochi from '../mochi'
 
 class CookRecipe extends React.Component{
 
@@ -30,49 +15,44 @@ class CookRecipe extends React.Component{
     super(props);
     //starts off mochi not talking
     this.state = {
-      stopped: true
+      stopped: true,
+      forwardDisable: false,
+      backDisable: false
     }
     this.sendUserInput = this.sendUserInput.bind(this);
     this.toggleMochi = this.toggleMochi.bind(this);
+    this.updateStep = this.updateStep.bind(this);
+  }
+
+  componentDidMount(){
+    this.props.getRecipe(this.props.match.params.id);
+    this.props.isCooking(true);
+    Mochi.addCommands({
+    smart:true,
+    indexes: ["*"],
+    action: function(i, wildcard){
+      if (wildcard === 'next' || wildcard === 'next step'){
+          this.updateStep(null, true)
+        }
+        else if (wildcard === 'go back' || wildcard === 'back' || wildcard === 'previous'){
+          this.updateStep(null, false)
+        }
+        else if (wildcard === 'start cooking' || wildcard === 'start' ||wildcard === 'stop' || wildcard === 'pause'){
+          this.toggleMochi()
+        }
+
+        else
+          this.sendUserInput(wildcard)
+      }
+    });
   }
 
   componentDidUpdate(){
     if (this.props.mochiSays !== ''){
       Mochi.say(this.props.mochiSays)
     }
-    else if (Object.keys(this.props.recipe).length && !this.state.stopped){
-      this.setState({stopped: false})
-      Mochi.say(this.props.recipe.directions[this.props.step])
-    }
-  }
-  componentDidMount(){
-      this.props.getRecipe(this.props.match.params.id);
-
-      //only listen when the user speaks
-      if (Mochi.isSpeaking()){
-        Mochi.on(['*'], true).then((i, wildcard) => {
-        if (wildcard === 'next' || wildcard === 'next step'){
-          Mochi.shutUp()
-          this.props.goForward()
-          Mochi.say(this.props.recipe.directions[this.props.step])
-        }
-        else if (wildcard === 'go back' || wildcard === 'back' || wildcard === 'previous'){
-          Mochi.shutUp()
-          this.props.goBackward()
-          Mochi.say(this.props.recipe.directions[this.props.step])
-        }
-        else if (wildcard === 'start cooking' || wildcard === 'start'){
-          Mochi.say(this.props.recipe.directions[this.props.step])
-          this.toggleMochi()
-        }
-        else if (wildcard === 'stop' || wildcard === 'pause') {
-          Mochi.shutUp()
-          this.toggleMochi()
-        }
-        else
-          this.sendUserInput(wildcard)
-      })
-    }
+    if (this.props.recipe && this.props.stepToSay !== '')
+      Mochi.say(this.props.stepToSay)
   }
 
   sendUserInput(userInput){
@@ -80,32 +60,47 @@ class CookRecipe extends React.Component{
   }
 
   toggleMochi(){
-    if (Mochi.isSpeaking()){
+    if (!this.state.stopped){
       Mochi.shutUp()
       this.setState({stopped: true})
     }
     else {
-      console.log('mochisays ', this.props.recipe)
       Mochi.say(this.props.recipe.directions[this.props.step])
       this.setState({stopped: false})
     }
   }
 
+  updateStep(evt, bool){
+    console.log(evt.target.value)
+    let newStep;
+    if ((evt && evt.target.value === 'forward') || bool)
+      newStep = this.props.step+1
+    else if ((evt && evt.target.value === 'back') || !bool)
+      newStep = this.props.step-1
 
+    if (newStep <= 0)
+      this.setState({backDisable: true})
+    else if (this.props.recipe && newStep >= this.props.recipe.directions.length-1)
+      this.setState({forwardDisable: true})
+    else{
+      Mochi.shutUp()
+      this.props.changeStepTo(newStep, this.props.recipe.directions)
+    }
+  }
 
   render(){
-    let recipe = this.props.recipe;
-    let step = this.props.step;
+    let {forwardDisable, backDisable} = this.state
+    const recipe = this.props.recipe
     return (
-
       <Wrapper>
         <CurrentStep column>
-          <Title> Step {step + 1}: <br />
-          {recipe.directions && recipe.directions[step]}
+          <Title> Step {this.props.step + 1}: <br />
+          {recipe.directions && recipe.directions[this.props.step]}
           </Title>
+
           <NextStep>
-            Up next...{recipe.directions && recipe.directions[step + 1]}
-          </NextStep>
+            <p><b>Up next...</b> {recipe.directions && recipe.directions[this.props.step + 1]} </p>
+        </NextStep>
         </CurrentStep>
 
         <IngredientsView column>
@@ -114,7 +109,7 @@ class CookRecipe extends React.Component{
             {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
           </List>
           <ControlPanel>
-            <button type="button" className="btn btn-info btn-lg" value="back" onClick={this.props.goBackward}>
+            <button disabled={backDisable} className="btn btn-info btn-lg" value="back" onClick={this.updateStep}>
               <span className="glyphicon glyphicon-step-backward" />
             </button>
             &nbsp; &nbsp;
@@ -127,13 +122,15 @@ class CookRecipe extends React.Component{
               }
             </button>
             &nbsp; &nbsp;
-           <button type="button" className="btn btn-info btn-lg" value="forward" onClick={this.props.goForward} >
+           <button disabled={forwardDisable} className="btn btn-info btn-lg" value="forward" onClick={this.updateStep} >
               <span className="glyphicon glyphicon-step-forward" />
-          </button>
+            </button>
+            &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; {/*need better spacing solution*/}
+            <Link to={`/recipe/${recipe.id}`} className="btn btn-info btn-lg">
+              <span className="glyphicon glyphicon-remove-sign" /> Exit
+            </Link>
           </ControlPanel>
-
         </IngredientsView>
-
       </Wrapper>
 
     );
@@ -144,23 +141,20 @@ const mapState = (state) => {
   return {
     recipe: state.recipe,
     mochiSays: state.ai,
-    step: state.currentStep
+    step: state.currentStep,
+    stepToSay: state.sayStep
   };
 };
 const mapDispatch = (dispatch) => {
   return {
+    isCooking: bool => dispatch(action.getCooking(bool)),
     getRecipe: id => dispatch(action.getRecipe(id)),
     submitUserInput(userInput){
       return dispatch(fetchOutput(userInput))
     },
-    goForward() {
-      console.log('go forward');
-      Mochi.shutUp()
-      return dispatch(action.forward());
-    },
-    goBackward() {
-      Mochi.shutUp()
-      return dispatch(action.backward());
+    changeStepTo(newStep, directions){
+      dispatch(action.getStep(newStep))
+      dispatch(action.sayStep(newStep, directions))
     }
   };
 };

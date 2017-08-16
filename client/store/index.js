@@ -6,9 +6,10 @@ import recipe from './recipe'
 import ai from './ai'
 import cooking from './cooking'
 import currentStep from './currentStep'
+import sayStep from './sayStep'
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-const reducer = combineReducers({ user, recipe, ai, cooking, currentStep})
+const reducer = combineReducers({ user, recipe, ai, cooking, currentStep, sayStep})
 const middleware = applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
 const store = createStore(reducer, composeWithDevTools(middleware))
 
@@ -18,3 +19,4 @@ export * from './user'
 export * from './ai'
 export * from './cooking'
 export * from './currentStep'
+export * from './sayStep'
