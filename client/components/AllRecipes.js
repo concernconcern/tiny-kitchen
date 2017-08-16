@@ -19,7 +19,8 @@ class AllRecipes extends React.Component {
     const recipes = this.props.recipes;
     return (
       <Tiles>
-        {recipes.length && recipes.map((recipe, i) => <Tile key={i} recipe={recipe}/>)}
+        {recipes.length && recipes.map((recipe, i) =>
+          <Link to={`/recipe/${recipe.id}`}><Tile key={i} recipe={recipe}/></Link>)}
       </Tiles>
     )
   }

@@ -139,10 +139,24 @@ export const ProfileUpperArea = styled.div`
   padding: 25px;
   flex-direction: ${props => props.column ? 'column' : 'row'};
 `
+export const ProfileCard = styled.div`
+  flex:2
+  height: 25vh;
+  display: flex;
+  padding: 25px;
+  flex-direction: ${props => props.column ? 'column' : 'row'};
+`
 export const ProfileWarning = styled.h2`
   font-size: 30px;
   color: grey;
   padding: 0px 20px;
   margin: 0px;
   font-family: 'Playfair Display', serif;
+`
+export const ProfileIcon = styled.h2`
+  flex:3;
+  font-size: 40px;
+  padding: 20px;
+  border-radius: 50%;
+  width: 80px;
 `
