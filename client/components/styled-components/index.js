@@ -67,11 +67,10 @@ export const TileTitle = styled.h2`
 `
 export const Input = styled.input`
   font-family: ${props => props.title ? 'Playfair Display, serif' : ''};
-  font-size: ${props => props.title ? '50px' : '12px'};
-  color: ${props => props.title ? 'black' : 'grey'};
-  width: ${props => props.title ? '100vh' : '300px'};
+  font-size: ${props => props.title ? '50px' : '12px'}; 
+  width: ${props => props.title ? '775px' : '300px'};
+  display: inline;
   height: auto;
-  display: block;
   margin: 5px;
 `
 export const Box = styled.div`
