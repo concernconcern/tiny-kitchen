@@ -3,15 +3,37 @@ import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
 import { Wrapper, SecondaryWrap, Button, Modify, RecipeImg, RecipeText, Form, Title, List, Input, Box, TextArea } from './styled-components'
 import * as action from '../store'
+import { GridList, GridTile } from 'material-ui/GridList';
+import IconButton from 'material-ui/IconButton';
+import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 
+
+const styles = {
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    width: '750px'
+  },
+  gridList: {
+    display: 'flex',
+    flexWrap: 'nowrap',
+    overflowX: 'auto',
+    cellHeight: 'auto'
+  }
+};
 
 class AddRecipe extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      highlighted: null
+    }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.addField = this.addField.bind(this);
     this.deleteField = this.deleteField.bind(this);
+    this.selectPic = this.selectPic.bind(this);
   }
   componentDidMount() {
     this.props.chromeRecipe(this.props.location.search.slice(5));
@@ -24,7 +46,15 @@ class AddRecipe extends React.Component {
   }
   handleSubmit(e) {
     e.preventDefault();
-    this.props.submitRecipe(this.props.recipe)
+    let recipe = Object.assign({},
+      {
+        title: this.props.recipe.title,
+        source_url: this.props.recipe.source_url,
+        directions: this.props.recipe.directions,
+        ingredients: this.props.recipe.ingredients,
+        picture_url: this.props.recipe.selected_pic
+      });
+    this.props.submitRecipe(recipe)
   }
   addField(e) {
     e.preventDefault();
@@ -38,12 +68,37 @@ class AddRecipe extends React.Component {
     recipe[e.target.name].splice(+e.target.id, 1);
     this.props.getRecipeSuccess(recipe)
   }
+  selectPic(e) {
+    e.preventDefault();
+    let recipe = Object.assign({}, this.props.recipe);
+    recipe.selected_pic = recipe.picture_url[+e.target.id];
+    this.setState({ highlighted: +e.target.id })
+    this.props.getRecipeSuccess(recipe)
+  }
   render() {
     let recipe = this.props.recipe;
+
     return (
       <Form onSubmit={this.handleSubmit}>
         <Input title type="text" name="title" onChange={this.handleChange} value={recipe && recipe.title} />
-        <RecipeImg secondary src={recipe.picture_url} />
+        <Title secondary>Choose a Picture:</Title>
+        <div style={styles.root}>
+          {recipe.picture_url.length && <GridList style={styles.gridList} cols={2.2}>
+            {recipe.picture_url.map((pic, i) => {
+              return (<GridTile
+                onClick={this.selectPic}
+                key={i}
+                id={i}
+              >
+                {i === this.state.highlighted ?
+                  <img id={i} src={pic} style={{ border: "5px solid #db3434" }} />
+                  : <img id={i} src={pic} style={{ border: "5px solid transparent" }} />
+                }  </GridTile>)
+            })
+            }
+          </GridList>
+          }
+        </div>
         <SecondaryWrap>
           <Box>
             <Title secondary>Ingredients</Title> {

@@ -12,6 +12,7 @@ const recipe = {
   title: '',
   source_url: '',
   picture_url: '',
+  selected_pic: '',
   ingredients: [],
   directions: []
 }
@@ -34,16 +35,18 @@ export const getRecipe = (id) =>
 export const chromeRecipe = (url) =>
   dispatch =>
     axios.post(`/api/recipe-sources`, { url })
-      .then(res =>
-        dispatch(getRecipeSuccess(res.data)))
+      .then(res => {
+        res.data.selected_pic = ''
+        dispatch(getRecipeSuccess(res.data))
+      })
       .catch(err => console.log(err))
 
 export const submitRecipe = (recipe) =>
   dispatch =>
     axios.post(`/api/recipes`, recipe)
       .then(res => {
-        dispatch(getRecipeSuccess(res.data))
         history.push(`/recipe/${res.data.id}`)
+        dispatch(getRecipeSuccess(res.data))
       })
       .catch(err => console.log(err))
 
