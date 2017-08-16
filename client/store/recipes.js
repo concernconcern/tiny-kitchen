@@ -25,13 +25,21 @@ export const getRecipes = () =>
         dispatch(getRecipesSuccess(res.data)))
       .catch(err => console.log(err))
 
+
+export const getRecipesBatch = (offset) =>
+  dispatch =>
+    axios.get(`/api/recipes/batch/${offset}`)
+      .then(res =>
+        dispatch(getRecipesSuccess(res.data)))
+      .catch(err => console.log(err));
+
 /**
  * REDUCER
  */
 export default function (state = recipes, action) {
   switch (action.type) {
     case GET_RECIPES_SUCCESS:
-      return action.recipes;
+      return state.concat(action.recipes);
     default:
       return state
   }

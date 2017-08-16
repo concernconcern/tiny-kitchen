@@ -16,7 +16,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
       function findTitle(html) {
         const idx1 = html.indexOf('<title>');
         const idx2 = html.indexOf('</title>');
-        return html.slice(idx1 + 7, idx2).split(' - ')[0];
+        return html.slice(idx1 + 7, idx2).split(' - ')[0].split('|')[0];
       }
 
       // find image if not provided by an API response
@@ -42,7 +42,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
           }
           html = html.slice(idx2);
         }
-        return imgUrls.filter(el => !!el).filter(el => !!el.startsWith('http'));
+        return imgUrls.filter(el => !!el).filter(el => !!el.startsWith('http')).filter((el, idx, arr) => arr.indexOf(el) === idx);
       }
 
       // find the first index where the first tag after 'listName' keyword is an ordered or unordered list
