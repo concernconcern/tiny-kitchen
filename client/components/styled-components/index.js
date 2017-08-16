@@ -161,3 +161,10 @@ export const Error = styled.div`
   background: goldenrod;
   margin: 5px;
 `
+
+export const SearchInput = styled.input`
+  display: inline;
+  height: auto;
+  border: 1px solid #db7d7d;
+  color: black
+`
