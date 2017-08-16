@@ -42,7 +42,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
           }
           html = html.slice(idx2);
         }
-        return imgUrls.filter(el => !!el).filter(el => !!el.startsWith('http'));
+        return imgUrls.filter(el => !!el).filter(el => !!el.startsWith('http')).filter((el, idx, arr) => arr.indexOf(el) === idx);
       }
 
       // find the first index where the first tag after 'listName' keyword is an ordered or unordered list
