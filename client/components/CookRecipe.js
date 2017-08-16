@@ -15,9 +15,12 @@ window.addEventListener("keydown", function (event) {
     return; // Do nothing if the event was already processed
   }
   else{
-    let whereToGo = event.key === 'ArrowDown'|| event.key === 'ArrowLeft' ? this.stepForward : this.stepBackward;
-    console.log(event.key)
-    whereToGo();
+    if (event.key === 'ArrowDown'|| event.key === 'ArrowLeft')
+      this.stepBackward()
+    else if (event.key === 'ArrowUp' || event.key === 'ArrowRight')
+      this.stepForward()
+    else
+      return
   }
 });
 

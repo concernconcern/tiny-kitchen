@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-
+import { Wrapper, Tiles } from './styled-components'
 
 /**
  * COMPONENT
@@ -14,10 +14,22 @@ class UserHome extends React.Component{
 
 
   render(){
-    const {email} = this.props.email;
-
+    const {user, userRecipes} = this.props;
+    console.log(user)
     return (
-      <h2>email</h2>
+      <div>
+        <div>
+          {user.email}
+        </div>
+        {
+          userRecipes.length ?
+          <Tiles>
+           {userRecipes.map((recipe, i) => <Tile key={i} recipe={recipe}/>)}
+          </Tiles>
+          :
+          <h2>You have no recipes! Go add some!</h2>
+        }
+      </div>
     )
   }
 
@@ -28,7 +40,8 @@ class UserHome extends React.Component{
  */
 const mapState = (state) => {
   return {
-    email: state.user.email
+    user: state.user,
+    userRecipes: state.userRecipes
   }
 }
 
