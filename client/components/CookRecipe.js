@@ -76,14 +76,8 @@ class CookRecipe extends React.Component{
     }
     if (this.props.recipe && this.props.stepToSay !== '' && !this.state.stopped)
       Mochi.say(this.props.stepToSay)
-  }
 
-  // handlePress(event){
-  //   event.preventDefault()
-  //   let whereToGo = event.key === 'ArrowDown'|| event.key === 'ArrowLeft' ? this.stepForward : this.stepBackward;
-  //   console.log(event.key)
-  //   whereToGo();
-  // }
+  }
 
   sendUserInput(userInput){
     return this.props.submitUserInput(userInput)
