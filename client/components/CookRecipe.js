@@ -130,14 +130,15 @@ class CookRecipe extends React.Component {
           <CurrentStep>
             <Directions>
               <Title>Step {this.props.step + 1}:</Title>
-              <p>
-                {recipe.directions && recipe.directions[this.props.step]}
-              </p>
+              <ScaleText>
+                <p>
+                  {recipe.directions && recipe.directions[this.props.step]}
+                </p>
+              </ScaleText>
             </Directions>
-
           </CurrentStep>
           <Sidebar>
-            <Title secondary> Ingredients </Title>
+            <Title secondary>Ingredients</Title>
             <List>
               {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
             </List>
