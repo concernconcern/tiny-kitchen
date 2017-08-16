@@ -23,7 +23,7 @@ class Routes extends Component {
       <Router history={history}>
         <Main>
           <Switch>
-            <Route exact path='/'component={AllRecipes} />
+            <Route exact path='/' component={AllRecipes} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/signup' component={Signup} />
             <Route exact path='/recipe/:id' component={ViewRecipe} />

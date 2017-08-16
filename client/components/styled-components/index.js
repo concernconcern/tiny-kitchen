@@ -145,8 +145,7 @@ export const CurrentStep = styled.div`
   height: 100px;
 `
 export const Directions = styled.div`
-height: 200px;
-width: 400px;
+overflow: scroll;
 `
 export const ControlPanel = styled.div`
   display: flex;
