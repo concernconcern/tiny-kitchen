@@ -13,3 +13,4 @@ export { default as CookingAI } from './CookingAI'
 export { default as AllRecipes } from './AllRecipes'
 export { default as Tile } from './Tile'
 export { default as CookRecipe } from './CookRecipe';
+export { default as Batch } from './Batch'
