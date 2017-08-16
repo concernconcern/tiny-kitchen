@@ -19,8 +19,8 @@ class CookRecipe extends React.Component{
     let forward = (this.props.recipe && this.props.step === this.props.recipe.directions.length - 1) ? true : false;
     this.state = {
       stopped: true,
-      forwardDisable: forward,
-      backDisable: back
+      forwardDisable: false,
+      backDisable: true
     }
     this.sendUserInput = this.sendUserInput.bind(this);
     this.toggleMochi = this.toggleMochi.bind(this);
@@ -89,7 +89,7 @@ class CookRecipe extends React.Component{
   }
 
   stepBackward(){
-    if (!this.state.backwardDisable){
+    if (this.state.backwardDisable === false){
       let newStep = this.props.step - 1;
       Mochi.shutUp();
       this.props.changeStepTo(newStep, this.props.recipe.directions);
