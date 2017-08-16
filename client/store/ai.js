@@ -8,16 +8,20 @@ import convert from 'convert-units';
  */
 
 const GET_OUTPUT = 'GET_OUTPUT'//get output string from api.ai
-
+const SET_TIMER = 'SET_TIMER';
 /**
  * INITIAL STATE
  */
-const ai = '';
+const ai = {
+  text:'',
+  time: 6000
+};
 
 /**
  * ACTION CREATORS
  */
 export const getOutput = output => ({type: GET_OUTPUT, output})
+export const setTimer = time => ({type: SET_TIMER, time})
 /**
  * THUNK CREATORS
  *The query endpoint is used to process natural language in the form of text. The query requests *return structured data in JSON format with an action and parameters for that action
@@ -57,11 +61,7 @@ export const fetchOutput = (userInput) =>
       if (res.data.result.action === 'setTimer'){
         const {amount, unit} = res.data.result.parameters.duration
         const timeInMs = convert(amount).from(unit).to('ms')
-
-        setTimeout(function(){
-          dispatch(getOutput('times up'))
-          dispatch(getOutput(''))
-        }, timeInMs)
+        dispatch(setTimer(timeInMs));
       }
     })
     .catch(err => console.log(err))
@@ -72,10 +72,15 @@ export const fetchOutput = (userInput) =>
  * REDUCER
  */
 export default function (state = ai, action) {
+  let newState = Object.assign({}, state);
   switch (action.type) {
     case GET_OUTPUT:
-      return action.output
-    default:
-      return state
+      newState.text = action.output;
+      break;
+    case SET_TIMER:
+      newState.time = action.time;
+      break;
+    default: return state;
   }
+  return newState;
 }

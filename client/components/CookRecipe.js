@@ -1,14 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import Artyom from 'artyom.js';
-import { Router, withRouter, Link } from 'react-router-dom';
-import Step from './Step';
+import { Link } from 'react-router-dom';
 import {fetchOutput} from '../store';
 import {Wrapper, IngredientsView, CurrentStep, NextStep, ControlPanel, Title, List} from './styled-components';
 import * as action from '../store';
 import Mochi from '../mochi';
-import ReactTestUtils from 'react-dom/test-utils';
+import Timer from './Timer';
 
 window.addEventListener("keydown", function (event) {
   if (event.defaultPrevented) {
@@ -48,11 +45,12 @@ class CookRecipe extends React.Component{
     smart:true,
     indexes: ["*"],
     action: (i, wildcard) => {
+      let toggleWords = ['start cooking', 'start', 'stop', 'pause', 'play', 'read'];
       if (wildcard === 'next' || wildcard === 'next step'){
           this.stepForward();
         } else if (wildcard === 'go back' || wildcard === 'back' || wildcard === 'previous'){
           this.stepBackward();
-        } else if (wildcard === 'start cooking' || wildcard === 'start' || wildcard === 'stop' || wildcard === 'pause'){
+        } else if (toggleWords.includes(wildcard)){
           this.toggleMochi();
         } else {
           this.sendUserInput(wildcard);
@@ -135,10 +133,11 @@ class CookRecipe extends React.Component{
   render(){
     let {forwardDisable, backDisable} = this.state
     const recipe = this.props.recipe;
+    console.log(this.props.timer);
     return (
       <Wrapper>
         <CurrentStep column>
-          <Title> Step {this.props.step + 1}: <br />
+          <Title> <b>Step {this.props.step + 1}: </b><br />
           {recipe.directions && recipe.directions[this.props.step]}
           </Title>
 
@@ -173,6 +172,7 @@ class CookRecipe extends React.Component{
             <Link to={`/recipe/${recipe.id}`} className="btn btn-info btn-lg" onClick={Mochi.shutUp}>
               <span className="glyphicon glyphicon-remove-sign" /> Exit
             </Link>
+            <Timer time={this.props.timer} />
           </ControlPanel>
         </IngredientsView>
       </Wrapper>
@@ -184,9 +184,10 @@ class CookRecipe extends React.Component{
 const mapState = (state) => {
   return {
     recipe: state.recipe,
-    mochiSays: state.ai,
+    mochiSays: state.ai.text,
     step: state.currentStep,
-    stepToSay: state.sayStep
+    stepToSay: state.sayStep,
+    timer: state.ai.time
   };
 };
 const mapDispatch = (dispatch) => {

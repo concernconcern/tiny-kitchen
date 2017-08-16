@@ -67,7 +67,7 @@ export const TileTitle = styled.h2`
 `
 export const Input = styled.input`
   font-family: ${props => props.title ? 'Playfair Display, serif' : ''};
-  font-size: ${props => props.title ? '50px' : '12px'}; 
+  font-size: ${props => props.title ? '50px' : '12px'};
   width: ${props => props.title ? '775px' : '300px'};
   display: inline;
   height: auto;
@@ -130,4 +130,9 @@ export const NextStep = styled.div`
 `
 export const ControlPanel = styled.div`
   padding: 25px;
+`
+export const Clock = styled.div`
+  height: 100px;
+  width: 200px;
+  background-color: pink;
 `
