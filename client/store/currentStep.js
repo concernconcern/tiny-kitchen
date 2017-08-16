@@ -10,7 +10,7 @@ export const getStep = (step) => ({type: GET_STEP, step});
 
 // Reducer
 export default function(state = currentStep, action){
-  console.log('step reducer');
+  console.log('step reducer', action);
   switch (action.type) {
     case GET_STEP:
       return action.step;
