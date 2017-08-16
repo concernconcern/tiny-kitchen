@@ -12,20 +12,37 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
           'img': ['src', 'data-src']
         }
       }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&');
-
+      
       function findTitle(html) {
         const idx1 = html.indexOf('<title>');
         const idx2 = html.indexOf('</title>');
         return html.slice(idx1 + 7, idx2).split(' - ')[0];
       }
 
-      // find image if not provided by the API response
+      // find image if not provided by an API response
       function findImage(html) {
         const idx1 = html.indexOf('<img');
         const imgString = html.slice(idx1);
         const idx2 = imgString.indexOf('/>')
         const imgUrl = html2json(imgString.slice(0, idx2 + 2)).child[0].attr.src;
         return imgUrl;
+      }
+
+      function findImages(html) {
+        let imgUrls = [];
+        while (html.includes('<img')){
+          const idx1 = html.indexOf('<img');
+          const imgString = html.slice(idx1);
+          const idx2 = imgString.indexOf('/>')
+          const imgJson = html2json(imgString.slice(0, idx2 + 2))
+          if (imgJson.child[0].attr) {
+            const imgSrc = imgJson.child[0].attr.src;
+            const imgDataSrc = imgJson.child[0].attr['data-src'];
+            imgUrls = imgUrls.concat(imgSrc, imgDataSrc);
+          }
+          html = html.slice(idx2);
+        }
+        return imgUrls.filter(el => !!el).filter(el => !!el.startsWith('http'));
       }
 
       // find the first index where the first tag after 'listName' keyword is an ordered or unordered list
@@ -62,9 +79,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
       function createArray(section) {
         const list = section.child.find(el => el.tag === 'ul' || el.tag === 'ol');
         const elements = list.child.reduce((acc, el) => {
-          if (el.child) {
-            return acc.concat(el.child[0].text);
-          }
+          if (el.child) return acc.concat(el.child[0].text);
           else return acc;
         }, [])
         return elements;
@@ -74,7 +89,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
       const title = findTitle(sanitizedHtml);
 
       // Not needed for NY TIMES response - uncomment where necessary
-      if (!picture_url) picture_url = findImage(sanitizedHtml);
+      if (!picture_url) picture_url = findImages(sanitizedHtml);
 
       // GET INGREDIENTS
       let ingredients = html2json(clipSection(sanitizedHtml, 'Ingredients'));
