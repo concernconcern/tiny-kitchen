@@ -16,6 +16,7 @@ export const RecipeText = styled.div`
   height: 90vh;
   width: 50vw;
   padding: 25px;
+  overflow: auto;
 `
 export const Title = styled.h1`
  font-size: ${props => props.secondary ? '25px' : '50px'};
@@ -56,21 +57,19 @@ export const Input = styled.input`
   font-family: ${props => props.title ? 'Playfair Display, serif' : ''};
   font-size: ${props => props.title ? '50px' : '12px'}; 
   width: ${props => props.title ? '775px' : '300px'};
+  display: inline;
   height: auto;
-  display: block;
   margin: 5px;
 `
 export const Box = styled.div`
   padding: 10px;
 `
 export const TextArea = styled.textarea`
-  display: block;
+  display: inline;
   font-size: 12px;
   width: 400px;
-  margin: 5px;
   height: 100px;
 `
-<<<<<<< HEAD
 export const Form = styled.form`
 padding: 20px;
 display:flex;
@@ -88,11 +87,26 @@ font-size: 24px;
 background: #db3434;
 border-radius: 5px;
 outline: none;
-height: 50px;
+height: ${props => props.add ? '50px' : '50px'};
  font-family: 'Playfair Display', serif;
-width: 400px;
+width: ${props => props.add ? '50px' : '400px'};
 `
-=======
+export const Modify = styled.a`
+font-size: 24px;
+color: ${props => props.x ? 'grey' : '#db3434'};
+border-radius: 50%; 
+padding: 5px;
+display: inline;
+ float: ${props => props.x ? '' : 'right'};
+&:hover{
+  text-decoration: none;
+  color: ${props => props.x ? '#db3434' : 'grey'};
+}
+&:focus{
+  text-decoration: none;
+  color:  #db3434;
+}
+`
 //Ingredients on the CookRecipe Component
 export const IngredientsView = styled.div`
   height: 80vh;
@@ -114,4 +128,3 @@ export const NextStep = styled.div`
 export const ControlPanel = styled.div`
   padding: 25px;
 `
->>>>>>> 92f3b83cbc19b8aece6fcc18940964c6448555c8
