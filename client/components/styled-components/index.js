@@ -4,8 +4,10 @@ import styled from 'styled-components';
 export const Wrapper = styled.div`
   display: flex;
   width: 100vw;
+  height: 100vh;
   font-family: 'Roboto', sans-serif;
   flex-direction: ${props => props.column ? 'column' : 'row'};
+  justify-content: space-between;
 `
 export const RecipeImg = styled.img`
   height: ${props => props.secondary ? '300px' : '90vh'};
@@ -94,11 +96,16 @@ export const Form = styled.form`
   align-items: center;
   flex-direction: column;
 `
-export const SecondaryWrap = styled.form`
+export const SecondaryWrap = styled.div`
   padding: 20px;
   display: flex;
   justify-content: center;
 `
+export const Sidebar = styled.div`
+  flex: 1;
+  padding: 20px 0;
+`
+
 export const Button = styled.button`
   color: white;
   font-size: 24px;
@@ -130,30 +137,29 @@ export const Modify = styled.a`
     color:  #db3434;
   }
 `
-export const IngredientsView = styled.div`
-  height: 80vh;
-  flex: 1;
-  display: flex;
-  padding: 25px;
-  flex-direction: ${props => props.column ? 'column' : 'row'};
-`
 export const CurrentStep = styled.div`
-  height: 80vh;
-  flex: 2;
-  padding: 25px;
-  display: flex;
+  flex: 3;
+  padding: 20px;
   font-family: 'Playfair Display', serif;
   flex-direction: ${props => props.column ? 'column' : 'row'};
+  height: 100px;
 `
-export const NextStep = styled.div`
-  padding: 25px;
-  flex: 3;
-  padding: 25px;
-  display: flex;
-  font-family: 'Playfair Display', serif;
+export const Directions = styled.div`
+height: 200px;
+width: 400px;
 `
 export const ControlPanel = styled.div`
+  display: flex;
+  border-top: 1px solid #ddd;
   padding: 25px;
+  align-items: center;
+`
+export const UpNext = styled.div`
+  flex: 3;
+`
+export const Controls = styled.div`
+  flex: 1;
+  text-align: center;
 `
 export const Error = styled.div`
   padding: 10px;
