@@ -11,6 +11,7 @@ import Mochi from '../mochi';
 import ReactTestUtils from 'react-dom/test-utils';
 import ScaleText from 'react-scale-text';
 
+<<<<<<< HEAD
 window.addEventListener("keydown", function (event) {
   if (event.defaultPrevented) {
     return; // Do nothing if the event was already processed
@@ -22,6 +23,8 @@ window.addEventListener("keydown", function (event) {
   }
 });
 
+=======
+>>>>>>> 5e03d90f66e419129bce0cdb1a50a9a47cced2b2
 
 class CookRecipe extends React.Component {
 
@@ -61,11 +64,25 @@ class CookRecipe extends React.Component {
       }
     });
     window.addEventListener("keydown", event => {
+<<<<<<< HEAD
 
       let whereToGo = event.key === 'ArrowDown' || event.key === 'ArrowLeft' ? this.stepBackward : this.stepForward;
       console.log(event.key)
       whereToGo();
 
+=======
+      if (event.defaultPrevented) {
+        return; // Do nothing if the event was already processed
+      }
+      else{
+        if (event.key === 'ArrowDown'|| event.key === 'ArrowLeft')
+          this.stepBackward()
+        else if (event.key === 'ArrowUp' || event.key === 'ArrowRight')
+          this.stepForward()
+        else
+          return
+      }
+>>>>>>> 5e03d90f66e419129bce0cdb1a50a9a47cced2b2
     });
 
   }
@@ -77,9 +94,14 @@ class CookRecipe extends React.Component {
     }
     if (this.props.recipe && this.props.stepToSay !== '' && !this.state.stopped)
       Mochi.say(this.props.stepToSay)
+
+<<<<<<< HEAD
+  sendUserInput(userInput) {
+=======
   }
 
-  sendUserInput(userInput) {
+  sendUserInput(userInput){
+>>>>>>> 5e03d90f66e419129bce0cdb1a50a9a47cced2b2
     return this.props.submitUserInput(userInput)
   }
 
