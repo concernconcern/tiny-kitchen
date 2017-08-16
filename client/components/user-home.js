@@ -10,15 +10,15 @@ class UserHome extends React.Component{
 
   constructor(props){
     super(props)
-    this.state = {
-      i: 0
-    }
   }
 
-  // Momo.say('Hello World!');
+
   render(){
+    const {email} = this.props.email;
 
-
+    return (
+      <h2>email</h2>
+    )
   }
 
 }
