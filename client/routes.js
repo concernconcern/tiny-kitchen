@@ -4,11 +4,9 @@ import { Router } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
 import PropTypes from 'prop-types'
 // import history from './history'
-import { Main, Login, Signup, UserHome, ViewRecipe, CookRecipe, AddRecipe } from './components'
+import history from './history'
+import { Main, Login, Signup, UserHome, ViewRecipe, CookRecipe, AddRecipe, AllRecipes } from './components'
 import { me } from './store'
-import createBrowserHistory from 'history/createBrowserHistory';
-let history = createBrowserHistory();
-
 
 /**`
  * COMPONENT
@@ -27,15 +25,10 @@ class Routes extends Component {
           <Switch>
             <Route path='/login' component={Login} />
             <Route path='/signup' component={Signup} />
-            {
-              isLoggedIn &&
-              <swtch>
-                <Route exact path='/recipe/:id' component={ViewRecipe} />
-                <Route path='/add-recipe' component={AddRecipe} />
-                <Route exact path='/recipe/:id/cook' component={CookRecipe} />
-              </switch>
-            }
-
+            <Route exact path='/recipe/:id' component={ViewRecipe} />
+            <Route path='/add-recipe' component={AddRecipe} />
+            <Route exact path='/recipe/:id/cook' component={CookRecipe} />
+            <Route component={AllRecipes} />
           </Switch>
         </Main>
       </Router>

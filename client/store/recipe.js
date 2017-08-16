@@ -39,6 +39,15 @@ export const chromeRecipe = (url) =>
         dispatch(getRecipeSuccess(res.data)))
       .catch(err => console.log(err))
 
+export const submitRecipe = (recipe) =>
+  dispatch =>
+    axios.post(`/api/recipes`, recipe)
+      .then(res => {
+        dispatch(getRecipeSuccess(res.data))
+        history.push(`/recipe/${res.data.id}`)
+      })
+      .catch(err => console.log(err))
+
 /**
  * REDUCER
  */
