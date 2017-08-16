@@ -7,9 +7,13 @@ const userRecipes = [];
 const getUserRecipes = (recipes) => ({type: GET_USER_RECIPES, recipes})
 
 //THUNK
-const fetchUserRecipes = (userId) => dispatch =>
+export const fetchUserRecipes = (userId) => dispatch =>
   axios.get(`/${userId}/recipebox`)
-    .then(res => dispatch(getUserRecipes(res.data)))
+    .then(res => {
+      console.log(res)
+      dispatch(getUserRecipes(res.data))
+
+    })
     .catch(err => console.log(err))
 
 export default function (state=userRecipes, action){

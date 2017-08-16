@@ -35,7 +35,7 @@ class Routes extends Component {
                 <Route exact path='/recipe/:id/cook' component={CookRecipe} />
               </Switch>
             }
-            <Redirect to='/login'/>
+
           </Switch>
         </Main>
       </Router>
