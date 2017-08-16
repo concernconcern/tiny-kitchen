@@ -16,7 +16,8 @@ const recipe = {
   selected_pic: '',
   ingredients: [],
   directions: [],
-  error: false
+  error: false,
+  rating: 0.0
 }
 
 /**

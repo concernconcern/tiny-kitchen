@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 import { Router } from 'react-router'
 import { Route, Switch } from 'react-router-dom'
 import PropTypes from 'prop-types'
+// import history from './history'
 import history from './history'
-import { Main, Login, Signup, UserHome, ViewRecipe, CookingAI, CookRecipe, AddRecipe, AllRecipes } from './components'
+import { Main, Login, Signup, UserHome, ViewRecipe, CookRecipe, AddRecipe, AllRecipes } from './components'
 import { me } from './store'
 
 /**`

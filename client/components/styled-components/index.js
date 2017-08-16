@@ -142,10 +142,15 @@ export const CurrentStep = styled.div`
   flex: 2;
   padding: 25px;
   display: flex;
+  font-family: 'Playfair Display', serif;
   flex-direction: ${props => props.column ? 'column' : 'row'};
 `
 export const NextStep = styled.div`
   padding: 25px;
+  flex: 3;
+  padding: 25px;
+  display: flex;
+  font-family: 'Playfair Display', serif;
 `
 export const ControlPanel = styled.div`
   padding: 25px;
