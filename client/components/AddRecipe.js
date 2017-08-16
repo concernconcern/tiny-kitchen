@@ -1,27 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
-import { Wrapper, SecondaryWrap, Button, Modify, RecipeImg, RecipeText, Form, Title, List, Input, Box, TextArea } from './styled-components'
+import { Wrapper, SecondaryWrap, Button, Modify, Error, RecipeImg, RecipeText, Form, Title, List, Input, Box, TextArea } from './styled-components'
 import * as action from '../store'
 import { GridList, GridTile } from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
-
-
-const styles = {
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    width: '750px'
-  },
-  gridList: {
-    display: 'flex',
-    flexWrap: 'nowrap',
-    overflowX: 'auto',
-    cellHeight: 'auto'
-  }
-};
 
 class AddRecipe extends React.Component {
   constructor(props) {
@@ -55,6 +39,7 @@ class AddRecipe extends React.Component {
         picture_url: this.props.recipe.selected_pic
       });
     this.props.submitRecipe(recipe)
+
   }
   addField(e) {
     e.preventDefault();
@@ -77,26 +62,27 @@ class AddRecipe extends React.Component {
   }
   render() {
     let recipe = this.props.recipe;
-
     return (
       <Form onSubmit={this.handleSubmit}>
         <Input title type="text" name="title" onChange={this.handleChange} value={recipe && recipe.title} />
-        <Title secondary>Choose a Picture:</Title>
+        <Title secondary>Choose the Correct Picture:</Title>
         <div style={styles.root}>
-          {recipe.picture_url.length && <GridList style={styles.gridList} cols={2.2}>
-            {recipe.picture_url.map((pic, i) => {
-              return (<GridTile
-                onClick={this.selectPic}
-                key={i}
-                id={i}
-              >
-                {i === this.state.highlighted ?
-                  <img id={i} src={pic} style={{ border: "5px solid #db3434" }} />
-                  : <img id={i} src={pic} style={{ border: "5px solid transparent" }} />
-                }  </GridTile>)
-            })
-            }
-          </GridList>
+          {recipe.picture_url.length &&
+            <GridList style={styles.gridList} cols={2.2}>
+              {recipe.picture_url.map((pic, i) => {
+                return (<GridTile
+                  onClick={this.selectPic}
+                  rows={1.1}
+                  key={i}
+                  id={i}
+                >
+                  {i === this.state.highlighted ?
+                    <img id={i} src={pic} style={{ "object-fit": "cover", "height": "200px", "width": "auto", "border": "5px solid #db3434" }} />
+                    : <img id={i} src={pic} style={{ "object-fit": "cover", "height": "200px", "width": "auto", "border": "5px solid transparent" }} />
+                  }  </GridTile>)
+              })
+              }
+            </GridList>
           }
         </div>
         <SecondaryWrap>
@@ -114,14 +100,34 @@ class AddRecipe extends React.Component {
             <Modify href="#" onClick={this.addField} name="directions">+</Modify>
           </Box>
         </SecondaryWrap>
-        <Button type="submit">Add Recipe</Button>
+        <SecondaryWrap>
+          <Button type="submit">ADD RECIPE</Button>
+          {recipe.error ? <Error>Sorry, recipe already exists</Error> : ''}
+        </SecondaryWrap>
       </Form>
     )
   }
 }
-/**
- * CONTAINER
- */
+
+/* STYLES FOR GRID */
+const styles = {
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    cellHeight: '250px',
+    width: '790px'
+  },
+  gridList: {
+    display: 'flex',
+    flexWrap: 'nowrap',
+    overflowX: 'auto',
+    cellHeight: '350px'
+  }
+};
+
+
+/* CONTAINER */
 const mapState = (state) => {
   return {
     recipe: state.recipe
@@ -135,6 +141,5 @@ const mapDispatch = (dispatch) => {
     submitRecipe: (recipe) => dispatch(action.submitRecipe(recipe))
   }
 }
-// The `withRouter` wrapper makes sure that updates are not blocked
-// when the url changes
+
 export default withRouter(connect(mapState, mapDispatch)(AddRecipe))

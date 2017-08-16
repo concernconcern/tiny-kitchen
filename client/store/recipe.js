@@ -5,6 +5,7 @@ import history from '../history'
  * ACTION TYPES
  */
 const GET_RECIPE_SUCCESS = 'GET_RECIPE_SUCCESS'
+const GET_RECIPE_FAIL = 'GET_RECIPE_FAIL'
 /**
  * INITIAL STATE
  */
@@ -14,13 +15,15 @@ const recipe = {
   picture_url: '',
   selected_pic: '',
   ingredients: [],
-  directions: []
+  directions: [],
+  error: false
 }
 
 /**
  * ACTION CREATORS
  */
 export const getRecipeSuccess = (recipe) => ({ type: GET_RECIPE_SUCCESS, recipe })
+export const getRecipeFail = () => ({ type: GET_RECIPE_FAIL })
 
 /**
  * THUNK CREATORS
@@ -48,7 +51,7 @@ export const submitRecipe = (recipe) =>
         history.push(`/recipe/${res.data.id}`)
         dispatch(getRecipeSuccess(res.data))
       })
-      .catch(err => console.log(err))
+      .catch(err => { dispatch(getRecipeFail()) })
 
 /**
  * REDUCER
@@ -57,6 +60,8 @@ export default function (state = recipe, action) {
   switch (action.type) {
     case GET_RECIPE_SUCCESS:
       return action.recipe;
+    case GET_RECIPE_FAIL:
+      return Object.assign({}, state, { error: true });
     default:
       return state
   }
