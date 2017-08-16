@@ -16,6 +16,7 @@ export const RecipeText = styled.div`
   height: 90vh;
   width: 50vw;
   padding: 25px;
+  overflow: scroll;
 `
 export const Title = styled.h1`
  font-size: ${props => props.secondary ? '25px' : '50px'};
@@ -68,8 +69,8 @@ export const Input = styled.input`
   font-family: ${props => props.title ? 'Playfair Display, serif' : ''};
   font-size: ${props => props.title ? '50px' : '12px'}; 
   width: ${props => props.title ? '775px' : '300px'};
+  display: inline;
   height: auto;
-  display: block;
   margin: 5px;
 `
 export const Box = styled.div`
@@ -117,10 +118,15 @@ export const CurrentStep = styled.div`
   flex: 2;
   padding: 25px;
   display: flex;
+  font-family: 'Playfair Display', serif;
   flex-direction: ${props => props.column ? 'column' : 'row'};
 `
 export const NextStep = styled.div`
   padding: 25px;
+  flex: 3;
+  padding: 25px;
+  display: flex;
+  font-family: 'Playfair Display', serif;
 `
 export const ControlPanel = styled.div`
   padding: 25px;

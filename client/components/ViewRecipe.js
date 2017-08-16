@@ -11,10 +11,11 @@ class ViewRecipe extends React.Component {
 
   componentDidMount() {
     this.props.getRecipe(this.props.match.params.id);
+    this.props.isCooking(false);
   }
 
   render() {
-    const {recipe, handleClick} = this.props;
+    const {recipe} = this.props;
     console.log(recipe);
     return (
       <Wrapper >
@@ -22,8 +23,8 @@ class ViewRecipe extends React.Component {
         <RecipeText>
 
           <Title>{recipe && recipe.title}
-            &nbsp; &nbsp;
-             <Link to={`/recipe/${recipe.id}/cook`} className="btn btn-info btn-lg" onClick={handleClick}>
+            &nbsp;
+             <Link to={`/recipe/${recipe.id}/cook`} className="btn btn-info btn-lg">
               <span className="glyphicon glyphicon-play" />
             </Link>
 
@@ -53,10 +54,7 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     getRecipe: id => dispatch(action.getRecipe(id)),
-    handleClick(evt) {
-      console.log(action.getCooking)
-      dispatch(action.getCooking(true))
-    }
+    isCooking: bool => dispatch(action.getCooking(bool))
   }
 }
 
