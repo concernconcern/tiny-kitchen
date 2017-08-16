@@ -155,6 +155,21 @@ export const NextStep = styled.div`
 export const ControlPanel = styled.div`
   padding: 25px;
 `
+//user profile styles
+export const ProfileUpperArea = styled.div`
+  height: 50vh;
+  flex: 1;
+  display: flex;
+  padding: 25px;
+  flex-direction: ${props => props.column ? 'column' : 'row'};
+`
+export const ProfileWarning = styled.h2`
+  font-size: 30px;
+  color: grey;
+  padding: 0px 20px;
+  margin: 0px;
+  font-family: 'Playfair Display', serif;
+`
 export const Error = styled.div`
   padding: 10px;
   color:  white;

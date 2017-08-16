@@ -10,17 +10,6 @@ import * as action from '../store';
 import Mochi from '../mochi';
 import ReactTestUtils from 'react-dom/test-utils';
 
-window.addEventListener("keydown", function (event) {
-  if (event.defaultPrevented) {
-    return; // Do nothing if the event was already processed
-  }
-  else{
-    let whereToGo = event.key === 'ArrowDown'|| event.key === 'ArrowLeft' ? this.stepForward : this.stepBackward;
-    console.log(event.key)
-    whereToGo();
-  }
-});
-
 
 class CookRecipe extends React.Component{
 
@@ -60,11 +49,17 @@ class CookRecipe extends React.Component{
       }
     });
     window.addEventListener("keydown", event => {
-
-        let whereToGo = event.key === 'ArrowDown'|| event.key === 'ArrowLeft' ? this.stepBackward : this.stepForward;
-        console.log(event.key)
-        whereToGo();
-
+      if (event.defaultPrevented) {
+        return; // Do nothing if the event was already processed
+      }
+      else{
+        if (event.key === 'ArrowDown'|| event.key === 'ArrowLeft')
+          this.stepBackward()
+        else if (event.key === 'ArrowUp' || event.key === 'ArrowRight')
+          this.stepForward()
+        else
+          return
+      }
     });
 
   }
@@ -76,14 +71,8 @@ class CookRecipe extends React.Component{
     }
     if (this.props.recipe && this.props.stepToSay !== '' && !this.state.stopped)
       Mochi.say(this.props.stepToSay)
-  }
 
-  // handlePress(event){
-  //   event.preventDefault()
-  //   let whereToGo = event.key === 'ArrowDown'|| event.key === 'ArrowLeft' ? this.stepForward : this.stepBackward;
-  //   console.log(event.key)
-  //   whereToGo();
-  // }
+  }
 
   sendUserInput(userInput){
     return this.props.submitUserInput(userInput)

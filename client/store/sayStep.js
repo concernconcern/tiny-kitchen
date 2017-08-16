@@ -12,7 +12,6 @@ const stepToSay = ''
  */
 export const sayStep = (step, directions) => ({type: SAY_STEP, step: directions[step]})
 
-
 /**
  * REDUCER
  */
