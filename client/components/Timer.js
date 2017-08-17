@@ -102,7 +102,7 @@ class Timer extends React.Component{
         <Add name="hourSub" onClick={this.changeTime}> - </Add>
         <Add name="minutesSub" onClick={this.changeTime}> - </Add>
         <Add name="secondsSub" onClick={this.changeTime}> - </Add>
-        {(this.props.time === 0 && !this.state.stopped) ?
+        {this.props.time === 0 ?
         <audio autoPlay className="player" preload="false">
           <source src="https://freesound.org/people/kwahmah_02/sounds/250629/download/250629__kwahmah-02__alarm1.mp3" />
         </audio> : null}
