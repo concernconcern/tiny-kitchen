@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock } from './styled-components';
+import { Clock, Modify } from './styled-components';
 import * as action from '../store';
 import {connect} from 'react-redux';
 
@@ -58,6 +58,9 @@ class Timer extends React.Component{
     return (
       <Clock>
        <h4>Timer</h4>
+        <Modify href="#" name="hourAdd">+</Modify>
+       <Modify href="#" name="minutesAdd">+</Modify>
+       <Modify href="#"  name="secondsAdd">+</Modify>
         {twoDigits(hours) + ':' + twoDigits(minutes) + ':' + twoDigits(seconds)}
         <button type="button" className="btn btn-info btn-lg" onClick={this.toggleTimer}>
           {
@@ -97,4 +100,4 @@ const mapDispatch = (dispatch) => {
 };
 
 
-export default connect(mapState, mapDispatch) (Timer);
+export default connect(mapState, mapDispatch)(Timer);
