@@ -142,7 +142,6 @@ export const CurrentStep = styled.div`
   padding: 20px;
   font-family: 'Playfair Display', serif;
   flex-direction: ${props => props.column ? 'column' : 'row'};
-  height: 100px;
 `
 export const Directions = styled.div`
 height: 80vh;
@@ -168,6 +167,13 @@ export const ProfileUpperArea = styled.div`
   padding: 25px;
   flex-direction: ${props => props.column ? 'column' : 'row'};
 `
+export const ProfileCard = styled.div`
+  flex:2
+  height: 25vh;
+  display: flex;
+  padding: 25px;
+  flex-direction: ${props => props.column ? 'column' : 'row'};
+`
 export const ProfileWarning = styled.h2`
   font-size: 30px;
   color: grey;
@@ -175,9 +181,17 @@ export const ProfileWarning = styled.h2`
   margin: 0px;
   font-family: 'Playfair Display', serif;
 `
+export const ProfileIcon = styled.h2`
+  flex:3;
+  font-size: 40px;
+  padding: 20px;
+  border-radius: 50%;
+  width: 80px;
+`
 export const Error = styled.div`
   padding: 10px;
   color:  white;
   background: goldenrod;
   margin: 5px;
+
 `
