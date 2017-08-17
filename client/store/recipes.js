@@ -4,7 +4,7 @@ import history from '../history'
 /**
  * ACTION TYPES
  */
-const GET_RECIPES_SUCCESS = 'GET_RECIPES_SUCCESS'
+const GET_RECIPES_SUCCESS = 'GET_RECIPES_SUCCESS';
 /**
  * INITIAL STATE
  */
@@ -13,7 +13,7 @@ const recipes = []
 /**
  * ACTION CREATORS
  */
-const getRecipesSuccess = (recipes) => ({ type: GET_RECIPES_SUCCESS, recipes })
+export const getRecipesSuccess = (recipes) => ({ type: GET_RECIPES_SUCCESS, recipes })
 
 /**
  * THUNK CREATORS
@@ -39,7 +39,7 @@ export const getRecipesBatch = (offset) =>
 export default function (state = recipes, action) {
   switch (action.type) {
     case GET_RECIPES_SUCCESS:
-      return state.concat(action.recipes);
+      return action.recipes;
     default:
       return state
   }
