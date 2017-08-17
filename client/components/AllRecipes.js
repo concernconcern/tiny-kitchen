@@ -26,12 +26,12 @@ class AllRecipes extends React.Component {
   }
 
   render() {
-    let {input, filteredRecipes}= this.props;
-    // recipes = this.filterRecipes(recipes, input);
+    let {input, recipes}= this.props;
+    recipes = this.filterRecipes(recipes, input);
 
     return (
       <Tiles>
-        {filteredRecipes.length && filteredRecipes.map((recipe, i) =>
+        {recipes.length && recipes.map((recipe, i) =>
           <Link key={i} to={`/recipe/${recipe.id}`}><Tile recipe={recipe}/></Link>)}
       </Tiles>
     )
@@ -43,7 +43,6 @@ class AllRecipes extends React.Component {
 const mapState = (state) => {
   return {
     recipes: state.recipes.recipes,
-    filteredRecipes: state.recipes.filteredRecipes,
     input: state.recipes.input
   }
 }
