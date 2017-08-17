@@ -1,24 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import { Wrapper, Tiles, TileTitle, ProfileUpperArea, ProfileWarning, ProfileCard, ProfileIcon } from './styled-components'
 import Tile from './Tile'
 import * as action from '../store'
 /**
  * COMPONENT
  */
-class UserHome extends React.Component{
+class UserHome extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props)
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.fetchUserRecipes(this.props.user.id)
   }
-  render(){
-    const {user, userRecipes} = this.props;
+  render() {
+    const { user, userRecipes } = this.props;
 
     console.log(user)
     console.log(userRecipes)
@@ -27,7 +27,7 @@ class UserHome extends React.Component{
         <ProfileUpperArea row>
           <ProfileCard>
             <ProfileIcon>
-            <img className="media-object img-circle" src={user.picture_url} />
+              <img className="media-object img-circle" src={user.picture_url} />
             </ProfileIcon>
             {user.first_name + ' ' + user.last_name}
             {user.email}
@@ -36,11 +36,11 @@ class UserHome extends React.Component{
         </ProfileUpperArea>
         {
           userRecipes.length ?
-          <Tiles>
-           {userRecipes.map((recipe, i) => <Link to={`/recipe/${recipe.id}`}><Tile key={i} recipe={recipe}/></Link>)}
-          </Tiles>
-          :
-          <ProfileWarning>You have no recipes! Go add some!</ProfileWarning>
+            <Tiles>
+              {userRecipes.map((recipe, i) => <Link to={`/recipe/${recipe.id}/user/${user.id}`}><Tile key={i} recipe={recipe} /></Link>)}
+            </Tiles>
+            :
+            <ProfileWarning>You have no recipes! Go add some!</ProfileWarning>
         }
       </div>
     )

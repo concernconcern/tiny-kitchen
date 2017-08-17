@@ -15,13 +15,12 @@ class ViewRecipe extends React.Component {
     this.cancel = this.cancel.bind(this)
     this.handleNote = this.handleNote.bind(this)
     this.handleSave = this.handleSave.bind(this)
-
   }
 
   componentDidMount() {
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(false);
-    this.props.getRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
+    this.props.isLoggedIn ? this.props.getRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid) : ''
   }
 
   editing() {
@@ -49,14 +48,14 @@ class ViewRecipe extends React.Component {
     this.props.saveNote(this.props.match.params.userid, this.props.match.params.recipeid, { notes: this.state.notes })
   }
   render() {
-    const { recipe } = this.props;
+    const { recipe, isLoggedIn } = this.props;
     return (
       <Wrapper >
         <RecipeImg src={recipe.picture_url} />
         <RecipeText>
 
           <Title>{recipe && recipe.title}</Title>
-          <ControlPanel>
+          {isLoggedIn ? <ControlPanel>
             <Link to={`/recipe/${recipe.id}/cook`} alt="Cook Recipe" className="btn btn-info btn-lg">
               <span className="glyphicon glyphicon-play" />
             </Link>
@@ -69,7 +68,7 @@ class ViewRecipe extends React.Component {
                 <span className="glyphicon glyphicon-plus" />
               </Link>
             }
-          </ControlPanel>
+          </ControlPanel> : ''}
           <Title secondary>Ingredients</Title>
           <List>
             {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
@@ -79,7 +78,7 @@ class ViewRecipe extends React.Component {
             {recipe.directions && recipe.directions.map((direction, i) => <li key={i}>{direction}</li>)}
           </List>
           {/*/ Render if there is a recipebox, render textarea if in editing mode/*/}
-          {this.props.recipebox ?
+          {isLoggedIn ?
             <div> <Title secondary>My Notes</Title>
               {this.state.editing ?
                 <Notes>
@@ -106,6 +105,7 @@ const mapState = (state) => {
   return {
     recipe: state.recipe,
     recipebox: state.recipebox,
+    isLoggedIn: !!state.user.id,
     user: state.user
   }
 }

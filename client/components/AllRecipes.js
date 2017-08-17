@@ -10,13 +10,14 @@ class AllRecipes extends React.Component {
   constructor(props) {
     super(props);
     this.filterRecipes.bind(this);
+    this.getUrl.bind(this);
   }
 
   componentDidMount() {
     this.props.getRecipes();
   }
 
-  filterRecipes(recipes, input){  
+  filterRecipes(recipes, input) {
     input = input.toLowerCase();
     return recipes.filter(recipe => {
       return recipe.title.toLowerCase().includes(input) ||
@@ -24,16 +25,18 @@ class AllRecipes extends React.Component {
         recipe.ingredients.join().toLowerCase().includes(input)
     })
   }
-
+  getUrl(isLoggedIn, userId, recipeId) {
+    return isLoggedIn ? `/recipe/${recipeId}/user/${userId}` : `/recipe/${recipeId}`
+  }
   render() {
-    let {input, recipes}= this.props;
+    let { input, recipes, isLoggedIn, userId } = this.props;
     recipes = this.filterRecipes(recipes, input);
-
     return (
       <Tiles>
         {recipes.length && recipes.map((recipe, i) =>
-          <Link key={i} to={`/recipe/${recipe.id}`}><Tile recipe={recipe}/></Link>)}
-      </Tiles>
+          <Link key={i} to={this.getUrl(isLoggedIn, userId, recipe.id)}><Tile recipe={recipe} /></Link>
+        )
+        }  </Tiles>
     )
   }
 }
@@ -43,7 +46,9 @@ class AllRecipes extends React.Component {
 const mapState = (state) => {
   return {
     recipes: state.recipes,
-    input: state.input
+    input: state.input,
+    isLoggedIn: !!state.user.id,
+    userId: state.user.id
   }
 }
 

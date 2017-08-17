@@ -13,7 +13,6 @@ import userRecipes from './userRecipes'
 import input from './input'
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-
 const reducer = combineReducers({ user, recipe, recipebox, ai, cooking, currentStep, sayStep, recipes, userRecipes, input })
 const middleware = applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
 const store = createStore(reducer, composeWithDevTools(middleware))

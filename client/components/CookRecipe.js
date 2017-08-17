@@ -90,16 +90,16 @@ class CookRecipe extends React.Component {
   }
 
 
-  stepForward(){
-      let newStep = this.props.step + 1;
-      if (this.props.recipe && newStep < this.props.recipe.directions.length){
-        Mochi.shutUp();
-        this.props.changeStepTo(newStep, this.props.recipe.directions);
-        let backDisable = (newStep === 0) ? true  : false;
-        let forwardDisable = (newStep === this.props.recipe.directions.length) ? true : false;
-        this.setState({
-          forwardDisable,
-          backDisable
+  stepForward() {
+    let newStep = this.props.step + 1;
+    if (this.props.recipe && newStep < this.props.recipe.directions.length) {
+      Mochi.shutUp();
+      this.props.changeStepTo(newStep, this.props.recipe.directions);
+      let backDisable = (newStep === 0) ? true : false;
+      let forwardDisable = (newStep === this.props.recipe.directions.length) ? true : false;
+      this.setState({
+        forwardDisable,
+        backDisable
       });
     }
   }
@@ -122,7 +122,8 @@ class CookRecipe extends React.Component {
 
   render() {
     let { forwardDisable, backDisable } = this.state
-    const recipe = this.props.recipe;
+    let { recipe, userId } = this.props;
+    console.log(userId)
     return (
       <Wrapper column height>
         <SecondaryWrap>
@@ -133,7 +134,7 @@ class CookRecipe extends React.Component {
             </Textfit>
           </CurrentStep>
           <Sidebar>
-            <ExitLink to={`/recipe/${recipe.id}`}>X</ExitLink>
+            <ExitLink to={`/recipe/${recipe.id}/user/${userId}`}>X</ExitLink>
             <Title secondary>Ingredients</Title>
             <List>
               {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
@@ -177,7 +178,8 @@ const mapState = (state) => {
     recipe: state.recipe,
     mochiSays: state.ai,
     step: state.currentStep,
-    stepToSay: state.sayStep
+    stepToSay: state.sayStep,
+    userId: state.user.id
   };
 };
 const mapDispatch = (dispatch) => {
@@ -194,4 +196,4 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-export default connect(mapState, mapDispatch)(CookRecipe);
+export default withRouter(connect(mapState, mapDispatch)(CookRecipe));
