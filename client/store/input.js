@@ -11,7 +11,6 @@ export const newInput = (input) => ({type: NEW_INPUT, input});
 
 // Reducer
 export default function(state = input, action){
-  console.log('step reducer', action);
   switch (action.type) {
     case NEW_INPUT:
       return action.input;

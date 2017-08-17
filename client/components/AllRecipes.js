@@ -42,8 +42,8 @@ class AllRecipes extends React.Component {
  */
 const mapState = (state) => {
   return {
-    recipes: state.recipes.recipes,
-    input: state.recipes.input
+    recipes: state.recipes,
+    input: state.input
   }
 }
 

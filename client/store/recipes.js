@@ -5,21 +5,15 @@ import history from '../history'
  * ACTION TYPES
  */
 const GET_RECIPES_SUCCESS = 'GET_RECIPES_SUCCESS';
-const NEW_INPUT = 'NEW_INPUT';
-const FILTER_RECIPES = 'FILTER_RECIPES'
 /**
  * INITIAL STATE
  */
-const initialState = {
-  recipes: [],
-  input: ''
-}
+const recipes = []
 
 /**
  * ACTION CREATORS
  */
 export const getRecipesSuccess = (recipes) => ({ type: GET_RECIPES_SUCCESS, recipes })
-export const newInput = (input) => ({type: NEW_INPUT, input});
 
 /**
  * THUNK CREATORS
@@ -42,12 +36,10 @@ export const getRecipesBatch = (offset) =>
 /**
  * REDUCER
  */
-export default function (state = initialState, action) {
+export default function (state = recipes, action) {
   switch (action.type) {
     case GET_RECIPES_SUCCESS:
-      return Object.assign({}, state, {recipes:action.recipes});
-    case NEW_INPUT:
-      return Object.assign({}, state, {input: action.input});
+      return action.recipes;
     default:
       return state
   }
