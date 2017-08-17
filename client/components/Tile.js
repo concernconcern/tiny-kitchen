@@ -18,7 +18,7 @@ export default class Tile extends React.Component {
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center',
       backgroundSize: '100%',
-      width: '33.3vw',
+      width: '33.33vw',
       height: '40vh'
     }
 
@@ -27,7 +27,7 @@ export default class Tile extends React.Component {
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center',
       backgroundSize: '100%',
-      width: '33.3vw',
+      width: '33.33vw',
       height: '40vh',
       display: 'flex',
       flexDirection: 'column',
@@ -52,11 +52,14 @@ export default class Tile extends React.Component {
       <div>
         {
           this.state.hover ?
+          <Link to={`/recipe/${this.props.recipe.id}`}>
           <div
             style={this.hoverStyle}
             onMouseLeave={this.handleMouseLeave}>
             <TileTitle>{this.props.recipe.title}</TileTitle>
-          </div> :
+          </div>
+          </Link>
+          :
           <div
             style={this.style}
             onMouseEnter={this.handleMouseEnter}>

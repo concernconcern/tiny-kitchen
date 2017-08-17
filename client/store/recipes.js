@@ -6,6 +6,7 @@ import history from '../history'
  */
 const GET_RECIPES_SUCCESS = 'GET_RECIPES_SUCCESS';
 const NEW_INPUT = 'NEW_INPUT';
+const FILTER_RECIPES = 'FILTER_RECIPES'
 /**
  * INITIAL STATE
  */
@@ -18,6 +19,7 @@ const initialState = {
  * ACTION CREATORS
  */
 export const getRecipesSuccess = (recipes) => ({ type: GET_RECIPES_SUCCESS, recipes })
+export const filterRecipes = (recipes) => ({type: FILTER_RECIPES, recipes})
 export const newInput = (input) => ({type: NEW_INPUT, input});
 
 /**
@@ -39,12 +41,13 @@ export const getRecipesBatch = (offset) =>
       .catch(err => console.log(err));
 
 
-export const searchDb = () =>
-  (dispatch, getState) =>
-    axios.get(`/api/recipes?${getState()}`)
-    .then(res => 
-      console.log(res.data)
-    )
+export const searchDb = (input) =>
+  dispatch =>
+    axios.get(`/api/recipes/search?search=${input}`)
+    .then(res => {
+      console.log('filtered recipes', res.data)
+      dispatch(filterRecipes(res.data))
+    })
     .catch(err => console.log(err));
 /**
  * REDUCER
@@ -53,6 +56,8 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case GET_RECIPES_SUCCESS:
       return Object.assign({}, state, {recipes: state.recipes.concat(action.recipes)});
+    case FILTER_RECIPES:
+      return Object.assign({}, state, {recipes: action.recipes});
     case NEW_INPUT:
       return Object.assign({}, state, {input: action.input});
     default:

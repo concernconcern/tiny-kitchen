@@ -28,7 +28,6 @@ class Routes extends Component {
             <Route exact path='/recipe/:id' component={ViewRecipe} />
             <Route path='/add-recipe' component={AddRecipe} />
             <Route exact path='/recipe/:id/cook' component={CookRecipe} />
-            <Route exact path='/search' component={Search} />            
             <Route component={AllRecipes} />
           </Switch>
         </Main>

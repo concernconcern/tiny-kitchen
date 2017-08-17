@@ -11,5 +11,4 @@ export { default as AddRecipe } from './AddRecipe'
 export { Login, Signup } from './auth-form'
 export { default as AllRecipes } from './AllRecipes'
 export { default as Tile } from './Tile'
-export { default as CookRecipe } from './CookRecipe';
-export { default as Search } from './Search'
+export { default as CookRecipe } from './CookRecipe'

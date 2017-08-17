@@ -18,6 +18,18 @@ router.post('/', (req, res, next) => {
     .catch(next);
 });
 
+// GET /api/recipes? by search string
+router.get('/search', (req, res, next) => {
+  const search = req.query.search;
+  Recipe.findAll({where: {
+    $or: [
+      {title: {like: '%' + search + '%'}}
+    ]
+  }})
+    .then(recipes => res.json(recipes))
+    .catch(next);
+});
+
 // GET /api/recipes/batch
 router.get('/batch/:offset', (req, res, next) => {
   const offset = req.params.offset;
