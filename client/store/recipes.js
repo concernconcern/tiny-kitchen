@@ -19,7 +19,6 @@ const initialState = {
  * ACTION CREATORS
  */
 export const getRecipesSuccess = (recipes) => ({ type: GET_RECIPES_SUCCESS, recipes })
-export const filterRecipes = (recipes) => ({type: FILTER_RECIPES, recipes})
 export const newInput = (input) => ({type: NEW_INPUT, input});
 
 /**
