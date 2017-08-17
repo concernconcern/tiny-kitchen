@@ -14,7 +14,7 @@ const Navbar = (props) => {
           ?
           <Links>
             <SearchBar />
-            <Link to='/recipe-box'><span className="glyphicon glyphicon-user" style={{ color: "white" }} aria-hidden="true"></span></Link>
+            <Link to='/home'><span className="glyphicon glyphicon-user" style={{ color: "white" }} aria-hidden="true"></span></Link>
             <a href='#' onClick={handleClick}>Logout</a>
           </Links>
           :
