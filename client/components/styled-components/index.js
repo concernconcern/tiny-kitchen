@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Wrapper = styled.div`
   display: flex;
@@ -107,6 +108,18 @@ export const Sidebar = styled.div`
   padding: 20px 0;
   height: 80vh;
   overflow:scroll;
+`
+export const ExitLink = styled(Link) `
+  font-size: 50px;
+  color: grey;
+  top: 0;
+  right: 20px;
+  font-family: 'Raleway', serif;
+  position: absolute;
+  &:hover{
+    color:  #db3434;
+    text-decoration: none;
+  }
 `
 
 export const Button = styled.button`

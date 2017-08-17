@@ -5,7 +5,7 @@ import Artyom from 'artyom.js';
 import { Router, withRouter, Link } from 'react-router-dom';
 import Step from './Step';
 import { fetchOutput } from '../store';
-import { Wrapper, IngredientsView, UpNext, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
+import { Wrapper, IngredientsView, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
 import * as action from '../store';
 import Mochi from '../mochi';
 import { Textfit } from 'react-textfit';
@@ -134,6 +134,7 @@ class CookRecipe extends React.Component {
             </Textfit>
           </CurrentStep>
           <Sidebar>
+            <ExitLink to={`/recipe/${recipe.id}`}>X</ExitLink>
             <Title secondary>Ingredients</Title>
             <List>
               {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
@@ -145,7 +146,6 @@ class CookRecipe extends React.Component {
         <ControlPanel>
           <UpNext>
             <Title secondary style={{ display: "inline", padding: "5px 0" }}>Up next...</Title>
-
             {recipe.directions && recipe.directions[this.props.step + 1].slice(0, 200)}
           </UpNext>
           <Controls>
