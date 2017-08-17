@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Router } from 'react-router'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 // import history from './history'
 import history from './history'
@@ -23,12 +23,19 @@ class Routes extends Component {
       <Router history={history}>
         <Main>
           <Switch>
-            <Route path='/login' component={Login} />
-            <Route path='/signup' component={Signup} />
+            <Route exact path='/' component={AllRecipes} />
+            <Route exact path='/login' component={Login} />
+            <Route exact path='/signup' component={Signup} />
             <Route exact path='/recipe/:id' component={ViewRecipe} />
-            <Route path='/add-recipe' component={AddRecipe} />
             <Route exact path='/recipe/:id/cook' component={CookRecipe} />
-            <Route component={AllRecipes} />
+            {
+              isLoggedIn &&
+              <Switch>
+                <Route exact path='/home' component={UserHome} />
+                <Route path='/add-recipe' component={AddRecipe} />
+              </Switch>
+            }
+
           </Switch>
         </Main>
       </Router>

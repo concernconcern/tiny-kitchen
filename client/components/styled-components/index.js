@@ -1,11 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Wrapper = styled.div`
   display: flex;
   width: 100vw;
+  height: ${props => props.height ? '100vh' : ''};
   font-family: 'Roboto', sans-serif;
   flex-direction: ${props => props.column ? 'column' : 'row'};
+  justify-content: space-between;
 `
 export const RecipeImg = styled.img`
   height: ${props => props.secondary ? '300px' : '90vh'};
@@ -94,11 +97,30 @@ export const Form = styled.form`
   align-items: center;
   flex-direction: column;
 `
-export const SecondaryWrap = styled.form`
+export const SecondaryWrap = styled.div`
   padding: 20px;
   display: flex;
   justify-content: center;
 `
+export const Sidebar = styled.div`
+  flex: 1;
+  padding: 20px 0;
+  height: 80vh;
+  overflow:scroll;
+`
+export const ExitLink = styled(Link) `
+  font-size: 50px;
+  color: grey;
+  top: 0;
+  right: 20px;
+  font-family: 'Raleway', serif;
+  position: absolute;
+  &:hover{
+    color:  #db3434;
+    text-decoration: none;
+  }
+`
+
 export const Button = styled.button`
   color: white;
   font-size: 24px;
@@ -130,30 +152,66 @@ export const Modify = styled.a`
     color:  #db3434;
   }
 `
-export const IngredientsView = styled.div`
-  height: 80vh;
+
+
+export const Directions = styled.div`
+  height: 70vh;
+   width: 75vw;
+`
+
+export const CurrentStep = styled.div`
+  padding: 20px;
+    height: 90vh;
+    padding: 10px;
+  font-family: 'Playfair Display', serif;
+  flex-direction: ${props => props.column ? 'column' : 'row'};
+`
+export const ControlPanel = styled.div`
+  display: flex;
+  border-top: 1px solid #ddd;
+  padding: 20px;
+  height: 10vh;
+  align-items: center;
+  overflow:hidden;
+`
+export const UpNext = styled.div`
+  flex: 3;
+  height: 100%;
+  overflow:hidden;
+  color: grey;
+`
+export const Controls = styled.div`
+  flex: 1;
+  text-align: center;
+`
+//user profile styles
+export const ProfileUpperArea = styled.div`
+  height: 50vh;
   flex: 1;
   display: flex;
   padding: 25px;
   flex-direction: ${props => props.column ? 'column' : 'row'};
 `
-export const CurrentStep = styled.div`
-  height: 80vh;
-  flex: 2;
-  padding: 25px;
+export const ProfileCard = styled.div`
+  flex:2
+  height: 25vh;
   display: flex;
-  font-family: 'Playfair Display', serif;
+  padding: 25px;
   flex-direction: ${props => props.column ? 'column' : 'row'};
 `
-export const NextStep = styled.div`
-  padding: 25px;
-  flex: 3;
-  padding: 25px;
-  display: flex;
+export const ProfileWarning = styled.h2`
+  font-size: 30px;
+  color: grey;
+  padding: 0px 20px;
+  margin: 0px;
   font-family: 'Playfair Display', serif;
 `
-export const ControlPanel = styled.div`
-  padding: 25px;
+export const ProfileIcon = styled.h2`
+  flex:3;
+  font-size: 40px;
+  padding: 20px;
+  border-radius: 50%;
+  width: 80px;
 `
 export const Error = styled.div`
   padding: 10px;

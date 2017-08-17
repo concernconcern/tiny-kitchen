@@ -4,8 +4,6 @@ import { withRouter, Link } from 'react-router-dom'
 import { Wrapper, SecondaryWrap, Button, Modify, Error, RecipeImg, RecipeText, Form, Title, List, Input, Box, TextArea } from './styled-components'
 import * as action from '../store'
 import { GridList, GridTile } from 'material-ui/GridList';
-import IconButton from 'material-ui/IconButton';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 
 class AddRecipe extends React.Component {
   constructor(props) {
