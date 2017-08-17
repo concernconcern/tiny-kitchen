@@ -8,7 +8,7 @@ class Timer extends React.Component{
     super(props);
     this.state = {
       stopped: true,
-      timerId: null
+      timerId: null,
     };
     this.toggleTimer = this.toggleTimer.bind(this);
     this.tick = this.tick.bind(this);
@@ -16,29 +16,32 @@ class Timer extends React.Component{
   }
 
   tick(){
-    let time = this.props.time;
+    let time = this.props.time
+    console.log(time)
     if (time <= 999){
       this.setState({stopped: true})
-    } else {
-      this.props.changeTimer(time - 1000);
+      clearInterval(this.state.timerId);
+    } else if (!this.state.stopped) {
+        this.props.changeTimer(time - 1000);
     }
   }
 
   toggleTimer(){
-    if (!this.state.stopped) {
+    if (this.state.stopped || this.props.autoStart){
+      this.setState({stopped: false})
+      this.setState({timerId: setInterval(this.tick, 1000)})
+    }
+    else {
       this.setState({stopped: true})
       clearInterval(this.state.timerId);
       console.log('toggle timer!');
     }
-    else {
-      this.setState({stopped: false})
-      this.setState({timerId: setInterval(this.tick, 1000)})
-    }
   }
+
 
   changeTime(evt){
     console.log(evt.target.name);
-    let time = this.props.time;
+    let time = this.props.time
     switch (evt.target.name){
       case 'hourAdd':
         this.props.changeTimer(time + (60*60*1000));
@@ -104,19 +107,17 @@ function twoDigits(n){
 
 const mapState = (state) => {
   return {
-    time: state.ai.time
+    time: state.timer,
+    autoStart: state.ai.time > 0
   }
 }
-
 const mapDispatch = (dispatch) => {
   return {
-    changeTimer (time){
-     if (time >= 0){
-       dispatch(action.setTimer(time));
-     }
-   },
-  };
-};
+    changeTimer(time){
+      dispatch(action.setTimer(time))
+    }
+  }
+}
 
 
 export default connect(mapState, mapDispatch)(Timer);
