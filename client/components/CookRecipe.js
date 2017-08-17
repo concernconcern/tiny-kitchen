@@ -27,6 +27,7 @@ class CookRecipe extends React.Component {
     this.toggleMochi = this.toggleMochi.bind(this);
     this.stepBackward = this.stepBackward.bind(this);
     this.stepForward = this.stepForward.bind(this);
+    this.exit = this.exit.bind(this);
   }
 
   componentDidMount() {
@@ -119,10 +120,14 @@ class CookRecipe extends React.Component {
     }
   }
 
+  exit() {
+    Mochi.shutUp();
+  }
+
 
   render() {
     let { forwardDisable, backDisable } = this.state
-    let { recipe} = this.props;
+    let { recipe } = this.props;
     return (
       <Wrapper column height>
         <SecondaryWrap>
@@ -133,7 +138,7 @@ class CookRecipe extends React.Component {
             </Textfit>
           </CurrentStep>
           <Sidebar>
-            <ExitLink to={`/recipe/${recipe.id}`}>X</ExitLink>
+            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}>X</ExitLink>
             <Title secondary>Ingredients</Title>
             <List>
               {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
@@ -194,4 +199,4 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-export default withRouter(connect(mapState, mapDispatch)(CookRecipe));
+export default connect(mapState, mapDispatch)(CookRecipe);
