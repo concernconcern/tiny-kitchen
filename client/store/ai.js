@@ -1,7 +1,7 @@
 import axios from 'axios'
 import history from '../history'
 import convert from 'convert-units';
-import setTimer from './timer'
+import {setTimer} from './timer'
 
 /**
  * ACTION TYPES

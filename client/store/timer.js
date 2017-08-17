@@ -4,7 +4,10 @@ const SET_TIMER = 'SET_TIMER';
 export const setTimer = (timerObj) => ({ type: SET_TIMER, timer: timerObj })
 
 // Initital State
-const timer = 0
+const timer = {
+  time: 0,
+  fromAi: false
+}
 
 //Reducer
 export default function(state = timer, action) {

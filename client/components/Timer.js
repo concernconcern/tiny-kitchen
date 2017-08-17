@@ -6,9 +6,10 @@ import {connect} from 'react-redux';
 class Timer extends React.Component{
   constructor(props){
     super(props);
+
     this.state = {
       stopped: true,
-      timerId: null,
+      timerId: null
     };
     this.toggleTimer = this.toggleTimer.bind(this);
     this.tick = this.tick.bind(this);
@@ -18,6 +19,7 @@ class Timer extends React.Component{
   tick(){
     let time = this.props.time
     console.log(time)
+    console.log('autostart', this.props.autoStart)
     if (time <= 999){
       this.setState({stopped: true})
       clearInterval(this.state.timerId);
@@ -27,9 +29,8 @@ class Timer extends React.Component{
   }
 
   toggleTimer(){
-    if (this.state.stopped || this.props.autoStart){
-      this.setState({stopped: false})
-      this.setState({timerId: setInterval(this.tick, 1000)})
+    if (this.state.stopped){
+      this.setState({stopped: false, timerId: setInterval(this.tick, 1000)})
     }
     else {
       this.setState({stopped: true})
@@ -38,6 +39,14 @@ class Timer extends React.Component{
     }
   }
 
+  componentDidUpdate(){
+    console.log('mounted')
+    if (this.props.autoStart){
+      this.toggleTimer()
+      this.props.changeTimer(this.props.time)
+    }
+
+  }
 
   changeTime(evt){
     console.log(evt.target.name);
@@ -66,6 +75,8 @@ class Timer extends React.Component{
   }
 
   render(){
+    console.log(this.state)
+    console.log(this.props.autoStart)
     let ms = this.props.time;
     let hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     let minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
@@ -107,14 +118,14 @@ function twoDigits(n){
 
 const mapState = (state) => {
   return {
-    time: state.timer,
-    autoStart: state.ai.time > 0
+    time: state.timer.time,
+    autoStart: state.timer.fromAi
   }
 }
 const mapDispatch = (dispatch) => {
   return {
     changeTimer(time){
-      dispatch(action.setTimer(time))
+      dispatch(action.setTimer({time: time, fromAi: false}))
     }
   }
 }
