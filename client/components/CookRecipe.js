@@ -142,8 +142,8 @@ class CookRecipe extends React.Component {
             <List>
               {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
             </List>
-            <Title secondary>Timer</Title>
-            <Title>00:00</Title>
+
+            <Timer />
           </Sidebar>
         </SecondaryWrap>
         <ControlPanel>

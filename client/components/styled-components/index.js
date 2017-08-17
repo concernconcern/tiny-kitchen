@@ -152,6 +152,21 @@ export const Modify = styled.a`
     color:  #db3434;
   }
 `
+// increment/decrement buttons on timer
+export const Add = styled.a`
+  font-size: 24px;
+  color: ${props => props.x ? 'grey' : '#db3434'};
+  border-radius: 50%;
+  padding: 5px;
+  &:hover{
+    text-decoration: none;
+    color: ${props => props.x ? '#db3434' : 'grey'};
+  }
+  &:focus{
+    text-decoration: none;
+    color:  #db3434;
+  }
+`
 
 
 export const Directions = styled.div`
