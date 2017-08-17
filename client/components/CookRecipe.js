@@ -133,7 +133,6 @@ class CookRecipe extends React.Component{
   render(){
     let {forwardDisable, backDisable} = this.state
     const recipe = this.props.recipe;
-    console.log(this.props.timer);
     return (
       <Wrapper>
         <CurrentStep column>
@@ -172,7 +171,7 @@ class CookRecipe extends React.Component{
             <Link to={`/recipe/${recipe.id}`} className="btn btn-info btn-lg" onClick={Mochi.shutUp}>
               <span className="glyphicon glyphicon-remove-sign" /> Exit
             </Link>
-            <Timer time={this.props.timer} />
+            <Timer />
           </ControlPanel>
         </IngredientsView>
       </Wrapper>
@@ -186,8 +185,7 @@ const mapState = (state) => {
     recipe: state.recipe,
     mochiSays: state.ai.text,
     step: state.currentStep,
-    stepToSay: state.sayStep,
-    timer: state.ai.time
+    stepToSay: state.sayStep
   };
 };
 const mapDispatch = (dispatch) => {

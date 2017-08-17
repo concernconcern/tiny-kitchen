@@ -1,11 +1,12 @@
 import React from 'react';
 import { Clock } from './styled-components';
+import * as action from '../store';
+import {connect} from 'react-redux';
 
 class Timer extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      ms: props.time,
       stopped: true,
       timer: null,
       done: false
@@ -21,13 +22,16 @@ class Timer extends React.Component{
 
   tick(){
     if (this.state.stopped === false){
-      if (this.state.ms <= 999){
+      let time = this.props.timer;
+      if (time <= 999){
         this.stop();
       } else {
-        this.setState({
-          counter: this.state.counter - 1,
-          ms: this.state.ms - 1000
-        });
+        // this.setState({
+        //   ms: this.state.ms - 1000
+        // });
+        console.log('TICK', this.props.timer, typeof time);
+
+        this.props.changeTimer(time - 1000);
       }
     }
 
@@ -45,7 +49,8 @@ class Timer extends React.Component{
   }
 
   render(){
-    let ms = this.state.ms;
+    let ms = this.props.timer;
+    console.log('RENDER', this.props);
     let hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     let minutes = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     let seconds = Math.floor((ms % (1000 * 60)) / 1000);
@@ -76,4 +81,20 @@ function twoDigits(n){
   return (n < 10 ? '0' : '') + n;
 }
 
-export default Timer;
+const mapState = (state) => {
+  return {
+    timer: state.ai.time
+  };
+};
+
+const mapDispatch = (dispatch) => {
+  return {
+    changeTimer (time){
+      console.log('CHANGE TIMER', time);
+     dispatch(action.setTimer(time))
+   }
+  };
+};
+
+
+export default connect(mapState, mapDispatch) (Timer);
