@@ -100,6 +100,7 @@ export const SecondaryWrap = styled.div`
   padding: 20px;
   display: flex;
   justify-content: center;
+  height: 80vh;
 `
 export const Sidebar = styled.div`
   flex: 1;
@@ -137,11 +138,17 @@ export const Modify = styled.a`
     color:  #db3434;
   }
 `
+
+
+export const Directions = styled.div`
+  height: 70vh;
+   width: 75vw;
+`
+
 export const CurrentStep = styled.div`
-  flex: 3;
   padding: 20px;
-  font-size: 45px;
-  overflow:scroll;
+    height: 90vh;
+    padding: 10px;
   font-family: 'Playfair Display', serif;
   flex-direction: ${props => props.column ? 'column' : 'row'};
 `
@@ -149,6 +156,7 @@ export const ControlPanel = styled.div`
   display: flex;
   border-top: 1px solid #ddd;
   padding: 25px;
+  height: 10vh;
   align-items: center;
 `
 export const UpNext = styled.div`

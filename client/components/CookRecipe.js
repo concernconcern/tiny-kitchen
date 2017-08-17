@@ -5,10 +5,12 @@ import Artyom from 'artyom.js';
 import { Router, withRouter, Link } from 'react-router-dom';
 import Step from './Step';
 import { fetchOutput } from '../store';
-import { Wrapper, IngredientsView, UpNext, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
+import { Wrapper, IngredientsView, UpNext, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
 import * as action from '../store';
 import Mochi from '../mochi';
+import { Textfit } from 'react-textfit';
 import ReactTestUtils from 'react-dom/test-utils';
+
 class CookRecipe extends React.Component {
 
   constructor(props) {
@@ -126,10 +128,10 @@ class CookRecipe extends React.Component {
       <Wrapper column>
         <SecondaryWrap>
           <CurrentStep>
-            <Title>Step {this.props.step + 1}:</Title>
-            <p>
-              {recipe.directions[this.props.step]}
-            </p>
+            <Textfit mode="multi">
+              <Title>Step {this.props.step + 1}:</Title>
+              <Directions>{recipe.directions[this.props.step]}</Directions>
+            </Textfit>
           </CurrentStep>
           <Sidebar>
             <Title secondary>Ingredients</Title>
