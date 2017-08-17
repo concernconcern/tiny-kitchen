@@ -10,7 +10,6 @@ class AllRecipes extends React.Component {
   constructor(props) {
     super(props);
     this.filterRecipes.bind(this);
-    this.getUrl.bind(this);
   }
 
   componentDidMount() {
@@ -25,16 +24,13 @@ class AllRecipes extends React.Component {
         recipe.ingredients.join().toLowerCase().includes(input)
     })
   }
-  getUrl(isLoggedIn, userId, recipeId) {
-    return isLoggedIn ? `/recipe/${recipeId}/user/${userId}` : `/recipe/${recipeId}`
-  }
   render() {
     let { input, recipes, isLoggedIn, userId } = this.props;
     recipes = this.filterRecipes(recipes, input);
     return (
       <Tiles>
         {recipes.length && recipes.map((recipe, i) =>
-          <Link key={i} to={this.getUrl(isLoggedIn, userId, recipe.id)}><Tile recipe={recipe} /></Link>
+          <Link key={i} to={`/recipe/${recipe.id}`}><Tile recipe={recipe} /></Link>
         )
         }  </Tiles>
     )

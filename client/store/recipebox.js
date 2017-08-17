@@ -5,7 +5,7 @@ import history from '../history'
  * ACTION TYPES
  */
 const GET_RECIPEBOX = 'GET_RECIPEBOX'
-const EDIT_RECIPEBOX = 'EDIT_RECIPEBOX'
+const ADD_RECIPEBOX = 'ADD_RECIPEBOX'
 /**
  * INITIAL STATE
  */
@@ -30,12 +30,20 @@ export const editRecipeBox = (userId, recipeId, notes) =>
     axios.put(`/api/users/${userId}/recipebox/${recipeId}`, notes)
       .then(res => dispatch(getRecipeBoxSuccess(res.data)))
       .catch(err => console.log(err))
+
+export const addRecipeBox = (userId, recipeId) =>
+  dispatch =>
+    axios.post(`/api/users/${userId}/recipebox`, { recipeId })
+      .then(res => dispatch(getRecipeBoxSuccess(res.data)))
+      .catch(err => console.log(err))
 /**
  * REDUCER
  */
 export default function (state = recipebox, action) {
   switch (action.type) {
     case GET_RECIPEBOX:
+      return action.recipebox;
+    case ADD_RECIPEBOX:
       return action.recipebox;
     default:
       return state

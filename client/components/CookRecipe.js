@@ -5,7 +5,7 @@ import Artyom from 'artyom.js';
 import { Router, withRouter, Link } from 'react-router-dom';
 import Step from './Step';
 import { fetchOutput } from '../store';
-import { Wrapper, IngredientsView, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
+import { Wrapper, IngredientsView, AccentButton, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
 import * as action from '../store';
 import Mochi from '../mochi';
 import { Textfit } from 'react-textfit';
@@ -134,7 +134,7 @@ class CookRecipe extends React.Component {
             </Textfit>
           </CurrentStep>
           <Sidebar>
-            <ExitLink to={`/recipe/${recipe.id}/user/${userId}`}>X</ExitLink>
+            <ExitLink to={`/recipe/${recipe.id}`}>X</ExitLink>
             <Title secondary>Ingredients</Title>
             <List>
               {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
@@ -149,22 +149,22 @@ class CookRecipe extends React.Component {
             {recipe.directions[this.props.step + 1]}
           </UpNext>
           <Controls>
-            <button disabled={backDisable} className="btn btn-info btn-lg" value="back" onClick={this.stepBackward}>
+            <AccentButton disabled={backDisable} value="back" onClick={this.stepBackward}>
               <span className="glyphicon glyphicon-step-backward" />
-            </button>
+            </AccentButton>
             &nbsp; &nbsp;
-            <button type="button" className="btn btn-info btn-lg" onClick={this.toggleMochi}>
+            <AccentButton type="button" onClick={this.toggleMochi}>
               {
                 this.state.stopped ?
                   <span className="glyphicon glyphicon-play" />
                   :
                   <span className="glyphicon glyphicon-pause" />
               }
-            </button>
+            </AccentButton>
             &nbsp; &nbsp;
-           <button disabled={forwardDisable} className="btn btn-info btn-lg" value="forward" onClick={this.stepForward} >
+           <AccentButton disabled={forwardDisable} value="forward" onClick={this.stepForward} >
               <span className="glyphicon glyphicon-step-forward" />
-            </button>
+            </AccentButton>
           </Controls>
         </ControlPanel>
       </Wrapper>

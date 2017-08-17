@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
-import { Wrapper, RecipeImg, ControlPanel, TextArea, RecipeText, Notes, Title, List } from './styled-components'
+import { Wrapper, RecipeImg, ControlPanel, AccentButton, TextArea, RecipeText, Notes, Title, List } from './styled-components'
+import history from '../history'
 import * as action from '../store'
 
 class ViewRecipe extends React.Component {
@@ -15,11 +16,14 @@ class ViewRecipe extends React.Component {
     this.cancel = this.cancel.bind(this)
     this.handleNote = this.handleNote.bind(this)
     this.handleSave = this.handleSave.bind(this)
+    this.handleCreateRecipeBox = this.handleCreateRecipeBox.bind(this)
   }
 
   componentDidMount() {
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(false);
+    console.log(this.props.isLoggedIn)
+    this.props.isLoggedIn ? history.push(`/recipe/${this.props.match.params.recipeid}/user/${this.props.user.id}`) : ''
     this.props.isLoggedIn ? this.props.getRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid) : ''
   }
 
@@ -47,8 +51,13 @@ class ViewRecipe extends React.Component {
     })
     this.props.saveNote(this.props.match.params.userid, this.props.match.params.recipeid, { notes: this.state.notes })
   }
+  handleCreateRecipeBox(e) {
+    e.preventDefault()
+    this.props.createRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
+  }
   render() {
-    const { recipe, isLoggedIn } = this.props;
+    const { recipe, recipebox, isLoggedIn } = this.props;
+
     return (
       <Wrapper >
         <RecipeImg src={recipe.picture_url} />
@@ -56,17 +65,17 @@ class ViewRecipe extends React.Component {
 
           <Title>{recipe && recipe.title}</Title>
           {isLoggedIn ? <ControlPanel>
-            <Link to={`/recipe/${recipe.id}/cook`} alt="Cook Recipe" className="btn btn-info btn-lg">
+            <a href={`/recipe/${recipe.id}/cook`} ><AccentButton alt="Cook Recipe" >
               <span className="glyphicon glyphicon-play" />
-            </Link>
-            {this.props.recipebox ?
-              <a href="#edit" alt="Add Notes" onClick={this.editing} className="btn btn-info btn-lg">
+            </AccentButton></a>&nbsp;&nbsp;
+            {this.props.recipebox.hasOwnProperty("notes") ?
+              <a href="#edit"><AccentButton alt="Add Notes" onClick={this.editing} >
                 <span className="glyphicon glyphicon-pencil" />
-              </a>
+              </AccentButton></a>
               :
-              <Link to={`/recipe/${recipe.id}/cook`} alt="Add to RecipeBox" className="btn btn-info btn-lg">
+              <AccentButton href="#" alt="Add to RecipeBox" onClick={this.handleCreateRecipeBox} >
                 <span className="glyphicon glyphicon-plus" />
-              </Link>
+              </AccentButton>
             }
           </ControlPanel> : ''}
           <Title secondary>Ingredients</Title>
@@ -78,17 +87,18 @@ class ViewRecipe extends React.Component {
             {recipe.directions && recipe.directions.map((direction, i) => <li key={i}>{direction}</li>)}
           </List>
           {/*/ Render if there is a recipebox, render textarea if in editing mode/*/}
-          {isLoggedIn ?
+          {isLoggedIn && recipebox.hasOwnProperty("notes") ?
             <div> <Title secondary>My Notes</Title>
               {this.state.editing ?
                 <Notes>
                   <TextArea id="edit" value={this.state.notes} onChange={this.handleNote}></TextArea>
-                  <a href="#" alt="Save Note" onClick={this.handleSave} className="btn btn-info btn-lg">
+                  <div><AccentButton href="#" alt="Save Note" onClick={this.handleSave}>
                     <span className="glyphicon glyphicon-ok" />
-                  </a>
-                  <a href="#" alt="Cook Recipe" onClick={this.cancel} className="btn btn-info btn-lg">
-                    <span className="glyphicon glyphicon-remove" />
-                  </a>
+                  </AccentButton>&nbsp;&nbsp;
+                    <AccentButton href="#" alt="Cook Recipe" onClick={this.cancel}>
+                      <span className="glyphicon glyphicon-remove" />
+                    </AccentButton>
+                  </div>
                 </Notes>
                 :
                 <Notes>{this.props.recipebox.notes}</Notes>
@@ -114,8 +124,10 @@ const mapDispatch = (dispatch) => {
   return {
     getRecipe: id => dispatch(action.getRecipe(id)),
     getRecipeBox: (userId, recipeId) => dispatch(action.getRecipeBox(userId, recipeId)),
+    createRecipeBox: (userId, recipeId) => dispatch(action.addRecipeBox(userId, recipeId)),
     isCooking: bool => dispatch(action.getCooking(bool)),
     saveNote: (userId, recipeId, note) => dispatch(action.editRecipeBox(userId, recipeId, note))
+
   }
 }
 

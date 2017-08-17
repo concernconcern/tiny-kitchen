@@ -139,6 +139,18 @@ export const Button = styled.button`
     background:#c91a1a;
   }
 `
+export const AccentButton = styled.button`
+ background:#53BDFF;
+ outline: none;
+ color:white;
+ border: 1px solid #35A6FF;
+padding: 15px 20px;
+ border-radius: 5px;
+ &:hover{
+   background: #3bb8f7;
+ }
+`
+
 export const Modify = styled.a`
   font-size: 24px;
   color: ${props => props.x ? 'grey' : '#db3434'};

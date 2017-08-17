@@ -37,7 +37,7 @@ class UserHome extends React.Component {
         {
           userRecipes.length ?
             <Tiles>
-              {userRecipes.map((recipe, i) => <Link to={`/recipe/${recipe.id}/user/${user.id}`}><Tile key={i} recipe={recipe} /></Link>)}
+              {userRecipes.map((recipe, i) => <Link to={`/recipe/${recipe.id}`}><Tile key={i} recipe={recipe} /></Link>)}
             </Tiles>
             :
             <ProfileWarning>You have no recipes! Go add some!</ProfileWarning>
