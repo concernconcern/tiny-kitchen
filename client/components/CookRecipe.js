@@ -122,8 +122,7 @@ class CookRecipe extends React.Component {
 
   render() {
     let { forwardDisable, backDisable } = this.state
-    let { recipe, userId } = this.props;
-    console.log(userId)
+    let { recipe} = this.props;
     return (
       <Wrapper column height>
         <SecondaryWrap>
