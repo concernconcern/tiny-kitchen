@@ -52,7 +52,6 @@ export default class Tile extends React.Component {
   }
 
   render(){
-    console.log('image:', this.props.recipe.picture_url)
     return (
       <div>
         {
