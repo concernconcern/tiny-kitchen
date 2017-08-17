@@ -8,11 +8,10 @@ const getUserRecipes = (recipes) => ({type: GET_USER_RECIPES, recipes})
 
 //THUNK
 export const fetchUserRecipes = (userId) => dispatch =>
-  axios.get(`/${userId}/recipebox`)
+  axios.get(`/api/users/${userId}/recipebox`)
     .then(res => {
-      console.log(res)
+      console.log('response from axios: ', res.data)
       dispatch(getUserRecipes(res.data))
-
     })
     .catch(err => console.log(err))
 
