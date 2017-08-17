@@ -110,17 +110,20 @@ export const Sidebar = styled.div`
 `
 export const ExitLink = styled(Link) `
   font-size: 50px;
-  color: grey;
+  color: #db3434;
   top: 0;
   right: 20px;
   font-family: 'Raleway', serif;
   position: absolute;
   &:hover{
-    color:  #db3434;
+    color:  #black;
     text-decoration: none;
   }
 `
-
+export const Notes = styled.p`
+  margin: 0 25px;
+  color: grey;
+`
 export const Button = styled.button`
   color: white;
   font-size: 24px;

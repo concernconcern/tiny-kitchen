@@ -30,7 +30,7 @@ class CookRecipe extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getRecipe(this.props.match.params.id);
+    this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(true);
 
     Mochi.addCommands({
