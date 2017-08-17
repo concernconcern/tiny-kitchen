@@ -24,7 +24,8 @@ router.get('/search', (req, res, next) => {
   Recipe.findAll({where: {
     $or: [
       {title: {like: '%' + search + '%'}},
-      {directions: {$contains: []}}
+      {directions: {$contains: []}},
+      {ingedients: {$contains: []}}
     ]
   }})
     .then(recipes => res.json(recipes))

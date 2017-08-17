@@ -52,13 +52,11 @@ export default class Tile extends React.Component {
       <div>
         {
           this.state.hover ?
-          <Link to={`/recipe/${this.props.recipe.id}`}>
           <div
             style={this.hoverStyle}
             onMouseLeave={this.handleMouseLeave}>
             <TileTitle>{this.props.recipe.title}</TileTitle>
           </div>
-          </Link>
           :
           <div
             style={this.style}

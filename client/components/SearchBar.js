@@ -13,7 +13,7 @@ class SearchBar extends React.Component{
 
   handleChange(event){
     this.props.newInput(event.target.value);
-    this.props.searchDb(event.target.value);
+    // this.props.searchDb(event.target.value);
   }
   render(){
     return (<SearchInput onChange={this.handleChange}/>)

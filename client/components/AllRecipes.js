@@ -9,18 +9,30 @@ import * as action from '../store'
 class AllRecipes extends React.Component {
   constructor(props) {
     super(props);
+    this.filterRecipes.bind(this);
   }
 
   componentDidMount() {
     this.props.getRecipes();
   }
 
+  filterRecipes(recipes, input){  
+    input = input.toLowerCase();
+    return recipes.filter(recipe => {
+      return recipe.title.toLowerCase().includes(input) ||
+        recipe.directions.join().toLowerCase().includes(input) ||
+        recipe.ingredients.join().toLowerCase().includes(input)
+    })
+  }
+
   render() {
-    const recipes = this.props.recipes;
+    let {input, filteredRecipes}= this.props;
+    // recipes = this.filterRecipes(recipes, input);
+
     return (
       <Tiles>
-        {recipes.length && recipes.map((recipe, i) =>
-          <Link to={`/recipe/${recipe.id}`}><Tile key={i} recipe={recipe}/></Link>)}
+        {filteredRecipes.length && filteredRecipes.map((recipe, i) =>
+          <Link key={i} to={`/recipe/${recipe.id}`}><Tile recipe={recipe}/></Link>)}
       </Tiles>
     )
   }
@@ -30,7 +42,9 @@ class AllRecipes extends React.Component {
  */
 const mapState = (state) => {
   return {
-    recipes: state.recipes.recipes
+    recipes: state.recipes.recipes,
+    filteredRecipes: state.recipes.filteredRecipes,
+    input: state.recipes.input
   }
 }
 
