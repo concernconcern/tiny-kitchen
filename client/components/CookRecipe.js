@@ -125,7 +125,7 @@ class CookRecipe extends React.Component {
     let { forwardDisable, backDisable } = this.state
     const recipe = this.props.recipe;
     return (
-      <Wrapper column>
+      <Wrapper column height>
         <SecondaryWrap>
           <CurrentStep>
             <Textfit mode="multi">
@@ -146,7 +146,7 @@ class CookRecipe extends React.Component {
         <ControlPanel>
           <UpNext>
             <Title secondary style={{ display: "inline", padding: "5px 0" }}>Up next...</Title>
-            {recipe.directions && recipe.directions[this.props.step + 1].slice(0, 200)}
+            {recipe.directions[this.props.step + 1]}
           </UpNext>
           <Controls>
             <button disabled={backDisable} className="btn btn-info btn-lg" value="back" onClick={this.stepBackward}>

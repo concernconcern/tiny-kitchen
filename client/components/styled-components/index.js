@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 export const Wrapper = styled.div`
   display: flex;
   width: 100vw;
-  height: 100vh;
+  height: ${props => props.height ? '100vh' : ''};
   font-family: 'Roboto', sans-serif;
   flex-direction: ${props => props.column ? 'column' : 'row'};
   justify-content: space-between;
@@ -101,7 +101,6 @@ export const SecondaryWrap = styled.div`
   padding: 20px;
   display: flex;
   justify-content: center;
-  height: 80vh;
 `
 export const Sidebar = styled.div`
   flex: 1;
@@ -170,12 +169,15 @@ export const CurrentStep = styled.div`
 export const ControlPanel = styled.div`
   display: flex;
   border-top: 1px solid #ddd;
-  padding: 25px;
+  padding: 20px;
   height: 10vh;
   align-items: center;
+  overflow:hidden;
 `
 export const UpNext = styled.div`
   flex: 3;
+  height: 100%;
+  overflow:hidden;
   color: grey;
 `
 export const Controls = styled.div`
