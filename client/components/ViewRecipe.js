@@ -87,7 +87,7 @@ class ViewRecipe extends React.Component {
             {recipe.directions && recipe.directions.map((direction, i) => <li key={i}>{direction}</li>)}
           </List>
           {/*/ Render if there is a recipebox, render textarea if in editing mode/*/}
-          {isLoggedIn && recipebox.hasOwnProperty("notes") ?
+          {recipebox && recipebox.hasOwnProperty("notes") ?
             <div> <Title secondary>My Notes</Title>
               {this.state.editing ?
                 <Notes>
