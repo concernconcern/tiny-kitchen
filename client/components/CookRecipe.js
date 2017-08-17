@@ -121,7 +121,6 @@ class CookRecipe extends React.Component {
   }
 
   exit() {
-    console.log('exiting');
     Mochi.shutUp();
   }
 
