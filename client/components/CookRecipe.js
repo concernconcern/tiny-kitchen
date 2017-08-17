@@ -27,6 +27,7 @@ class CookRecipe extends React.Component {
     this.toggleMochi = this.toggleMochi.bind(this);
     this.stepBackward = this.stepBackward.bind(this);
     this.stepForward = this.stepForward.bind(this);
+    this.setTimer = this.setTimer.bind(this);
   }
 
   componentDidMount() {
@@ -69,12 +70,21 @@ class CookRecipe extends React.Component {
 
     if (this.props.mochiSays !== '') {
       Mochi.say(this.props.mochiSays)
+      if (this.props.mochiSays.charAt(0) === 'timer')
+        this.startTimer()
     }
     if (this.props.recipe && this.props.stepToSay !== '' && !this.state.stopped)
       Mochi.say(this.props.stepToSay)
 
   }
 
+  startTimer(){
+
+  }
+
+  stopTimer(){
+
+  }
   sendUserInput(userInput) {
     return this.props.submitUserInput(userInput)
   }
@@ -144,6 +154,7 @@ class CookRecipe extends React.Component {
             </List>
 
             <Timer />
+
           </Sidebar>
         </SecondaryWrap>
         <ControlPanel>
@@ -183,7 +194,8 @@ const mapState = (state) => {
     recipe: state.recipe,
     mochiSays: state.ai.text,
     step: state.currentStep,
-    stepToSay: state.sayStep
+    stepToSay: state.sayStep,
+
   };
 };
 const mapDispatch = (dispatch) => {
