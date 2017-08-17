@@ -140,11 +140,10 @@ export const Modify = styled.a`
 export const CurrentStep = styled.div`
   flex: 3;
   padding: 20px;
+  font-size: 45px;
+  overflow:scroll;
   font-family: 'Playfair Display', serif;
   flex-direction: ${props => props.column ? 'column' : 'row'};
-`
-export const Directions = styled.div`
-height: 80vh;
 `
 export const ControlPanel = styled.div`
   display: flex;

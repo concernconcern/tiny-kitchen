@@ -5,12 +5,10 @@ import Artyom from 'artyom.js';
 import { Router, withRouter, Link } from 'react-router-dom';
 import Step from './Step';
 import { fetchOutput } from '../store';
-import { Wrapper, IngredientsView, UpNext, SecondaryWrap, Directions, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
+import { Wrapper, IngredientsView, UpNext, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
 import * as action from '../store';
 import Mochi from '../mochi';
 import ReactTestUtils from 'react-dom/test-utils';
-import ScaleText from 'react-scale-text';
-
 class CookRecipe extends React.Component {
 
   constructor(props) {
@@ -128,20 +126,18 @@ class CookRecipe extends React.Component {
       <Wrapper column>
         <SecondaryWrap>
           <CurrentStep>
-            <Directions>
-              <Title>Step {this.props.step + 1}:</Title>
-              <ScaleText>
-                <p>
-                  {recipe.directions && recipe.directions[this.props.step]}
-                </p>
-              </ScaleText>
-            </Directions>
+            <Title>Step {this.props.step + 1}:</Title>
+            <p>
+              {recipe.directions[this.props.step]}
+            </p>
           </CurrentStep>
           <Sidebar>
             <Title secondary>Ingredients</Title>
             <List>
               {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
             </List>
+            <Title secondary>Timer</Title>
+            <Title>00:00</Title>
           </Sidebar>
         </SecondaryWrap>
         <ControlPanel>
