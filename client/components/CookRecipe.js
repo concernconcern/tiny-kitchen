@@ -27,6 +27,7 @@ class CookRecipe extends React.Component {
     this.toggleMochi = this.toggleMochi.bind(this);
     this.stepBackward = this.stepBackward.bind(this);
     this.stepForward = this.stepForward.bind(this);
+    this.exit = this.exit.bind(this);
   }
 
   componentDidMount() {
@@ -119,6 +120,10 @@ class CookRecipe extends React.Component {
     }
   }
 
+  exit() {
+    Mochi.shutUp();
+  }
+
 
   render() {
     let { forwardDisable, backDisable } = this.state
@@ -133,7 +138,7 @@ class CookRecipe extends React.Component {
             </Textfit>
           </CurrentStep>
           <Sidebar>
-            <ExitLink to={`/recipe/${recipe.id}`}>X</ExitLink>
+            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}>X</ExitLink>
             <Title secondary>Ingredients</Title>
             <List>
               {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
