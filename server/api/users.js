@@ -4,6 +4,7 @@ const User = db.model('user');
 const Follower = db.model('follows');
 const RecipeBox = db.model('recipebox');
 const Recipe = db.model('recipe');
+const Promise = require('bluebird')
 module.exports = router;
 
 // GET /api/users
@@ -123,7 +124,11 @@ router.get('/:userId/recipebox', (req, res, next) => {
   RecipeBox.findAll({
     where: {userId: id}
   })
-  .then(recipes => res.json(recipes))
+  .then(recipeBoxes =>
+    Promise.map(recipeBoxes, box => {
+      return Recipe.findById(box.recipeId)
+    }))
+  .then(userRecipes => res.json(userRecipes))
   .catch(next);
 });
 
