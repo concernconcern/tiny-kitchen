@@ -5,7 +5,7 @@ import history from '../history'
  * ACTION TYPES
  */
 const GET_RECIPEBOX = 'GET_RECIPEBOX'
-const ADD_RECIPEBOX = 'ADD_RECIPEBOX'
+
 /**
  * INITIAL STATE
  */
@@ -42,8 +42,6 @@ export const addRecipeBox = (userId, recipeId) =>
 export default function (state = recipebox, action) {
   switch (action.type) {
     case GET_RECIPEBOX:
-      return action.recipebox;
-    case ADD_RECIPEBOX:
       return action.recipebox;
     default:
       return state

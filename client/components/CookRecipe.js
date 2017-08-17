@@ -122,8 +122,7 @@ class CookRecipe extends React.Component {
 
   render() {
     let { forwardDisable, backDisable } = this.state
-    let { recipe, userId } = this.props;
-    console.log(userId)
+    let { recipe} = this.props;
     return (
       <Wrapper column height>
         <SecondaryWrap>
@@ -178,8 +177,7 @@ const mapState = (state) => {
     recipe: state.recipe,
     mochiSays: state.ai,
     step: state.currentStep,
-    stepToSay: state.sayStep,
-    userId: state.user.id
+    stepToSay: state.sayStep
   };
 };
 const mapDispatch = (dispatch) => {
