@@ -186,7 +186,7 @@ export const Controls = styled.div`
 `
 //user profile styles
 export const ProfileUpperArea = styled.div`
-  height: 50vh;
+  height: 35vh;
   flex: 1;
   display: flex;
   padding: 25px;
@@ -195,10 +195,19 @@ export const ProfileUpperArea = styled.div`
 export const ProfileCard = styled.div`
   flex:2
   height: 25vh;
+  width: 30vw;
   display: flex;
   padding: 25px;
   flex-direction: ${props => props.column ? 'column' : 'row'};
 `
+
+export const ProfilePicArea = styled.div`
+  
+`
+
+export const ProfileInfoArea = styled.div`
+`
+
 export const ProfileWarning = styled.h2`
   font-size: 30px;
   color: grey;
@@ -206,13 +215,15 @@ export const ProfileWarning = styled.h2`
   margin: 0px;
   font-family: 'Playfair Display', serif;
 `
-export const ProfileIcon = styled.h2`
-  flex:3;
-  font-size: 40px;
-  padding: 20px;
+export const ProfilePic = styled.img`
+  max-height: 80px;
   border-radius: 50%;
-  width: 80px;
 `
+
+export const Recipes = styled.div`
+  width: 80vw;
+`
+
 export const Error = styled.div`
   padding: 10px;
   color:  white;
