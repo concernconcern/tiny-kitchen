@@ -177,8 +177,7 @@ const mapState = (state) => {
     recipe: state.recipe,
     mochiSays: state.ai,
     step: state.currentStep,
-    stepToSay: state.sayStep,
-    userId: state.user.id
+    stepToSay: state.sayStep
   };
 };
 const mapDispatch = (dispatch) => {
