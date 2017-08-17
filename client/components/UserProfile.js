@@ -16,9 +16,6 @@ class UserProfile extends React.Component{
   }
   render(){
     const {user, userRecipes} = this.props;
-
-    console.log(user)
-    console.log(userRecipes)
     return (
       <div>
         Welcome to the User Profile :)

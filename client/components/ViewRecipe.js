@@ -22,7 +22,7 @@ class ViewRecipe extends React.Component {
   componentDidMount() {
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(false);
-    console.log(this.props.isLoggedIn)
+
     this.props.isLoggedIn ? history.push(`/recipe/${this.props.match.params.recipeid}/user/${this.props.user.id}`) : ''
     this.props.isLoggedIn ? this.props.getRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid) : ''
   }
