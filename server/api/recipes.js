@@ -23,7 +23,8 @@ router.get('/search', (req, res, next) => {
   const search = req.query.search;
   Recipe.findAll({where: {
     $or: [
-      {title: {like: '%' + search + '%'}}
+      {title: {like: '%' + search + '%'}},
+      {directions: {overlap: ['%j']}}
     ]
   }})
     .then(recipes => res.json(recipes))
