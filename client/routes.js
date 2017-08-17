@@ -31,7 +31,7 @@ class Routes extends Component {
             {
               isLoggedIn &&
               <Switch>
-                <Route exact path='/home' component={UserHome} />
+                <Route path='/home' component={UserHome} />
                 <Route path='/add-recipe' component={AddRecipe} />
               </Switch>
             }

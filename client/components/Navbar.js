@@ -8,7 +8,7 @@ const Navbar = (props) => {
   const { children, isLoggedIn, handleClick } = props;
   return (
     <Bar>
-      <Logo>Tiny Kitchen</Logo>
+      <Link to='/'><Logo>Tiny Kitchen</Logo></Link>
       {
         isLoggedIn
           ?
