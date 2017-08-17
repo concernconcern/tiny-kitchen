@@ -144,7 +144,9 @@ class CookRecipe extends React.Component {
         </SecondaryWrap>
         <ControlPanel>
           <UpNext>
-            <Title secondary style={{ display: "inline", padding: "5px 0" }}>Up next...</Title> {recipe.directions && recipe.directions[this.props.step + 1]}
+            <Title secondary style={{ display: "inline", padding: "5px 0" }}>Up next...</Title>
+
+            {recipe.directions && recipe.directions[this.props.step + 1].slice(0, 200)}
           </UpNext>
           <Controls>
             <button disabled={backDisable} className="btn btn-info btn-lg" value="back" onClick={this.stepBackward}>
@@ -194,33 +196,3 @@ const mapDispatch = (dispatch) => {
 };
 
 export default connect(mapState, mapDispatch)(CookRecipe);
-
-
-        // <IngredientsView column>
-            // <Title secondary> Ingredients </Title>
-            // <List>
-            //   {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
-            // </List>
-        //     <ControlPanel>
-        //       <button disabled={backDisable} className="btn btn-info btn-lg" value="back" onClick={this.stepBackward}>
-        //         <span className="glyphicon glyphicon-step-backward" />
-        //       </button>
-        //       &nbsp; &nbsp;
-        //     <button type="button" className="btn btn-info btn-lg" onClick={this.toggleMochi}>
-        //         {
-        //           this.state.stopped ?
-        //             <span className="glyphicon glyphicon-play" />
-        //             :
-        //             <span className="glyphicon glyphicon-pause" />
-        //         }
-        //       </button>
-        //       &nbsp; &nbsp;
-        //    <button disabled={forwardDisable} className="btn btn-info btn-lg" value="forward" onClick={this.stepForward} >
-        //         <span className="glyphicon glyphicon-step-forward" />
-        //       </button>
-        //       &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; {/*need better spacing solution*/}
-        //       <Link to={`/recipe/${recipe.id}`} className="btn btn-info btn-lg" onClick={Mochi.shutUp}>
-        //         <span className="glyphicon glyphicon-remove-sign" /> Exit
-        //     </Link>
-        //     </ControlPanel>
-        //   </IngredientsView>

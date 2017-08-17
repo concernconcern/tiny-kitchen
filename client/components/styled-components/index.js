@@ -105,6 +105,8 @@ export const SecondaryWrap = styled.div`
 export const Sidebar = styled.div`
   flex: 1;
   padding: 20px 0;
+  height: 80vh;
+  overflow:scroll;
 `
 
 export const Button = styled.button`
@@ -161,6 +163,7 @@ export const ControlPanel = styled.div`
 `
 export const UpNext = styled.div`
   flex: 3;
+  color: grey;
 `
 export const Controls = styled.div`
   flex: 1;
