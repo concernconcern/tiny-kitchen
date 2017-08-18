@@ -141,8 +141,8 @@ class CookRecipe extends React.Component {
             </Textfit>
           </CurrentStep>
           <Sidebar>
-            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}><InfoModal /></ExitLink>
-            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}><span className="glyphicon glyphicon-remove-circle" /></ExitLink>
+            <InfoModal />
+            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}><span className="glyphicon glyphicon-remove" /></ExitLink>
             <Title secondary>Ingredients</Title>
 
             <List>
