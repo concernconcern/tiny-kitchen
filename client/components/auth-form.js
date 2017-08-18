@@ -15,7 +15,8 @@ class AuthForm extends React.Component {
     this.props.handleSubmit(evt, this.props.chromeUrl);
   }
   render() {
-    const { name, displayName, error, chromeUrl, handleSubmit } = this.props
+    const { name, displayName, error, handleSubmit } = this.props;
+    let chromeUrl = this.props.chromeUrl ? this.props.chromeUrl : ''
     const submit = chromeUrl.length ? this.chrome : handleSubmit
     return (
       <div>
@@ -100,6 +101,6 @@ export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
 AuthForm.propTypes = {
   name: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
-  handleSubmitRegular: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.object
 }
