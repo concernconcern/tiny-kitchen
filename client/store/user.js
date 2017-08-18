@@ -28,17 +28,16 @@ export const me = () =>
         dispatch(getUser(res.data || defaultUser)))
       .catch(err => console.log(err))
 
-export const auth = (email, password, method, first_name, last_name) =>
+export const auth = (email, password, method, first_name, last_name, chromeUrl) =>
   dispatch => {
     axios.post(`/auth/${method}`, { email, password, first_name, last_name })
       .then(res => {
         dispatch(getUser(res.data))
-        history.push('/home')
+        chromeUrl ? history.push(`/add-recipe?url=${chromeUrl}`) : history.push('/home')
       })
       .catch(error =>
         dispatch(getUser({ error })))
-      }
-      
+  }
 
 export const logout = () =>
   dispatch =>

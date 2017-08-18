@@ -123,8 +123,8 @@ class ViewRecipe extends React.Component {
                   <Notes>{this.props.recipebox.notes}</Notes>
                 }   </div> : ''
           }
-        </RecipeText >
-      </Wrapper >
+        </RecipeText>
+      </Wrapper>
     )
   }
 }

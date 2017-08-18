@@ -1,47 +1,56 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import {auth} from '../store'
-
+import { auth, authChrome } from '../store'
+import * as action from '../store'
 /**
  * COMPONENT
  */
-const AuthForm = (props) => {
-  const {name, displayName, handleSubmit, error} = props
-
-  return (
-    <div>
-      <form onSubmit={handleSubmit} name={name}>
-      {
-        displayName === 'Sign Up' ? 
-        <div>
+class AuthForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.chrome = this.chrome.bind(this);
+  }
+  chrome(evt) {
+    this.props.handleSubmit(evt, this.props.chromeUrl);
+  }
+  render() {
+    const { name, displayName, error, chromeUrl, handleSubmit } = this.props
+    const submit = chromeUrl.length ? this.chrome : handleSubmit
+    return (
+      <div>
+        <form onSubmit={submit} name={name}>
+          {
+            displayName === 'Sign Up' ?
+              <div>
+                <div>
+                  <label htmlFor='name'><small>First Name</small></label>
+                  <input name='firstName' type='text' />
+                </div>
+                <div>
+                  <label htmlFor='name'><small>Last Name</small></label>
+                  <input name='lastName' type='text' />
+                </div>
+              </div>
+              : null
+          }
           <div>
-            <label htmlFor='name'><small>First Name</small></label>
-            <input name='firstName' type='text' />
-          </div>      
+            <label htmlFor='email'><small>Email</small></label>
+            <input name='email' type='text' />
+          </div>
           <div>
-            <label htmlFor='name'><small>Last Name</small></label>
-            <input name='lastName' type='text' />
-          </div> 
-        </div>
-        : null
-      }
-        <div>
-          <label htmlFor='email'><small>Email</small></label>
-          <input name='email' type='text' />
-        </div>
-        <div>
-          <label htmlFor='password'><small>Password</small></label>
-          <input name='password' type='password' />
-        </div>
-        <div>
-          <button type='submit'>{displayName}</button>
-        </div>
-        {error && error.response && <div> {error.response.data} </div>}
-      </form>
-      <a href='/auth/google'>{displayName} with Google</a>
-    </div>
-  )
+            <label htmlFor='password'><small>Password</small></label>
+            <input name='password' type='password' />
+          </div>
+          <div>
+            <button type='submit'>{displayName}</button>
+          </div>
+          {error && error.response && <div> {error.response.data} </div>}
+        </form>
+        <a href='/auth/google'>{displayName} with Google</a>
+      </div>
+    )
+  }
 }
 
 /**
@@ -69,14 +78,15 @@ const mapSignup = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    handleSubmit (evt) {
+    saveChromeUrl: (url) => dispatch(action.saveChromeUrl(url)),
+    handleSubmit: (evt, chromeUrl) => {
       evt.preventDefault()
       const formName = evt.target.name
       const email = evt.target.email.value
       const password = evt.target.password.value
       const first_name = evt.target.firstName ? evt.target.firstName.value : null;
-      const last_name = evt.target.lastName ? evt.target.lastName.value: null;
-      dispatch(auth(email, password, formName, first_name, last_name))
+      const last_name = evt.target.lastName ? evt.target.lastName.value : null;
+      dispatch(auth(email, password, formName, first_name, last_name, chromeUrl))
     }
   }
 }
@@ -90,6 +100,6 @@ export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
 AuthForm.propTypes = {
   name: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
+  handleSubmitRegular: PropTypes.func.isRequired,
   error: PropTypes.object
 }
