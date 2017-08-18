@@ -15,7 +15,7 @@ import timer from './timer'
 import input from './input'
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-const reducer = combineReducers({ user, recipe, recipebox, ai, chromeUrl, cooking, currentStep, sayStep, recipes, userRecipes, timer, input })
+const reducer = combineReducers({ user, recipe, recipebox, chromeUrl, ai, cooking, currentStep, sayStep, recipes, userRecipes, timer, input })
 const middleware = applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
 const store = createStore(reducer, composeWithDevTools(middleware))
 

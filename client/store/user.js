@@ -1,6 +1,6 @@
 import axios from 'axios'
 import history from '../history'
-
+import InfoModal from '../components/InfoModal'
 /**
  * ACTION TYPES
  */

@@ -79,7 +79,6 @@ const mapSignup = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    saveChromeUrl: (url) => dispatch(action.saveChromeUrl(url)),
     handleSubmit: (evt, chromeUrl) => {
       evt.preventDefault()
       const formName = evt.target.name
