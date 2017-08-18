@@ -7,6 +7,8 @@ import { Wrapper, IngredientsView, AccentButton, UpNext, ExitLink, Directions, S
 import * as action from '../store';
 import Mochi from '../mochi';
 import { Textfit } from 'react-textfit';
+import ReactTestUtils from 'react-dom/test-utils';
+import InfoModal from './InfoModal';
 import Timer from './Timer';
 
 
@@ -34,15 +36,15 @@ class CookRecipe extends React.Component {
     this.props.isCooking(true);
 
     Mochi.addCommands({
-    smart:true,
-    indexes: ["*"],
-    action: (i, wildcard) => {
-      let toggleWords = ['start cooking', 'start', 'stop', 'pause', 'play', 'read'];
-      if (wildcard === 'next' || wildcard === 'next step'){
+      smart: true,
+      indexes: ["*"],
+      action: (i, wildcard) => {
+        let toggleWords = ['start cooking', 'start', 'stop', 'pause', 'play', 'read'];
+        if (wildcard === 'next' || wildcard === 'next step') {
           this.stepForward();
         } else if (wildcard === 'go back' || wildcard === 'back' || wildcard === 'previous') {
           this.stepBackward();
-        } else if (toggleWords.includes(wildcard)){
+        } else if (toggleWords.includes(wildcard)) {
           this.toggleMochi();
         } else {
           this.sendUserInput(wildcard);
@@ -139,7 +141,8 @@ class CookRecipe extends React.Component {
             </Textfit>
           </CurrentStep>
           <Sidebar>
-            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}><span className="glyphicon glyphicon-remove-circle" /></ExitLink>
+            <InfoModal />
+            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}><span className="glyphicon glyphicon-remove" /></ExitLink>
             <Title secondary>Ingredients</Title>
 
             <List>

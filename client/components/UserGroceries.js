@@ -6,7 +6,7 @@ import * as action from '../store'
 /**
  * COMPONENT
  */
-class UserProfile extends React.Component{
+class UserGroceries extends React.Component{
   constructor(props){
     super(props)
   }
@@ -42,11 +42,11 @@ const mapDispatch = (dispatch) => {
   }
 }
 
-export default connect(mapState, mapDispatch)(UserProfile)
+export default connect(mapState, mapDispatch)(UserGroceries)
 
 /**
  * PROP TYPES
  */
-UserProfile.propTypes = {
+UserGroceries.propTypes = {
   user: PropTypes.object
 }

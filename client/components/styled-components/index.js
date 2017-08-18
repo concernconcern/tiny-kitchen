@@ -108,8 +108,9 @@ export const Sidebar = styled.div`
   height: 80vh;
   overflow:scroll;
 `
+
 export const ExitLink = styled(Link) `
-  font-size: 50px;
+  font-size: 35px;
   color: #db3434;
   top: 10px;
   right: 20px;
@@ -229,6 +230,7 @@ export const ProfileCard = styled.div`
   width: 30vw;
   display: flex;
   padding: 25px;
+  justify-content: space-around;
   flex-direction: ${props => props.column ? 'column' : 'row'};
 `
 
