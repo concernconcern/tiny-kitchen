@@ -69,6 +69,7 @@ class ViewRecipe extends React.Component {
     console.log('userId: ', this.props.match.params.userid)
     this.props.reallyAddGrocery(this.props.match.params.userid, e.target.value)
   }
+
   render() {
     const { recipe, recipebox, isLoggedIn } = this.props;
 
