@@ -12,7 +12,8 @@ const User = db.define('user', {
     // allowNull: false
   },
   picture_url: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
+    defaultValue: 'https://i2.wp.com/hennesseyonline.com/wp-content/uploads/2017/01/generic-profile-avatar_352864.jpg?fit=500%2C500'
   },
   email: {
     type: Sequelize.STRING,
