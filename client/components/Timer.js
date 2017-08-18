@@ -2,7 +2,6 @@ import React from 'react';
 import { Clock, Add, Modify } from './styled-components';
 import * as action from '../store';
 import {connect} from 'react-redux';
-import Sound from 'react-sound';
 import Mochi from '../mochi'
 
 class Timer extends React.Component{
