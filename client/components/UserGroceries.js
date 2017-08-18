@@ -14,7 +14,6 @@ class UserGroceries extends React.Component{
 
   componentDidMount(){
     this.props.fetchGroceries(this.props.user.id)
-    console.log('userid: ', this.props.user.id)
   }
   render(){
     const {user, userGroceries} = this.props;
@@ -22,9 +21,8 @@ class UserGroceries extends React.Component{
       <List>
       {userGroceries && userGroceries.map((grocery, i) => <li key={i}>{grocery}</li>)}
       </List>
-    )
+    )     
   }
-
 }
 
 /**
