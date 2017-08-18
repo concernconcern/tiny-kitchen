@@ -13,26 +13,30 @@ export default class Tile extends React.Component {
       hover: false
     }
 
-    this.style = {
-      backgroundImage: 'url(' + props.recipe.picture_url + ')',
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center',
-      backgroundSize: '100%',
-      width: '33.3vw',
-      height: '40vh'
+    this.renderStyle = (picture_url) => {
+      return {
+        backgroundImage: 'url(' + picture_url + ')',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        backgroundSize: '100%',
+        width: '33.33vw',
+        height: '40vh'        
+      }
     }
 
-    this.hoverStyle = {
-      backgroundImage: 'linear-gradient(rgba(255, 0, 0, 0.45), rgba(255, 0, 0, 0.45)), url(' + props.recipe.picture_url + ')',
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center',
-      backgroundSize: '100%',
-      width: '33.3vw',
-      height: '40vh',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      textAlign: 'center'
+    this.renderHoverStyle = (picture_url) => {
+      return {
+        backgroundImage: 'linear-gradient(rgba(255, 0, 0, 0.45), rgba(255, 0, 0, 0.45)), url(' + picture_url + ')',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        backgroundSize: '100%',
+        width: '33.33vw',
+        height: '40vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        textAlign: 'center'        
+      }      
     }
 
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
@@ -53,12 +57,13 @@ export default class Tile extends React.Component {
         {
           this.state.hover ?
           <div
-            style={this.hoverStyle}
+            style={this.renderHoverStyle(this.props.recipe.picture_url)}
             onMouseLeave={this.handleMouseLeave}>
             <TileTitle>{this.props.recipe.title}</TileTitle>
-          </div> :
+          </div>
+          :
           <div
-            style={this.style}
+            style={this.renderStyle(this.props.recipe.picture_url)}
             onMouseEnter={this.handleMouseEnter}>
          </div>
         }

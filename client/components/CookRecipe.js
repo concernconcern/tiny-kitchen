@@ -27,6 +27,7 @@ class CookRecipe extends React.Component {
     this.toggleMochi = this.toggleMochi.bind(this);
     this.stepBackward = this.stepBackward.bind(this);
     this.stepForward = this.stepForward.bind(this);
+    this.exit = this.exit.bind(this);
   }
 
   componentDidMount() {
@@ -91,16 +92,16 @@ class CookRecipe extends React.Component {
   }
 
 
-  stepForward() {
-    let newStep = this.props.step + 1;
-    if (this.props.recipe && newStep < this.props.recipe.directions.length - 1) {
-      Mochi.shutUp();
-      this.props.changeStepTo(newStep, this.props.recipe.directions);
-      let backDisable = (newStep === 0) ? true : false;
-      let forwardDisable = (newStep === this.props.recipe.directions.length - 1) ? true : false;
-      this.setState({
-        forwardDisable,
-        backDisable
+  stepForward(){
+      let newStep = this.props.step + 1;
+      if (this.props.recipe && newStep < this.props.recipe.directions.length){
+        Mochi.shutUp();
+        this.props.changeStepTo(newStep, this.props.recipe.directions);
+        let backDisable = (newStep === 0) ? true  : false;
+        let forwardDisable = (newStep === this.props.recipe.directions.length) ? true : false;
+        this.setState({
+          forwardDisable,
+          backDisable
       });
     }
   }
@@ -118,7 +119,10 @@ class CookRecipe extends React.Component {
         backDisable
       });
     }
+  }
 
+  exit() {
+    Mochi.shutUp();
   }
 
 
@@ -136,7 +140,7 @@ class CookRecipe extends React.Component {
             </Textfit>
           </CurrentStep>
           <Sidebar>
-            <ExitLink to={`/recipe/${recipe.id}`}>X</ExitLink>
+            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}>X</ExitLink>
             <Title secondary>Ingredients</Title>
 
             <List>
