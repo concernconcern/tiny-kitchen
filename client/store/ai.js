@@ -25,7 +25,11 @@ export const getOutput = output => ({type: GET_OUTPUT, output})
  * THUNK CREATORS
  *The query endpoint is used to process natural language in the form of text. The query requests *return structured data in JSON format with an action and parameters for that action
  */
- const token = require('../../secrets')
+ // const token = require('../../secrets')
+ //  const token = require('../../secrets')
+ const token = process.env.AI_TOKEN;
+
+ // const token = '32a6925a368448038ed4e3899b5422ca';
 
 
 const makeRequestConfig = (userInput) => {
