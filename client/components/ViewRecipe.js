@@ -22,7 +22,6 @@ class ViewRecipe extends React.Component {
   componentDidMount() {
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(false);
-
     this.props.isLoggedIn ? history.push(`/recipe/${this.props.match.params.recipeid}/user/${this.props.user.id}`) : ''
     this.props.isLoggedIn ? this.props.getRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid) : ''
   }
@@ -62,7 +61,6 @@ class ViewRecipe extends React.Component {
       <Wrapper >
         <RecipeImg src={recipe.picture_url} />
         <RecipeText>
-
           <Title>{recipe && recipe.title}</Title>
           {isLoggedIn ? <ControlPanel>
             <a href={`/recipe/${recipe.id}/cook`} ><AccentButton alt="Cook Recipe" >

@@ -5,8 +5,6 @@
  */
 export { default as Main } from './main'
 export { default as UserHome } from './UserHome'
-export { default as UserProfile } from './UserProfile'
-export { default as UserRecipes } from './UserRecipes'
 export { default as ViewRecipe } from './ViewRecipe'
 export { default as Navbar } from './Navbar'
 export { default as AddRecipe } from './AddRecipe'

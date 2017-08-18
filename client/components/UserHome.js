@@ -15,7 +15,7 @@ export default class UserHome extends React.Component {
         <UserNav />
         <Switch>
           <Route exact path='/home/profile' component={UserProfile} />
-          <Route path='/home' component={UserRecipes} />
+          <Route component={UserRecipes} />
         </Switch>
       </div>
     )
