@@ -50,7 +50,6 @@ class Timer extends React.Component{
       this.toggleTimer()
       this.props.changeTimer(this.props.time)
     }
-
   }
 
 
@@ -80,7 +79,6 @@ class Timer extends React.Component{
   }
 
   render(){
-    console.log(this.state)
     let ms = this.props.time;
     let hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     let minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
@@ -113,7 +111,10 @@ class Timer extends React.Component{
         <Add name="secondsSub" onClick={this.changeTime}> - </Add>
         {
           this.state.playAlarm &&
-          <Sound source={{uri: 'alarm.mp3'}} />
+          <Sound
+      url="alarm.mp3"
+      playStatus={Sound.status.PLAYING}
+    />
         }
        </Clock>
     );
