@@ -4,7 +4,6 @@ import * as action from '../store';
 import {connect} from 'react-redux';
 import Sound from 'react-sound';
 import Audio from 'react-audio'
-import Alarm from './Alarm'
 
 class Timer extends React.Component{
   constructor(props){
