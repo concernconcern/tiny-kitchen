@@ -31,7 +31,8 @@ class ViewRecipe extends React.Component {
           </Title>
           <Title secondary>Ingredients</Title>
           <List>
-            {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
+            {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}<Link to="#">
+          <span className="glyphicon glyphicon-plus"></span></Link></li>)}
           </List>
           <Title secondary>Directions</Title>
           <List directions>
