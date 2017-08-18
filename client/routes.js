@@ -5,7 +5,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 // import history from './history'
 import history from './history'
-import { Main, Login, Signup, UserHome, ViewRecipe, CookRecipe, AddRecipe, AllRecipes, Search } from './components'
+import { Main, Login, Signup, UserHome, ViewRecipe, CookRecipe, AddRecipe, AllRecipes, ImgUpload } from './components'
 import { me } from './store'
 
 /**`
@@ -28,6 +28,7 @@ class Routes extends Component {
             <Route exact path='/signup' component={Signup} />
             <Route exact path='/recipe/:id' component={ViewRecipe} />
             <Route exact path='/recipe/:id/cook' component={CookRecipe} />
+            <Route exact path='/img' component={ImgUpload} />
             {
               isLoggedIn &&
               <Switch>

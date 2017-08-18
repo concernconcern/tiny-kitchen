@@ -12,3 +12,4 @@ export { Login, Signup } from './auth-form'
 export { default as AllRecipes } from './AllRecipes'
 export { default as Tile } from './Tile'
 export { default as CookRecipe } from './CookRecipe'
+export { default as ImgUpload } from './ImgUpload';

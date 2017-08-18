@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Artyom from 'artyom.js';
 import { Router, withRouter, Link } from 'react-router-dom';
-import Step from './Step';
 import { fetchOutput } from '../store';
 import { Wrapper, IngredientsView, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
 import * as action from '../store';
