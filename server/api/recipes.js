@@ -2,6 +2,8 @@ const router = require('express').Router();
 const db = require('../db/db');
 const Recipe = db.model('recipe');
 const RecipeBox = db.model('recipebox');
+const Grocery = db.model('grocery');
+const GroceryUser = db.model('groceryUser');
 module.exports = router;
 
 // GET /api/recipes
@@ -64,3 +66,4 @@ router.get('/:recipeId/recipebox', (req, res, next) => {
   .then(users => res.json(users))
   .catch(next);
 });
+

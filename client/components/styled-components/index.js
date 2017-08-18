@@ -110,17 +110,21 @@ export const Sidebar = styled.div`
 `
 export const ExitLink = styled(Link) `
   font-size: 50px;
-  color: grey;
-  top: 0;
+  color: #db3434;
+  top: 10px;
   right: 20px;
   font-family: 'Raleway', serif;
   position: absolute;
+  cursor: pointer;
   &:hover{
-    color:  #db3434;
+    color:  black;
     text-decoration: none;
   }
 `
-
+export const Notes = styled.p`
+  margin: 0 25px;
+  color: grey;
+`
 export const Button = styled.button`
   color: white;
   font-size: 24px;
@@ -136,6 +140,18 @@ export const Button = styled.button`
     background:#c91a1a;
   }
 `
+export const AccentButton = styled.button`
+ background:#53BDFF;
+ outline: none;
+ color:white;
+ border: 1px solid #35A6FF;
+padding: 15px 20px;
+ border-radius: 5px;
+ &:hover{
+   background: #3bb8f7;
+ }
+`
+
 export const Modify = styled.a`
   font-size: 24px;
   color: ${props => props.x ? 'grey' : '#db3434'};
@@ -168,17 +184,17 @@ export const CurrentStep = styled.div`
 `
 export const ControlPanel = styled.div`
   display: flex;
-  border-top: 1px solid #ddd;
   padding: 20px;
-  height: 10vh;
   align-items: center;
-  overflow:hidden;
 `
 export const UpNext = styled.div`
   flex: 3;
   height: 100%;
   overflow:hidden;
   color: grey;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 export const Controls = styled.div`
   flex: 1;
@@ -224,7 +240,7 @@ export const Recipes = styled.div`
   width: 80vw;
 `
 
-export const Error = styled.div`
+export const Message = styled.div`
   padding: 10px;
   color:  white;
   background: goldenrod;

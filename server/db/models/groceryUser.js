@@ -9,17 +9,16 @@ const GroceryUser = db.define('groceryUser', {
   },
   unit: {
     type: Sequelize.STRING,
-    allowNull: false
   }
 }, {
   instanceMethods: {
-    addQauntity: function(quantity, unit) {
-      let newQauntity;
-      if (this.unit !== unit){
-        newQauntity = convert(quantity).from(unit).to(this.unit);
+    addQuantity: function(quantity, unit) {
+      let newQuantity;
+      if (this.unit && unit && this.unit !== unit){
+        newQuantity = convert(quantity).from(unit).to(this.unit);
       }
-      else newQauntity = quantity;
-      this.quantity += newQauntity
+      else newQuantity = quantity;
+      this.quantity += newQuantity
     }
   }
 })

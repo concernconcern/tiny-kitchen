@@ -1,35 +1,44 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Link, Route, Switch } from 'react-router-dom'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import { Recipes, Tiles, ProfileWarning } from './styled-components'
 import Tile from './Tile'
 import * as action from '../store'
 /**
  * COMPONENT
  */
-class UserRecipes extends React.Component{
-  constructor(props){
+class UserRecipes extends React.Component {
+  constructor(props) {
     super(props)
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.fetchUserRecipes(this.props.user.id)
   }
-  render(){
-    const {user, userRecipes} = this.props;
 
-    console.log(user)
-    console.log(userRecipes)
+  filterRecipes(recipes, input) {
+    input = input.toLowerCase();
+    return recipes.filter(recipe => {
+      return recipe.title.toLowerCase().includes(input) ||
+        recipe.directions.join().toLowerCase().includes(input) ||
+        recipe.ingredients.join().toLowerCase().includes(input)
+    })
+  }
+
+  render() {
+    let { user, userRecipes, input } = this.props;
+    userRecipes = this.filterRecipes(userRecipes, input)
+
     return (
       <Recipes>
         {
           userRecipes.length ?
-          <Tiles>
-           {userRecipes.map((recipe, i) => <Link key={i} to={`/recipe/${recipe.id}`}><Tile recipe={recipe}/></Link>)}
-          </Tiles>
-          :
-          <ProfileWarning>You have no recipes! Go add some!</ProfileWarning>
+            <Tiles>
+              {userRecipes.map((recipe, i) => <Link key={i} to={`/recipe/${recipe.id}`}><Tile recipe={recipe} /></Link>)}
+            </Tiles>
+            :
+            <ProfileWarning>You have no recipes! Go add some!</ProfileWarning>
         }
       </Recipes>
     )
@@ -43,7 +52,8 @@ class UserRecipes extends React.Component{
 const mapState = (state) => {
   return {
     user: state.user,
-    userRecipes: state.userRecipes
+    userRecipes: state.userRecipes,
+    input: state.input
   }
 }
 

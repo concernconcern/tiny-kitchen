@@ -67,6 +67,18 @@ export const fetchOutput = (userInput) =>
     .catch(err => console.log(err))
 }
 
+export const parseIngredient = (userInput) =>
+  dispatch => {
+    axios(makeRequestConfig(userInput))
+    .then(res => {
+      //get title and unit back from AI
+      const {title, unit} = res.data.result.parameters
+      const grocery = {title: title, unit: unit}
+      return grocery
+    })
+    .catch(err => console.log(err))
+  }
+
 
 /**
  * REDUCER

@@ -6,7 +6,7 @@ const Grocery = db.define('grocery', {
   title: {
     type: Sequelize.STRING,
     allowNull: false
-  }
+  },
 })
 
 module.exports = Grocery;

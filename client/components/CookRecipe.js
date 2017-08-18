@@ -5,7 +5,7 @@ import Artyom from 'artyom.js';
 import { Router, withRouter, Link } from 'react-router-dom';
 import Step from './Step';
 import { fetchOutput } from '../store';
-import { Wrapper, IngredientsView, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
+import { Wrapper, IngredientsView, AccentButton, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
 import * as action from '../store';
 import Mochi from '../mochi';
 import { Textfit } from 'react-textfit';
@@ -31,7 +31,7 @@ class CookRecipe extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getRecipe(this.props.match.params.id);
+    this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(true);
 
     Mochi.addCommands({
@@ -91,16 +91,16 @@ class CookRecipe extends React.Component {
   }
 
 
-  stepForward(){
-      let newStep = this.props.step + 1;
-      if (this.props.recipe && newStep < this.props.recipe.directions.length){
-        Mochi.shutUp();
-        this.props.changeStepTo(newStep, this.props.recipe.directions);
-        let backDisable = (newStep === 0) ? true  : false;
-        let forwardDisable = (newStep === this.props.recipe.directions.length) ? true : false;
-        this.setState({
-          forwardDisable,
-          backDisable
+  stepForward() {
+    let newStep = this.props.step + 1;
+    if (this.props.recipe && newStep < this.props.recipe.directions.length) {
+      Mochi.shutUp();
+      this.props.changeStepTo(newStep, this.props.recipe.directions);
+      let backDisable = (newStep === 0) ? true : false;
+      let forwardDisable = (newStep === this.props.recipe.directions.length) ? true : false;
+      this.setState({
+        forwardDisable,
+        backDisable
       });
     }
   }
@@ -127,7 +127,7 @@ class CookRecipe extends React.Component {
 
   render() {
     let { forwardDisable, backDisable } = this.state
-    const recipe = this.props.recipe;
+    let { recipe } = this.props;
     return (
       <Wrapper column height>
         <SecondaryWrap>
@@ -138,7 +138,7 @@ class CookRecipe extends React.Component {
             </Textfit>
           </CurrentStep>
           <Sidebar>
-            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}>X</ExitLink>
+            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}><span className="glyphicon glyphicon-remove-circle" /></ExitLink>
             <Title secondary>Ingredients</Title>
             <List>
               {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
@@ -149,26 +149,26 @@ class CookRecipe extends React.Component {
         </SecondaryWrap>
         <ControlPanel>
           <UpNext>
-            <Title secondary style={{ display: "inline", padding: "5px 0" }}>Up next...</Title>
+            <Title secondary style={{ display: "inline", padding: "5px 0" }}>Up next...&nbsp;</Title>
             {recipe.directions[this.props.step + 1]}
           </UpNext>
           <Controls>
-            <button disabled={backDisable} className="btn btn-info btn-lg" value="back" onClick={this.stepBackward}>
+            <AccentButton disabled={backDisable} value="back" onClick={this.stepBackward}>
               <span className="glyphicon glyphicon-step-backward" />
-            </button>
+            </AccentButton>
             &nbsp; &nbsp;
-            <button type="button" className="btn btn-info btn-lg" onClick={this.toggleMochi}>
+            <AccentButton type="button" onClick={this.toggleMochi}>
               {
                 this.state.stopped ?
                   <span className="glyphicon glyphicon-play" />
                   :
                   <span className="glyphicon glyphicon-pause" />
               }
-            </button>
+            </AccentButton>
             &nbsp; &nbsp;
-           <button disabled={forwardDisable} className="btn btn-info btn-lg" value="forward" onClick={this.stepForward} >
+           <AccentButton disabled={forwardDisable} value="forward" onClick={this.stepForward} >
               <span className="glyphicon glyphicon-step-forward" />
-            </button>
+            </AccentButton>
           </Controls>
         </ControlPanel>
       </Wrapper>
