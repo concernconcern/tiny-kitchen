@@ -3,10 +3,6 @@ import React, {Component} from 'react';
 import { Clock, Add, Modify } from './styled-components';
 import * as action from '../store';
 import {connect} from 'react-redux';
-import Alarm from './Alarm';
-import { Clock, Add, Modify } from './styled-components';
-import * as action from '../store';
-import {connect} from 'react-redux';
 import Mochi from '../mochi'
 
 class Timer extends React.Component{
@@ -57,8 +53,6 @@ class Timer extends React.Component{
 
   }
 
-
-  }
 
   changeTime(evt){
     let time = this.props.time

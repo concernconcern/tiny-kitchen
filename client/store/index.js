@@ -13,9 +13,10 @@ import sayStep from './sayStep'
 import userRecipes from './userRecipes'
 import timer from './timer'
 import input from './input'
+import groceries from './groceries'
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-const reducer = combineReducers({ user, recipe, recipebox, chromeUrl, ai, cooking, currentStep, sayStep, recipes, userRecipes, timer, input })
+const reducer = combineReducers({ user, recipe, recipebox, chromeUrl, ai, cooking, currentStep, sayStep, recipes, userRecipes, timer, input, groceries })
 const middleware = applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
 const store = createStore(reducer, composeWithDevTools(middleware))
 
@@ -32,4 +33,5 @@ export * from './sayStep'
 export * from './userRecipes'
 export * from './timer'
 export * from './input'
+export * from './groceries'
 

@@ -16,6 +16,7 @@ const deleteGrocery = (groceryId) => ({type: DELETE_GROCERY, groceryId});
 //get all groceries from a user
 export const fetchGroceries = (userId) =>
   dispatch => {
+    console.log(userId)
     axios.get(`/api/groceries/${userId}`)
     .then(res => dispatch(getGroceries(res.data)))
     .catch(err => console.log(err))

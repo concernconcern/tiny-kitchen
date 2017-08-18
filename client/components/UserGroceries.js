@@ -14,6 +14,7 @@ class UserGroceries extends React.Component{
 
   componentDidMount(){
     this.props.fetchGroceries(this.props.user.id)
+    console.log('userid: ', this.props.user.id)
   }
   render(){
     const {user, userGroceries} = this.props;
@@ -32,7 +33,7 @@ class UserGroceries extends React.Component{
 const mapState = (state) => {
   return {
     user: state.user,
-    userGroceries: state.groceries
+    userGroceries: state.groceries.map(grocery => grocery.title)
   }
 }
 
