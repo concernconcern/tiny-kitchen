@@ -1,4 +1,4 @@
-
+import axios from 'axios'
 // Action Types
 const GET_GROCERIES = 'GET_GROCERIES';
 
@@ -11,7 +11,7 @@ const getGroceries = (groceries) => ({type: GET_GROCERIES, groceries});
 //THUNK
 const fetchGroceries = () =>
   dispatch => {
-
+    axios.get()
   }
 
 // Reducer
