@@ -15,7 +15,7 @@ const Main = (props) => {
 
   return (
     <div>
-      {!cooking ? (<Navbar handleClick={handleClick} isLoggedIn />) : null}
+      {!cooking ? (<Navbar handleClick={handleClick} isLoggedIn={isLoggedIn} />) : null}
       {children}
     </div>
   )
