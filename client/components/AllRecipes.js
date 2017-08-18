@@ -16,7 +16,7 @@ class AllRecipes extends React.Component {
     this.props.getRecipes();
   }
 
-  filterRecipes(recipes, input){  
+  filterRecipes(recipes, input) {
     input = input.toLowerCase();
     return recipes.filter(recipe => {
       return recipe.title.toLowerCase().includes(input) ||
@@ -24,16 +24,15 @@ class AllRecipes extends React.Component {
         recipe.ingredients.join().toLowerCase().includes(input)
     })
   }
-
   render() {
-    let {input, recipes}= this.props;
+    let { input, recipes, isLoggedIn, userId } = this.props;
     recipes = this.filterRecipes(recipes, input);
-
     return (
       <Tiles>
         {recipes.length && recipes.map((recipe, i) =>
-          <Link key={i} to={`/recipe/${recipe.id}`}><Tile recipe={recipe}/></Link>)}
-      </Tiles>
+          <Link key={i} to={`/recipe/${recipe.id}`}><Tile recipe={recipe} /></Link>
+        )
+        }  </Tiles>
     )
   }
 }
@@ -43,7 +42,9 @@ class AllRecipes extends React.Component {
 const mapState = (state) => {
   return {
     recipes: state.recipes,
-    input: state.input
+    input: state.input,
+    isLoggedIn: !!state.user.id,
+    userId: state.user.id
   }
 }
 

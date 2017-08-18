@@ -110,17 +110,20 @@ export const Sidebar = styled.div`
 `
 export const ExitLink = styled(Link) `
   font-size: 50px;
-  color: grey;
+  color: #db3434;
   top: 0;
   right: 20px;
   font-family: 'Raleway', serif;
   position: absolute;
   &:hover{
-    color:  #db3434;
+    color:  #black;
     text-decoration: none;
   }
 `
-
+export const Notes = styled.p`
+  margin: 0 25px;
+  color: grey;
+`
 export const Button = styled.button`
   color: white;
   font-size: 24px;
@@ -136,6 +139,18 @@ export const Button = styled.button`
     background:#c91a1a;
   }
 `
+export const AccentButton = styled.button`
+ background:#53BDFF;
+ outline: none;
+ color:white;
+ border: 1px solid #35A6FF;
+padding: 15px 20px;
+ border-radius: 5px;
+ &:hover{
+   background: #3bb8f7;
+ }
+`
+
 export const Modify = styled.a`
   font-size: 24px;
   color: ${props => props.x ? 'grey' : '#db3434'};
