@@ -96,7 +96,6 @@ class ViewRecipe extends React.Component {
               <AccentButton href="#" alt="Add to RecipeBox" onClick={this.handleCreateRecipeBox} >
                 <span className="glyphicon glyphicon-plus" />
               </AccentButton>
-
             }
           </ControlPanel> : ''
           }
