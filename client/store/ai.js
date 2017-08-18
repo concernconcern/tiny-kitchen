@@ -54,7 +54,6 @@ export const fetchOutput = (userInput) =>
     axios(makeRequestConfig(userInput))
     .then(res => {
       const output = res.data.result.fulfillment.displayText
-      // console.log(output)
       dispatch(getOutput(output));
       dispatch(getOutput(''))
       if (res.data.result.action === 'setTimer'){
