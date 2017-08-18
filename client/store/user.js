@@ -1,6 +1,6 @@
 import axios from 'axios'
 import history from '../history'
-
+import InfoModal from '../components/InfoModal'
 /**
  * ACTION TYPES
  */
@@ -33,7 +33,7 @@ export const auth = (email, password, method, first_name, last_name, chromeUrl) 
     axios.post(`/auth/${method}`, { email, password, first_name, last_name })
       .then(res => {
         dispatch(getUser(res.data))
-        chromeUrl ? history.push(`/add-recipe?url=${chromeUrl}`) : history.push('/home')
+        chromeUrl.length ? history.push(`/add-recipe?url=${chromeUrl}`) : history.push('/home')
       })
       .catch(error =>
         dispatch(getUser({ error })))
