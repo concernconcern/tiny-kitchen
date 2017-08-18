@@ -10,7 +10,44 @@ import * as action from '../store'
  */
 class UserNav extends React.Component{
   constructor(props){
-    super(props)
+    super(props);
+    this.state = {
+      editName: false,
+      editEmail: false,
+      name: '',
+      email: ''
+    }
+    this.handleNameClick = this.handleNameClick.bind(this);
+    this.handleEmailClick = this.handleEmailClick.bind(this);
+    this.handleDone = this.handleDone.bind(this);
+  }
+
+  handleNameClick(event){
+    const {value} = event.target;
+    const editName = value === 'edit' ? true : false;
+    this.setState({editName});
+  }
+
+  handleEmailClick(event){
+    const {value} = event.target;
+    const editEmail = value === 'edit' ? true : false;
+    this.setState({editEmail});
+  }
+
+  handleChange(event, type){
+    let newState = this.state;
+    newState[type] = event.target.value
+    this.setState(newState);
+  }
+
+  handleDone(event, type){
+    let newState = this.state;
+    let field = type === 'name' ? 'editName' : 'editEmail';
+    newState[field] = false;
+    this.setState(newState);
+
+    let info = this.state[type];
+    this.props.updateUser(info, type);
   }
 
   componentDidMount(){
@@ -26,13 +63,34 @@ class UserNav extends React.Component{
               <ProfilePic src={user.picture_url} />
             </ProfilePicArea>
             <ProfileInfoArea>
-              <h3>{user.first_name + ' ' + user.last_name}</h3>
-              <h5>{user.email}</h5>
+              <div>
+                {this.state.editName ? 
+                  <div>
+                    <input onChange={(e) => this.handleChange(e, 'name')}></input>
+                    <button type="submit" onClick={(e) => this.handleDone(e, 'name')}>Done</button>
+                  </div>
+                  :
+                  <div>
+                    <h3>{user.first_name + ' ' + user.last_name}</h3>
+                    <button value="edit" onClick={this.handleNameClick}>Edit</button>
+                  </div>
+                }
+                {this.state.editEmail ?
+                  <div>
+                    <input onChange={(e) => this.handleChange(e, 'email')}></input>
+                    <button type="submit" onClick={(e) => this.handleDone(e, 'email')}>Done</button>
+                  </div>
+                  :
+                  <div>
+                    <h5>{user.email}</h5>
+                    <button value="edit" name="email" onClick={this.handleEmailClick}>Edit</button>
+                  </div>}
+              </div>
             </ProfileInfoArea>
           </ProfileCard>
             <Links>
-              <Link to='/home/profile'>Profile</Link>
               <Link to='/home/recipes'>Recipes</Link>
+              <Link to='/home/groceries'>Groceries</Link>
             </Links>
         </ProfileUpperArea>
       </div>
@@ -53,7 +111,8 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    fetchUserRecipes: (userId) => dispatch(action.fetchUserRecipes(userId))
+    fetchUserRecipes: (userId) => dispatch(action.fetchUserRecipes(userId)),
+    updateUser: (info, type) => dispatch(action.updateUser(info, type))
   }
 }
 
