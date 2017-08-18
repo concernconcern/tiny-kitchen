@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Artyom from 'artyom.js';
 import { Router, withRouter, Link } from 'react-router-dom';
-import { fetchOutput } from '../store';
 import { Wrapper, IngredientsView, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
 import * as action from '../store';
 import Mochi from '../mochi';
@@ -197,7 +195,7 @@ const mapDispatch = (dispatch) => {
     isCooking: bool => dispatch(action.getCooking(bool)),
     getRecipe: id => dispatch(action.getRecipe(id)),
     submitUserInput(userInput) {
-      return dispatch(fetchOutput(userInput))
+      return dispatch(action.fetchOutput(userInput))
     },
     changeStepTo(newStep, directions) {
       dispatch(action.getStep(newStep))

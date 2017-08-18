@@ -75,7 +75,7 @@ export default function (state = ai, action) {
   let newState = Object.assign({}, state);
   switch (action.type) {
     case GET_OUTPUT:
-      newState.text = action.output;
+      newState = action.output;
       break;
     default: return state;
   }
