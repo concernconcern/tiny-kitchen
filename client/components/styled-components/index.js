@@ -239,7 +239,7 @@ export const Recipes = styled.div`
   width: 80vw;
 `
 
-export const Error = styled.div`
+export const Message = styled.div`
   padding: 10px;
   color:  white;
   background: goldenrod;
