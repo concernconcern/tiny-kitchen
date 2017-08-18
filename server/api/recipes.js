@@ -18,6 +18,14 @@ router.post('/', (req, res, next) => {
     .catch(next);
 });
 
+// GET /api/recipes/batch
+router.get('/batch/:offset', (req, res, next) => {
+  const offset = req.params.offset;
+  Recipe.findAll({ offset: offset * 12, limit: 12 })
+    .then(recipes => res.json(recipes))
+    .catch(next);
+});
+
 // GET /api/recipes/:recipeId
 router.get('/:recipeId', (req, res, next) => {
   const id = req.params.recipeId;

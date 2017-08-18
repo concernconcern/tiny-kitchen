@@ -17,8 +17,7 @@ const ai = '';
 /**
  * ACTION CREATORS
  */
-const getOutput = output => ({type: GET_OUTPUT, output})
-
+export const getOutput = output => ({type: GET_OUTPUT, output})
 /**
  * THUNK CREATORS
  *The query endpoint is used to process natural language in the form of text. The query requests *return structured data in JSON format with an action and parameters for that action
@@ -54,12 +53,14 @@ export const fetchOutput = (userInput) =>
       const output = res.data.result.fulfillment.displayText
       console.log(output)
       dispatch(getOutput(output));
+      dispatch(getOutput(''))
       if (res.data.result.action === 'setTimer'){
         const {amount, unit} = res.data.result.parameters.duration
         const timeInMs = convert(amount).from(unit).to('ms')
 
         setTimeout(function(){
           dispatch(getOutput('times up'))
+          dispatch(getOutput(''))
         }, timeInMs)
       }
     })
