@@ -10,7 +10,17 @@ import * as action from '../store'
  */
 class UserNav extends React.Component{
   constructor(props){
-    super(props)
+    super(props);
+    this.state = {
+      editing: false
+    }
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(event){
+    const {value} = event.target;
+    const editing = value === 'edit' ? true : false;
+    this.setState({editing});
   }
 
   componentDidMount(){
@@ -26,13 +36,27 @@ class UserNav extends React.Component{
               <ProfilePic src={user.picture_url} />
             </ProfilePicArea>
             <ProfileInfoArea>
-              <h3>{user.first_name + ' ' + user.last_name}</h3>
-              <h5>{user.email}</h5>
+              {this.state.editing ? 
+                <div>
+                  <form>
+                    <input name="firstName"></input>
+                    <input name="lastName"></input>
+                    <input name="email"></input>
+                  </form>
+                  <button value="done" onClick={this.handleClick}>Done</button>
+                </div>
+                :
+                <div>
+                  <h3>{user.first_name + ' ' + user.last_name}</h3>
+                  <h5>{user.email}</h5>
+                  <button value="edit" onClick={this.handleClick}>Edit</button>
+                </div>
+              }
             </ProfileInfoArea>
           </ProfileCard>
             <Links>
-              <Link to='/home/profile'>Profile</Link>
               <Link to='/home/recipes'>Recipes</Link>
+              <Link to='/home/groceries'>Groceries</Link>
             </Links>
         </ProfileUpperArea>
       </div>

@@ -213,6 +213,7 @@ export const ProfileCard = styled.div`
   width: 30vw;
   display: flex;
   padding: 25px;
+  justify-content: space-around;
   flex-direction: ${props => props.column ? 'column' : 'row'};
 `
 

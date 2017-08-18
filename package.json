@@ -22,6 +22,7 @@
     "api-ai-javascript": "^2.0.0-beta.14",
     "apiai": "^4.0.3",
     "artyom.js": "^1.0.6",
+    "aws-sdk": "^2.100.0",
     "axios": "^0.15.3",
     "bluebird": "^3.5.0",
     "body-parser": "^1.16.1",
