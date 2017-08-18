@@ -10,7 +10,7 @@ To try our chrome extension:
   - Click Load unpacked extension… to pop up a file-selection dialog.
   - Find the "chrome" folder you downloaded and select it
   - Navigate to a recipe website and hit the pizza to try it out 
-
+  - WARNING: Right now if the recipe can't be scraped, it will just be an empty form 
 ## Controls
   - To control Mochi's reading, you can say: 'start cooking', 'start', 'stop', or 'pause'
   - You can ask him unit conversion questions: e.g. 'what is one tablespoon to teaspoons', or 'convert one tablespoon to teaspoons'
