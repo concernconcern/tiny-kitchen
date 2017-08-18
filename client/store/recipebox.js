@@ -36,6 +36,13 @@ export const addRecipeBox = (userId, recipeId) =>
     axios.post(`/api/users/${userId}/recipebox`, { recipeId })
       .then(res => dispatch(getRecipeBoxSuccess(res.data)))
       .catch(err => console.log(err))
+
+
+export const removeRecipeBox = (userId, recipeId) =>
+  dispatch =>
+    axios.delete(`/api/users/${userId}/recipebox/${recipeId}`)
+      .then(res => dispatch(getRecipeBoxSuccess({})))
+      .catch(err => console.log(err))
 /**
  * REDUCER
  */
