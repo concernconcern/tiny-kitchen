@@ -1,16 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Artyom from 'artyom.js';
 import { Router, withRouter, Link } from 'react-router-dom';
-import Step from './Step';
 import { fetchOutput } from '../store';
 import { Wrapper, IngredientsView, AccentButton, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
 import * as action from '../store';
 import Mochi from '../mochi';
 import { Textfit } from 'react-textfit';
+<<<<<<< HEAD
 import ReactTestUtils from 'react-dom/test-utils';
 import InfoModal from './InfoModal';
+=======
+import Timer from './Timer';
+
+>>>>>>> 27b664c1fa861849ce8910d175f2b7ba91d6fa25
 
 class CookRecipe extends React.Component {
 
@@ -36,14 +39,15 @@ class CookRecipe extends React.Component {
     this.props.isCooking(true);
 
     Mochi.addCommands({
-      smart: true,
-      indexes: ["*"],
-      action: (i, wildcard) => {
-        if (wildcard === 'next' || wildcard === 'next step') {
+    smart:true,
+    indexes: ["*"],
+    action: (i, wildcard) => {
+      let toggleWords = ['start cooking', 'start', 'stop', 'pause', 'play', 'read'];
+      if (wildcard === 'next' || wildcard === 'next step'){
           this.stepForward();
         } else if (wildcard === 'go back' || wildcard === 'back' || wildcard === 'previous') {
           this.stepBackward();
-        } else if (wildcard === 'start cooking' || wildcard === 'start' || wildcard === 'stop' || wildcard === 'pause') {
+        } else if (toggleWords.includes(wildcard)){
           this.toggleMochi();
         } else {
           this.sendUserInput(wildcard);
@@ -130,6 +134,7 @@ class CookRecipe extends React.Component {
     let { forwardDisable, backDisable } = this.state
     let { recipe } = this.props;
     return (
+
       <Wrapper column height>
         <SecondaryWrap>
           <CurrentStep>
@@ -142,11 +147,13 @@ class CookRecipe extends React.Component {
             <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}><InfoModal /></ExitLink>
             <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}><span className="glyphicon glyphicon-remove-circle" /></ExitLink>
             <Title secondary>Ingredients</Title>
+
             <List>
               {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
             </List>
-            <Title secondary>Timer</Title>
-            <Title>00:00</Title>
+
+            <Timer />
+
           </Sidebar>
         </SecondaryWrap>
         <ControlPanel>
@@ -173,6 +180,7 @@ class CookRecipe extends React.Component {
             </AccentButton>
           </Controls>
         </ControlPanel>
+
       </Wrapper>
 
     );
@@ -184,7 +192,8 @@ const mapState = (state) => {
     recipe: state.recipe,
     mochiSays: state.ai,
     step: state.currentStep,
-    stepToSay: state.sayStep
+    stepToSay: state.sayStep,
+
   };
 };
 const mapDispatch = (dispatch) => {
@@ -192,7 +201,7 @@ const mapDispatch = (dispatch) => {
     isCooking: bool => dispatch(action.getCooking(bool)),
     getRecipe: id => dispatch(action.getRecipe(id)),
     submitUserInput(userInput) {
-      return dispatch(fetchOutput(userInput))
+      return dispatch(action.fetchOutput(userInput))
     },
     changeStepTo(newStep, directions) {
       dispatch(action.getStep(newStep))
