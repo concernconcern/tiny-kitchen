@@ -62,9 +62,6 @@ class ViewRecipe extends React.Component {
   handleRemoveRecipeBox(e) {
     e.preventDefault()
     this.props.removeRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
-    this.setState({
-      success: true
-    })
   }
   render() {
     const { recipe, recipebox, isLoggedIn } = this.props;
