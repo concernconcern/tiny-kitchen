@@ -108,8 +108,9 @@ export const Sidebar = styled.div`
   height: 80vh;
   overflow:scroll;
 `
+
 export const ExitLink = styled(Link) `
-  font-size: 50px;
+  font-size: 35px;
   color: #db3434;
   top: 10px;
   right: 20px;
