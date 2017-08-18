@@ -1,7 +1,10 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { Clock, Add, Modify } from './styled-components';
 import * as action from '../store';
 import {connect} from 'react-redux';
+import Sound from 'react-sound';
+import Audio from 'react-audio'
+import Alarm from './Alarm'
 
 class Timer extends React.Component{
   constructor(props){
@@ -9,23 +12,27 @@ class Timer extends React.Component{
 
     this.state = {
       stopped: true,
-      timerId: null
+      timerId: null,
+      playAlarm: false
     };
     this.toggleTimer = this.toggleTimer.bind(this);
     this.tick = this.tick.bind(this);
     this.changeTime = this.changeTime.bind(this);
+    this.stopAlarm = this.stopAlarm.bind(this);
   }
 
   tick(){
     let time = this.props.time
-    console.log(time)
-    console.log('autostart', this.props.autoStart)
     if (time <= 999){
-      this.setState({stopped: true})
+      this.setState({stopped: true, playAlarm: true})
       clearInterval(this.state.timerId);
     } else if (!this.state.stopped) {
         this.props.changeTimer(time - 1000);
     }
+  }
+
+  stopAlarm(){
+    this.setState({playAlarm: false})
   }
 
   toggleTimer(){
@@ -35,12 +42,10 @@ class Timer extends React.Component{
     else {
       this.setState({stopped: true})
       clearInterval(this.state.timerId);
-      console.log('toggle timer!');
     }
   }
 
   componentDidUpdate(){
-    console.log('mounted')
     if (this.props.autoStart){
       this.toggleTimer()
       this.props.changeTimer(this.props.time)
@@ -48,8 +53,8 @@ class Timer extends React.Component{
 
   }
 
+
   changeTime(evt){
-    console.log(evt.target.name);
     let time = this.props.time
     switch (evt.target.name){
       case 'hourAdd':
@@ -76,7 +81,6 @@ class Timer extends React.Component{
 
   render(){
     console.log(this.state)
-    console.log(this.props.autoStart)
     let ms = this.props.time;
     let hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     let minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
@@ -98,16 +102,20 @@ class Timer extends React.Component{
             <span className="glyphicon glyphicon-pause" />
           }
         </button>
+
+        <button type="button" onClick={this.stopAlarm} className="btn btn-info btn-lg" >
+          <span className="glyphicon glyphicon-stop"></span> Reset
+        </button>
+
         <br />
         <Add name="hourSub" onClick={this.changeTime}> - </Add>
         <Add name="minutesSub" onClick={this.changeTime}> - </Add>
         <Add name="secondsSub" onClick={this.changeTime}> - </Add>
-        {this.props.time === 0 ?
-        <audio autoPlay className="player" preload="false">
-          <source src="https://freesound.org/people/kwahmah_02/sounds/250629/download/250629__kwahmah-02__alarm1.mp3" />
-        </audio> : null}
-
-      </Clock>
+        {
+          this.state.playAlarm &&
+          <Sound source={{uri: 'alarm.mp3'}} />
+        }
+       </Clock>
     );
   }
 }
@@ -119,13 +127,16 @@ function twoDigits(n){
 const mapState = (state) => {
   return {
     time: state.timer.time,
-    autoStart: state.timer.fromAi
+    autoStart: state.timer.fromAi,
   }
 }
 const mapDispatch = (dispatch) => {
   return {
     changeTimer(time){
       dispatch(action.setTimer({time: time, fromAi: false}))
+    },
+    playAlarmDone(){
+      dispatch(action.playAlarm())
     }
   }
 }
