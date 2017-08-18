@@ -27,7 +27,7 @@ export const getOutput = output => ({type: GET_OUTPUT, output})
  */
  // const token = require('../../secrets')
 
- const token = process.env.AI_TOKEN;
+ const token = '32a6925a368448038ed4e3899b5422ca';
 
 
 
