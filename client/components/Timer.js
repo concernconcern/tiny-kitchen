@@ -18,7 +18,6 @@ class Timer extends React.Component{
 
   tick(){
     let time = this.props.time
-    console.log(time)
     console.log('autostart', this.props.autoStart)
     if (time <= 999){
       this.setState({stopped: true})
@@ -35,21 +34,17 @@ class Timer extends React.Component{
     else {
       this.setState({stopped: true})
       clearInterval(this.state.timerId);
-      console.log('toggle timer!');
     }
   }
 
   componentDidUpdate(){
-    console.log('mounted')
     if (this.props.autoStart){
       this.toggleTimer()
       this.props.changeTimer(this.props.time)
     }
-
   }
 
   changeTime(evt){
-    console.log(evt.target.name);
     let time = this.props.time
     switch (evt.target.name){
       case 'hourAdd':
@@ -75,8 +70,8 @@ class Timer extends React.Component{
   }
 
   render(){
-    console.log(this.state)
-    console.log(this.props.autoStart)
+    console.log('STOPPED', this.state.stopped, this.props.time);
+    console.log('AUTOSTART', this.props.autoStart)
     let ms = this.props.time;
     let hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     let minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));

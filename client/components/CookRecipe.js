@@ -186,7 +186,7 @@ class CookRecipe extends React.Component {
 const mapState = (state) => {
   return {
     recipe: state.recipe,
-    mochiSays: state.ai.text,
+    mochiSays: state.ai,
     step: state.currentStep,
     stepToSay: state.sayStep,
 
