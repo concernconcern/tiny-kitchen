@@ -10,3 +10,4 @@ const Grocery = db.define('grocery', {
 })
 
 module.exports = Grocery;
+

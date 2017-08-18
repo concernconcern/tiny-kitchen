@@ -1,10 +1,13 @@
+
 import React, {Component} from 'react';
 import { Clock, Add, Modify } from './styled-components';
 import * as action from '../store';
 import {connect} from 'react-redux';
-import Sound from 'react-sound';
-import Audio from 'react-audio'
-import Alarm from './Alarm'
+import Alarm from './Alarm';
+import { Clock, Add, Modify } from './styled-components';
+import * as action from '../store';
+import {connect} from 'react-redux';
+import Mochi from '../mochi'
 
 class Timer extends React.Component{
   constructor(props){
@@ -13,26 +16,27 @@ class Timer extends React.Component{
     this.state = {
       stopped: true,
       timerId: null,
-      playAlarm: false
     };
     this.toggleTimer = this.toggleTimer.bind(this);
     this.tick = this.tick.bind(this);
     this.changeTime = this.changeTime.bind(this);
-    this.stopAlarm = this.stopAlarm.bind(this);
+    this.resetAlarm = this.resetAlarm.bind(this);
   }
 
   tick(){
     let time = this.props.time
     if (time <= 999){
-      this.setState({stopped: true, playAlarm: true})
+      Mochi.say('times up')
+      this.setState({stopped: true})
       clearInterval(this.state.timerId);
     } else if (!this.state.stopped) {
         this.props.changeTimer(time - 1000);
     }
   }
 
-  stopAlarm(){
-    this.setState({playAlarm: false})
+
+  resetAlarm(){
+    this.props.changeTimer(0)
   }
 
   toggleTimer(){
@@ -53,6 +57,8 @@ class Timer extends React.Component{
 
   }
 
+
+  }
 
   changeTime(evt){
     let time = this.props.time
@@ -80,7 +86,6 @@ class Timer extends React.Component{
   }
 
   render(){
-    console.log(this.state)
     let ms = this.props.time;
     let hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     let minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
@@ -103,7 +108,7 @@ class Timer extends React.Component{
           }
         </button>
 
-        <button type="button" onClick={this.stopAlarm} className="btn btn-info btn-lg" >
+        <button type="button" onClick={this.resetAlarm} className="btn btn-info btn-lg" >
           <span className="glyphicon glyphicon-stop"></span> Reset
         </button>
 

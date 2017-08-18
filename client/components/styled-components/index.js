@@ -71,7 +71,7 @@ export const TileTitle = styled.h2`
 `
 export const Input = styled.input`
   font-family: ${props => props.title ? 'Playfair Display, serif' : 'Roboto, sans-serif'};
-  font-size: ${props => props.title ? '50px' : '14px'}; 
+  font-size: ${props => props.title ? '50px' : '14px'};
   width: ${props => props.title ? '775px' : '300px'};
   padding: 5px;
   display: inline;
@@ -155,10 +155,25 @@ padding: 15px 20px;
 export const Modify = styled.a`
   font-size: 24px;
   color: ${props => props.x ? 'grey' : '#db3434'};
-  border-radius: 50%; 
+  border-radius: 50%;
   padding: 5px;
   display: inline;
   float: ${props => props.x ? '' : 'right'};
+  &:hover{
+    text-decoration: none;
+    color: ${props => props.x ? '#db3434' : 'grey'};
+  }
+  &:focus{
+    text-decoration: none;
+    color:  #db3434;
+  }
+`
+// increment/decrement buttons on timer
+export const Add = styled.a`
+  font-size: 24px;
+  color: ${props => props.x ? 'grey' : '#db3434'};
+  border-radius: 50%;
+  padding: 5px;
   &:hover{
     text-decoration: none;
     color: ${props => props.x ? '#db3434' : 'grey'};
@@ -252,4 +267,9 @@ export const SearchInput = styled.input`
   height: auto;
   border: 1px solid #db7d7d;
   color: black
+`
+export const Clock = styled.div`
+  height: 100px;
+  width: 200px;
+  background-color: pink;
 `
