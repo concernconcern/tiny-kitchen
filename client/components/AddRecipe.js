@@ -3,7 +3,9 @@ import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
 import { Wrapper, SecondaryWrap, Button, Modify, Message, RecipeImg, RecipeText, Form, Title, List, Input, Box, TextArea } from './styled-components'
 import * as action from '../store'
-import { GridList, GridTile } from 'material-ui/GridList';
+import history from '../history'
+import { GridList, GridTile } from 'material-ui/GridList'
+import { Login } from './auth-form'
 
 class AddRecipe extends React.Component {
   constructor(props) {
@@ -18,7 +20,8 @@ class AddRecipe extends React.Component {
     this.selectPic = this.selectPic.bind(this);
   }
   componentDidMount() {
-    this.props.chromeRecipe(this.props.location.search.slice(5));
+    let recipeUrl = this.props.location.search.slice(5);
+    this.props.chromeRecipe(recipeUrl);
   }
   handleChange(evt) {
     let recipe = Object.assign({}, this.props.recipe);
@@ -37,7 +40,6 @@ class AddRecipe extends React.Component {
         picture_url: this.props.recipe.selected_pic
       });
     this.props.submitRecipe(recipe)
-
   }
   addField(e) {
     e.preventDefault();
@@ -60,49 +62,52 @@ class AddRecipe extends React.Component {
   }
   render() {
     let recipe = this.props.recipe;
+    let recipeUrl = this.props.location.search.slice(5);
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Input title type="text" name="title" onChange={this.handleChange} value={recipe && recipe.title} />
-        <Title secondary>Choose the Correct Picture:</Title>
-        <div style={styles.root}>
-          {recipe.picture_url.length &&
-            <GridList style={styles.gridList} cols={2.2}>
-              {recipe.picture_url.map((pic, i) => {
-                return (<GridTile
-                  onClick={this.selectPic}
-                  rows={1.1}
-                  key={i}
-                  id={i}
-                >
-                  {i === this.state.highlighted ?
-                    <img id={i} src={pic} style={{ "object-fit": "cover", "height": "200px", "width": "auto", "border": "5px solid #db3434" }} />
-                    : <img id={i} src={pic} style={{ "object-fit": "cover", "height": "200px", "width": "auto", "border": "5px solid transparent" }} />
-                  }  </GridTile>)
-              })
-              }
-            </GridList>
-          }
-        </div>
-        <SecondaryWrap>
-          <Box>
-            <Title secondary>Ingredients</Title> {
-              recipe.ingredients.map((ingredient, i) =>
-              { return (<div><Modify x href="#" onClick={this.deleteField} name="ingredients" id={i}>x</Modify> <Input type="text" key={i} id={i} name="ingredients" value={ingredient} style={{ height: "auto" }} onChange={this.handleChange} /></div>) })}
-            <Modify href="#" onClick={this.addField} name="ingredients">+</Modify>
-          </Box>
-          <Box>
-            <Title secondary>Directions</Title> {
-              recipe.directions.map((direction, i) =>
-              { return (<div><Modify x href="#" onClick={this.deleteField} name="directions" id={i}>x</Modify>  <TextArea type="text" key={i} id={i} name="directions" value={direction} onChange={this.handleChange} /></div>) })
+      this.props.user.id ?
+        <Form onSubmit={this.handleSubmit}>
+          <Input title type="text" name="title" onChange={this.handleChange} value={recipe && recipe.title} />
+          <Title secondary>Choose the Correct Picture:</Title>
+          <div style={styles.root}>
+            {recipe.picture_url.length &&
+              <GridList style={styles.gridList} cols={2.2}>
+                {recipe.picture_url.map((pic, i) => {
+                  return (<GridTile
+                    onClick={this.selectPic}
+                    rows={1.1}
+                    key={i}
+                    id={i}
+                  >
+                    {i === this.state.highlighted ?
+                      <img id={i} src={pic} style={{ "objectFit": "cover", "height": "200px", "width": "auto", "border": "5px solid #db3434" }} />
+                      : <img id={i} src={pic} style={{ "objectFit": "cover", "height": "200px", "width": "auto", "border": "5px solid transparent" }} />
+                    }  </GridTile>)
+                })
+                }
+              </GridList>
             }
-            <Modify href="#" onClick={this.addField} name="directions">+</Modify>
-          </Box>
-        </SecondaryWrap>
-        <SecondaryWrap>
-          <Button type="submit">ADD RECIPE</Button>
-          {recipe.error ? <Message>Sorry, recipe already exists</Message> : ''}
-        </SecondaryWrap>
-      </Form>
+          </div>
+          <SecondaryWrap>
+            <Box>
+              <Title secondary>Ingredients</Title> {
+                recipe.ingredients.map((ingredient, i) =>
+                { return (<div><Modify x href="#" onClick={this.deleteField} name="ingredients" id={i}>x</Modify> <Input type="text" key={i} id={i} name="ingredients" value={ingredient} style={{ height: "auto" }} onChange={this.handleChange} /></div>) })}
+              <Modify href="#" onClick={this.addField} name="ingredients">+</Modify>
+            </Box>
+            <Box>
+              <Title secondary>Directions</Title> {
+                recipe.directions.map((direction, i) =>
+                { return (<div><Modify x href="#" onClick={this.deleteField} name="directions" id={i}>x</Modify>  <TextArea type="text" key={i} id={i} name="directions" value={direction} onChange={this.handleChange} /></div>) })
+              }
+              <Modify href="#" onClick={this.addField} name="directions">+</Modify>
+            </Box>
+          </SecondaryWrap>
+          <SecondaryWrap>
+            <Button type="submit">ADD RECIPE</Button>
+            {recipe.error ? <Message>Sorry, recipe already exists</Message> : ''}
+          </SecondaryWrap>
+        </Form>
+        : <Login chromeUrl={recipeUrl} />
     )
   }
 }
@@ -128,7 +133,8 @@ const styles = {
 /* CONTAINER */
 const mapState = (state) => {
   return {
-    recipe: state.recipe
+    recipe: state.recipe,
+    user: state.user
   }
 }
 

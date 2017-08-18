@@ -27,6 +27,7 @@ class Routes extends Component {
             <Route exact path='/signup' component={Signup} />
             <Route exact path='/recipe/:recipeid' component={ViewRecipe} />
             <Route exact path='/recipe/:recipeid/cook' component={CookRecipe} />
+            <Route path='/add-recipe' component={AddRecipe} />
             {
               isLoggedIn &&
               <Switch>
@@ -35,7 +36,6 @@ class Routes extends Component {
                 <Route exact path='/recipe/:recipeid/user/:userid' component={ViewRecipe} />
               </Switch>
             }
-
           </Switch>
         </Main>
       </Router>
