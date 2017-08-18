@@ -18,7 +18,7 @@ export default class Tile extends React.Component {
         backgroundImage: 'url(' + picture_url + ')',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        backgroundSize: '100%',
+        backgroundSize: 'cover',
         width: '33.33vw',
         height: '40vh'        
       }
@@ -29,7 +29,7 @@ export default class Tile extends React.Component {
         backgroundImage: 'linear-gradient(rgba(255, 0, 0, 0.45), rgba(255, 0, 0, 0.45)), url(' + picture_url + ')',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        backgroundSize: '100%',
+        backgroundSize: 'cover',
         width: '33.33vw',
         height: '40vh',
         display: 'flex',

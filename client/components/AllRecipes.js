@@ -24,6 +24,7 @@ class AllRecipes extends React.Component {
         recipe.ingredients.join().toLowerCase().includes(input)
     })
   }
+  
   render() {
     let { input, recipes, isLoggedIn, userId } = this.props;
     recipes = this.filterRecipes(recipes, input);
