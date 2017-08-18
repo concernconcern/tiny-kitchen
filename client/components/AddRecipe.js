@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
-import { Wrapper, SecondaryWrap, Button, Modify, Error, RecipeImg, RecipeText, Form, Title, List, Input, Box, TextArea } from './styled-components'
+import { Wrapper, SecondaryWrap, Button, Modify, Message, RecipeImg, RecipeText, Form, Title, List, Input, Box, TextArea } from './styled-components'
 import * as action from '../store'
 import { GridList, GridTile } from 'material-ui/GridList';
 
@@ -100,7 +100,7 @@ class AddRecipe extends React.Component {
         </SecondaryWrap>
         <SecondaryWrap>
           <Button type="submit">ADD RECIPE</Button>
-          {recipe.error ? <Error>Sorry, recipe already exists</Error> : ''}
+          {recipe.error ? <Message>Sorry, recipe already exists</Message> : ''}
         </SecondaryWrap>
       </Form>
     )
