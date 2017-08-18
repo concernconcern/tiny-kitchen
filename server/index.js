@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 8080
 const app = express()
 const socketio = require('socket.io')
 module.exports = app
+const aws = require('aws-sdk');
 
 /**
  * In your development environment, you can keep all of your
@@ -32,6 +33,7 @@ passport.deserializeUser((id, done) =>
 const createApp = () => {
   // logging middleware
   app.use(morgan('dev'))
+  app.engine('html', require('ejs').renderFile);
 
   // body parsing middleware
   app.use(bodyParser.json())
@@ -58,6 +60,36 @@ const createApp = () => {
   app.use('*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public/index.html'))
   })
+
+
+aws.config.region = 'us-east-2';
+
+  app.get('/sign-s3', (req, res) => {
+  const s3 = new aws.S3();
+  const fileName = req.query['file-name'];
+  const fileType = req.query['file-type'];
+  console.log('BUCKET!!!!!!!!', S3_BUCKET);
+  const s3Params = {
+    Bucket: 'tiny-kitchen',
+    Key: fileName,
+    Expires: 60,
+    ContentType: fileType,
+    ACL: 'public-read'
+  };
+
+  s3.getSignedUrl('putObject', s3Params, (err, data) => {
+    if(err){
+      console.log(err);
+      return res.end();
+    }
+    const returnData = {
+      signedRequest: data,
+      url: `https://tiny-kitchen.s3.amazonaws.com/${fileName}`
+    };
+    res.write(JSON.stringify(returnData));
+    res.end();
+  });
+});
 
   // error handling endware
   app.use((err, req, res, next) => {
