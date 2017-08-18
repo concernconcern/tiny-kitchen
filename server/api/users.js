@@ -4,6 +4,8 @@ const User = db.model('user');
 const Follower = db.model('follows');
 const RecipeBox = db.model('recipebox');
 const Recipe = db.model('recipe');
+const Grocery = db.model('grocery');
+const GroceryUser = db.model('groceryUser');
 const Promise = require('bluebird')
 module.exports = router;
 
@@ -163,6 +165,54 @@ router.put('/:userId/recipebox/:recipeId', (req, res, next) => {
   })
   .then(recipe => recipe.update(req.body))
   .then(res.send(recipeId + ' recipe was updated'))
+  .catch(next);
+});
+
+//get groceries from a user
+router.get('/:userId/groceries', (req, res, next) => {
+  const id = req.params.userId;
+  GroceryUser.findAll({
+    where: {userId: id}
+  })
+  .then(groceryusers =>
+    Promise.map(groceryusers, groceryuser => {
+      return Grocery.findById(groceryuser.groceryId)
+    }))
+  .then(userGroceries => res.json(userGroceries))
+  .catch(next);
+});
+
+// POST /api/users/:userId/groceries
+router.post('/:userId/groceries', (req, res, next) => {
+  const userId = req.params.userId;
+  const quantity = req.body.quantity;
+  const unit = req.body.unit;
+  Grocery.findOrCreate({where: {
+    title: req.body.title
+  }})
+  .spread((grocery, created) => {
+    GroceryUser.findOrCreate({where: {
+      groceryId: id,
+      userId: userId
+    }})
+  })
+  .spread((groceryUser, created) => {
+    if (!created)
+      groceryUser.addQuantity(quantity, unit)
+  })
+  .then(groceryUser => res.json(groceryUser))
+  .catch(next);
+});
+
+// DELETE /api/users/:userId/grocery/:groceryId
+router.delete('/:userId/groceries/:groceryId', (req, res, next) => {
+  const userId = req.params.userId;
+  const groceryId = req.params.groceryId;
+  GroceryUser.findOne({
+    where: {userId, groceryId}
+  })
+  .then(groceryUser => groceryUser.destroy())
+  .then(res.send(groceryId + ' grocery deleted from list'))
   .catch(next);
 });
 

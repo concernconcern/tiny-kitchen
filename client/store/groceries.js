@@ -9,7 +9,7 @@ const groceries = [];
 const getGroceries = (groceries) => ({type: GET_GROCERIES, groceries});
 
 //THUNK
-const fetchGroceries = () =>
+export const fetchGroceries = () =>
   dispatch => {
     axios.get()
   }
