@@ -13,9 +13,10 @@ class UserProfile extends React.Component{
 
   componentDidMount(){
     this.props.fetchUserRecipes(this.props.user.id)
+    this.props.fetchGroceries(this.props.user.id)
   }
   render(){
-    const {user, userRecipes} = this.props;
+    const {user, userRecipes, userGroceries} = this.props;
     return (
       <div>
         Welcome to the User Profile :)
@@ -32,13 +33,15 @@ class UserProfile extends React.Component{
 const mapState = (state) => {
   return {
     user: state.user,
-    userRecipes: state.userRecipes
+    userRecipes: state.userRecipes,
+    userGroceries: state.groceries
   }
 }
 
 const mapDispatch = (dispatch) => {
   return {
-    fetchUserRecipes: (userId) => dispatch(action.fetchUserRecipes(userId))
+    fetchUserRecipes: (userId) => dispatch(action.fetchUserRecipes(userId)),
+    fetchGroceries: (userId) => dispatch(action.fetchGroceries(userId))
   }
 }
 

@@ -16,8 +16,19 @@ class UserRecipes extends React.Component {
   componentDidMount() {
     this.props.fetchUserRecipes(this.props.user.id)
   }
+
+  filterRecipes(recipes, input) {
+    input = input.toLowerCase();
+    return recipes.filter(recipe => {
+      return recipe.title.toLowerCase().includes(input) ||
+        recipe.directions.join().toLowerCase().includes(input) ||
+        recipe.ingredients.join().toLowerCase().includes(input)
+    })
+  }
+
   render() {
-    const { user, userRecipes } = this.props;
+    let { user, userRecipes, input } = this.props;
+    userRecipes = this.filterRecipes(userRecipes, input)
 
     return (
       <Recipes>
@@ -41,7 +52,8 @@ class UserRecipes extends React.Component {
 const mapState = (state) => {
   return {
     user: state.user,
-    userRecipes: state.userRecipes
+    userRecipes: state.userRecipes,
+    input: state.input
   }
 }
 

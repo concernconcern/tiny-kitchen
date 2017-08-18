@@ -138,7 +138,7 @@ class CookRecipe extends React.Component {
             </Textfit>
           </CurrentStep>
           <Sidebar>
-            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}>X</ExitLink>
+            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}><span className="glyphicon glyphicon-remove-circle" /></ExitLink>
             <Title secondary>Ingredients</Title>
             <List>
               {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
@@ -149,7 +149,7 @@ class CookRecipe extends React.Component {
         </SecondaryWrap>
         <ControlPanel>
           <UpNext>
-            <Title secondary style={{ display: "inline", padding: "5px 0" }}>Up next...</Title>
+            <Title secondary style={{ display: "inline", padding: "5px 0" }}>Up next...&nbsp;</Title>
             {recipe.directions[this.props.step + 1]}
           </UpNext>
           <Controls>

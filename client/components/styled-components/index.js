@@ -111,12 +111,13 @@ export const Sidebar = styled.div`
 export const ExitLink = styled(Link) `
   font-size: 50px;
   color: #db3434;
-  top: 0;
+  top: 10px;
   right: 20px;
   font-family: 'Raleway', serif;
   position: absolute;
+  cursor: pointer;
   &:hover{
-    color:  #black;
+    color:  black;
     text-decoration: none;
   }
 `
@@ -183,17 +184,17 @@ export const CurrentStep = styled.div`
 `
 export const ControlPanel = styled.div`
   display: flex;
-  border-top: 1px solid #ddd;
   padding: 20px;
-  height: 10vh;
   align-items: center;
-  overflow:hidden;
 `
 export const UpNext = styled.div`
   flex: 3;
   height: 100%;
   overflow:hidden;
   color: grey;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 export const Controls = styled.div`
   flex: 1;
@@ -239,7 +240,7 @@ export const Recipes = styled.div`
   width: 80vw;
 `
 
-export const Error = styled.div`
+export const Message = styled.div`
   padding: 10px;
   color:  white;
   background: goldenrod;
