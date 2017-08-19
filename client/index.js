@@ -6,8 +6,6 @@ import store from './store'
 import Routes from './routes'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-// establishes socket connection
-import './socket'
 
 ReactDOM.render(
   <MuiThemeProvider>

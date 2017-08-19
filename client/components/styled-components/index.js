@@ -71,7 +71,7 @@ export const TileTitle = styled.h2`
 `
 export const Input = styled.input`
   font-family: ${props => props.title ? 'Playfair Display, serif' : 'Roboto, sans-serif'};
-  font-size: ${props => props.title ? '50px' : '14px'}; 
+  font-size: ${props => props.title ? '50px' : '14px'};
   width: ${props => props.title ? '775px' : '300px'};
   padding: 5px;
   display: inline;
@@ -108,19 +108,24 @@ export const Sidebar = styled.div`
   height: 80vh;
   overflow:scroll;
 `
+
 export const ExitLink = styled(Link) `
-  font-size: 50px;
-  color: grey;
-  top: 0;
+  font-size: 35px;
+  color: #db3434;
+  top: 10px;
   right: 20px;
   font-family: 'Raleway', serif;
   position: absolute;
+  cursor: pointer;
   &:hover{
-    color:  #db3434;
+    color:  black;
     text-decoration: none;
   }
 `
-
+export const Notes = styled.p`
+  margin: 0 25px;
+  color: grey;
+`
 export const Button = styled.button`
   color: white;
   font-size: 24px;
@@ -136,13 +141,40 @@ export const Button = styled.button`
     background:#c91a1a;
   }
 `
+export const AccentButton = styled.button`
+ background:#53BDFF;
+ outline: none;
+ color:white;
+ border: 1px solid #35A6FF;
+padding: 15px 20px;
+ border-radius: 5px;
+ &:hover{
+   background: #3bb8f7;
+ }
+`
+
 export const Modify = styled.a`
   font-size: 24px;
   color: ${props => props.x ? 'grey' : '#db3434'};
-  border-radius: 50%; 
+  border-radius: 50%;
   padding: 5px;
   display: inline;
   float: ${props => props.x ? '' : 'right'};
+  &:hover{
+    text-decoration: none;
+    color: ${props => props.x ? '#db3434' : 'grey'};
+  }
+  &:focus{
+    text-decoration: none;
+    color:  #db3434;
+  }
+`
+// increment/decrement buttons on timer
+export const Add = styled.a`
+  font-size: 24px;
+  color: ${props => props.x ? 'grey' : '#db3434'};
+  border-radius: 50%;
+  padding: 5px;
   &:hover{
     text-decoration: none;
     color: ${props => props.x ? '#db3434' : 'grey'};
@@ -168,17 +200,17 @@ export const CurrentStep = styled.div`
 `
 export const ControlPanel = styled.div`
   display: flex;
-  border-top: 1px solid #ddd;
   padding: 20px;
-  height: 10vh;
   align-items: center;
-  overflow:hidden;
 `
 export const UpNext = styled.div`
   flex: 3;
   height: 100%;
   overflow:hidden;
   color: grey;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 export const Controls = styled.div`
   flex: 1;
@@ -198,6 +230,7 @@ export const ProfileCard = styled.div`
   width: 30vw;
   display: flex;
   padding: 25px;
+  justify-content: space-around;
   flex-direction: ${props => props.column ? 'column' : 'row'};
 `
 
@@ -224,7 +257,7 @@ export const Recipes = styled.div`
   width: 80vw;
 `
 
-export const Error = styled.div`
+export const Message = styled.div`
   padding: 10px;
   color:  white;
   background: goldenrod;
@@ -236,4 +269,9 @@ export const SearchInput = styled.input`
   height: auto;
   border: 1px solid #db7d7d;
   color: black
+`
+export const Clock = styled.div`
+  height: 100px;
+  width: 200px;
+  background-color: pink;
 `

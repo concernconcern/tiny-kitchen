@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Artyom from 'artyom.js';
 import { Router, withRouter, Link } from 'react-router-dom';
-import Step from './Step';
 import { fetchOutput } from '../store';
-import { Wrapper, IngredientsView, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
+import { Wrapper, IngredientsView, AccentButton, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
 import * as action from '../store';
 import Mochi from '../mochi';
 import { Textfit } from 'react-textfit';
 import ReactTestUtils from 'react-dom/test-utils';
+import InfoModal from './InfoModal';
+import Timer from './Timer';
+
 
 class CookRecipe extends React.Component {
 
@@ -27,21 +28,23 @@ class CookRecipe extends React.Component {
     this.toggleMochi = this.toggleMochi.bind(this);
     this.stepBackward = this.stepBackward.bind(this);
     this.stepForward = this.stepForward.bind(this);
+    this.exit = this.exit.bind(this);
   }
 
   componentDidMount() {
-    this.props.getRecipe(this.props.match.params.id);
+    this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(true);
 
     Mochi.addCommands({
       smart: true,
       indexes: ["*"],
       action: (i, wildcard) => {
+        let toggleWords = ['start cooking', 'start', 'stop', 'pause', 'play', 'read'];
         if (wildcard === 'next' || wildcard === 'next step') {
           this.stepForward();
         } else if (wildcard === 'go back' || wildcard === 'back' || wildcard === 'previous') {
           this.stepBackward();
-        } else if (wildcard === 'start cooking' || wildcard === 'start' || wildcard === 'stop' || wildcard === 'pause') {
+        } else if (toggleWords.includes(wildcard)) {
           this.toggleMochi();
         } else {
           this.sendUserInput(wildcard);
@@ -90,16 +93,16 @@ class CookRecipe extends React.Component {
   }
 
 
-  stepForward(){
-      let newStep = this.props.step + 1;
-      if (this.props.recipe && newStep < this.props.recipe.directions.length){
-        Mochi.shutUp();
-        this.props.changeStepTo(newStep, this.props.recipe.directions);
-        let backDisable = (newStep === 0) ? true  : false;
-        let forwardDisable = (newStep === this.props.recipe.directions.length) ? true : false;
-        this.setState({
-          forwardDisable,
-          backDisable
+  stepForward() {
+    let newStep = this.props.step + 1;
+    if (this.props.recipe && newStep < this.props.recipe.directions.length) {
+      Mochi.shutUp();
+      this.props.changeStepTo(newStep, this.props.recipe.directions);
+      let backDisable = (newStep === 0) ? true : false;
+      let forwardDisable = (newStep === this.props.recipe.directions.length) ? true : false;
+      this.setState({
+        forwardDisable,
+        backDisable
       });
     }
   }
@@ -119,11 +122,16 @@ class CookRecipe extends React.Component {
     }
   }
 
+  exit() {
+    Mochi.shutUp();
+  }
+
 
   render() {
     let { forwardDisable, backDisable } = this.state
-    const recipe = this.props.recipe;
+    let { recipe } = this.props;
     return (
+
       <Wrapper column height>
         <SecondaryWrap>
           <CurrentStep>
@@ -133,39 +141,43 @@ class CookRecipe extends React.Component {
             </Textfit>
           </CurrentStep>
           <Sidebar>
-            <ExitLink to={`/recipe/${recipe.id}`}>X</ExitLink>
+            <InfoModal />
+            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}><span className="glyphicon glyphicon-remove" /></ExitLink>
             <Title secondary>Ingredients</Title>
+
             <List>
               {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
             </List>
-            <Title secondary>Timer</Title>
-            <Title>00:00</Title>
+
+            <Timer />
+
           </Sidebar>
         </SecondaryWrap>
         <ControlPanel>
           <UpNext>
-            <Title secondary style={{ display: "inline", padding: "5px 0" }}>Up next...</Title>
+            <Title secondary style={{ display: "inline", padding: "5px 0" }}>Up next...&nbsp;</Title>
             {recipe.directions[this.props.step + 1]}
           </UpNext>
           <Controls>
-            <button disabled={backDisable} className="btn btn-info btn-lg" value="back" onClick={this.stepBackward}>
+            <AccentButton disabled={backDisable} value="back" onClick={this.stepBackward}>
               <span className="glyphicon glyphicon-step-backward" />
-            </button>
+            </AccentButton>
             &nbsp; &nbsp;
-            <button type="button" className="btn btn-info btn-lg" onClick={this.toggleMochi}>
+            <AccentButton type="button" onClick={this.toggleMochi}>
               {
                 this.state.stopped ?
                   <span className="glyphicon glyphicon-play" />
                   :
                   <span className="glyphicon glyphicon-pause" />
               }
-            </button>
+            </AccentButton>
             &nbsp; &nbsp;
-           <button disabled={forwardDisable} className="btn btn-info btn-lg" value="forward" onClick={this.stepForward} >
+           <AccentButton disabled={forwardDisable} value="forward" onClick={this.stepForward} >
               <span className="glyphicon glyphicon-step-forward" />
-            </button>
+            </AccentButton>
           </Controls>
         </ControlPanel>
+
       </Wrapper>
 
     );
@@ -177,7 +189,8 @@ const mapState = (state) => {
     recipe: state.recipe,
     mochiSays: state.ai,
     step: state.currentStep,
-    stepToSay: state.sayStep
+    stepToSay: state.sayStep,
+
   };
 };
 const mapDispatch = (dispatch) => {
@@ -185,7 +198,7 @@ const mapDispatch = (dispatch) => {
     isCooking: bool => dispatch(action.getCooking(bool)),
     getRecipe: id => dispatch(action.getRecipe(id)),
     submitUserInput(userInput) {
-      return dispatch(fetchOutput(userInput))
+      return dispatch(action.fetchOutput(userInput))
     },
     changeStepTo(newStep, directions) {
       dispatch(action.getStep(newStep))
