@@ -4,7 +4,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
   chrome.tabs.query(
     { currentWindow: true, active: true },
     function (tabArray) {
-      chrome.tabs.create({ url: `http://localhost:8080/add-recipe?url=${tabArray[0].url}` })
+      chrome.tabs.create({ url: `https://tiny-kitchen.heroku.com/add-recipe?url=${tabArray[0].url}` })
     }
   )
 });
