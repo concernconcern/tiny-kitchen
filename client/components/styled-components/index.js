@@ -142,15 +142,15 @@ export const Button = styled.button`
   }
 `
 export const AccentButton = styled.button`
- background:#53BDFF;
- outline: none;
- color:white;
- border: 1px solid #35A6FF;
-padding: 15px 20px;
- border-radius: 5px;
- &:hover{
-   background: #3bb8f7;
- }
+  background:#53BDFF;
+  outline: none;
+  color:white;
+  border: 1px solid #35A6FF;
+  padding: ${props => props.small ? '5px 10px' : '15px 20px'};
+  border-radius: 5px;
+  &:hover{
+    background: #3bb8f7;
+  }
 `
 
 export const Modify = styled.a`
