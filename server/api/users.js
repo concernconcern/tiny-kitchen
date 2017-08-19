@@ -46,7 +46,7 @@ router.put('/:userId', (req, res, next) => {
   const id = req.params.userId;
   User.findById(id)
     .then(user => user.update(req.body))
-    .then(res.json(req.body))
+    .then(user => res.json(user))
     .catch(next);
 });
 
