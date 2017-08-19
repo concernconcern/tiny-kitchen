@@ -143,7 +143,7 @@ class CookRecipe extends React.Component {
         <SecondaryWrap>
           <CurrentStep>
             <Textfit mode="multi">
-              <Title>Step {this.props.step + 1}:</Title>
+              <Title>Step {this.props.step + 1} of {recipe.directions.length}:</Title>
               <Directions>{recipe.directions[this.props.step]}</Directions>
             </Textfit>
           </CurrentStep>
