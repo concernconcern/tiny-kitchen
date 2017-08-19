@@ -65,8 +65,6 @@ class ViewRecipe extends React.Component {
     this.props.removeRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
   }
   handleAddGrocery(e) {
-    console.log('targetValue: ', e.target.value)
-    console.log('userId: ', this.props.match.params.userid)
     this.props.reallyAddGrocery(this.props.match.params.userid, e.target.value)
   }
 
