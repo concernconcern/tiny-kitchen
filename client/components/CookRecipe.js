@@ -48,9 +48,12 @@ class CookRecipe extends React.Component {
           this.stepBackward();
         } else if (options.includes(wildcard)) {
           Mochi.say(helpMenu);
+        } else if (wildcard === 'exit'){
+          Mochi.shutUp();
         } else if (startWords.includes(wildcard)) {
           this.toggleMochi();
-        } else {
+        } else if (!Mochi.isSpeaking()){
+          //doesn't send the things it says itself
           this.sendUserInput(wildcard);
         }
       }

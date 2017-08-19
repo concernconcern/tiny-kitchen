@@ -4,6 +4,7 @@ import { withRouter, Link } from 'react-router-dom'
 import { Wrapper, RecipeImg, ControlPanel, Message, AccentButton, TextArea, RecipeText, Notes, Title, List } from './styled-components'
 import history from '../history'
 import * as action from '../store'
+import Mochi from '../mochi'
 
 class ViewRecipe extends React.Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class ViewRecipe extends React.Component {
   }
 
   componentDidMount() {
+    Mochi.shutUp();
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(false);
     this.props.getRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid);
