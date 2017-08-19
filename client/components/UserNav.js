@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
 import {connect} from 'react-redux'
-import { Wrapper, Tiles, TileTitle, ProfileUpperArea, ProfileWarning, ProfileCard, ProfilePic, ProfilePicArea, ProfileInfoArea, Links, AccentButton } from './styled-components'
+import { Wrapper, Tiles, TileTitle, ProfileUpperArea, ProfileWarning, ProfileCard, ProfilePic, ProfilePicArea, ProfileInfoArea, Links, AccentButton, ControlPanel, Heading, Input } from './styled-components'
 import Tile from './Tile'
 import * as action from '../store'
 /**
@@ -55,7 +55,6 @@ class UserNav extends React.Component{
   }
   render(){
     const {user, userRecipes} = this.props;
-    console.log('state', this.state);
     return (
       <div>
         <ProfileUpperArea column>
@@ -66,36 +65,27 @@ class UserNav extends React.Component{
             <ProfileInfoArea>
               <div>
                 {this.state.editName ? 
-                  <div>
+                  <ControlPanel profile>
                     <input onChange={(e) => this.handleChange(e, 'name')}></input>
-                    <AccentButton small type="submit" onClick={(e) => this.handleDone(e, 'name')}>
-                      <span className="glyphicon glyphicon-ok" />
-                    </AccentButton>
-                    </div>
+                    <AccentButton small type="submit" onClick={(e) => this.handleDone(e, 'name')}>Done</AccentButton>
+                  </ControlPanel>
                   :
-                  <div>
-                    <h3>{user.first_name + ' ' + user.last_name}</h3>
-                    <AccentButton small value="edit" onClick={this.handleNameClick}>
-                      <span className="glyphicon glyphicon-pencil" />
-                    </AccentButton>
-                  </div>
+                  <ControlPanel profile>
+                    <Heading>{user.first_name + ' ' + user.last_name}</Heading>
+                    <AccentButton small value="edit" onClick={this.handleNameClick}>Edit</AccentButton>
+                  </ControlPanel>
                 }
                 {this.state.editEmail ?
-                  <div>
+                  <ControlPanel profile>
                     <input onChange={(e) => this.handleChange(e, 'email')}></input>
-                    <button type="submit" onClick={(e) => this.handleDone(e, 'email')}>Done</button>
-                    <AccentButton small type="submit" onClick={(e) => this.handleDone(e, 'email')}>
-                      <span className="glyphicon glyphicon-ok" />
-                    </AccentButton>
-                  </div>
+                    <AccentButton small type="submit" onClick={(e) => this.handleDone(e, 'email')}>Done</AccentButton>
+                  </ControlPanel>
                   :
-                  <div>
-                    <h5>{user.email}</h5>
-                    <AccentButton small value="edit" name="email" onClick={this.handleEmailClick}>
-                      <span className="glyphicon glyphicon-pencil" />
-                    </AccentButton>
-                    </div>
-                  }
+                  <ControlPanel profile>
+                    <Heading secondary>{user.email}</Heading>
+                    <AccentButton small value="edit" name="email" onClick={this.handleEmailClick}>Edit</AccentButton>
+                  </ControlPanel>
+                }
               </div>
             </ProfileInfoArea>
           </ProfileCard>
