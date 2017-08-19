@@ -5,11 +5,12 @@ import { Router, withRouter, Link } from 'react-router-dom';
 import { fetchOutput } from '../store';
 import { Wrapper, IngredientsView, AccentButton, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
 import * as action from '../store';
-import Mochi from '../mochi';
+import Mochi, {helpMenu} from '../mochi';
 import { Textfit } from 'react-textfit';
 import ReactTestUtils from 'react-dom/test-utils';
 import InfoModal from './InfoModal';
 import Timer from './Timer';
+
 
 
 class CookRecipe extends React.Component {
@@ -39,12 +40,15 @@ class CookRecipe extends React.Component {
       smart: true,
       indexes: ["*"],
       action: (i, wildcard) => {
-        let toggleWords = ['start cooking', 'start', 'stop', 'pause', 'play', 'read'];
+        let startWords = ['start cooking', 'start', 'stop', 'pause', 'play', 'read'];
+        let options = ['help', 'options', 'what can you do', 'commands'];
         if (wildcard === 'next' || wildcard === 'next step') {
           this.stepForward();
         } else if (wildcard === 'go back' || wildcard === 'back' || wildcard === 'previous') {
           this.stepBackward();
-        } else if (toggleWords.includes(wildcard)) {
+        } else if (options.includes(wildcard)) {
+          Mochi.say(helpMenu);
+        } else if (startWords.includes(wildcard)) {
           this.toggleMochi();
         } else {
           this.sendUserInput(wildcard);
