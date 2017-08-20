@@ -33,6 +33,7 @@
     "history": "^4.6.3",
     "html2json": "^1.0.2",
     "install": "^0.10.1",
+    "material-design-icons": "^3.0.1",
     "material-ui": "^0.19.0",
     "morgan": "^1.8.1",
     "npm": "^5.3.0",

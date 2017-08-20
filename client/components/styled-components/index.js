@@ -24,14 +24,13 @@ export const RecipeText = styled.div`
 `
 export const Title = styled.h1`
   font-size: ${props => props.secondary ? '25px' : '50px'};
-  color: ${props => props.secondary ? 'grey' : 'black'};
+  color: ${props => props.secondary ? '#5e5e5e' : 'black'};
   padding: ${props => props.secondary ? '12px' : '0 0 20px 0'};
   margin: 0;
   font-family: 'Playfair Display', serif;
 `
 export const Bar = styled.div`
   width: 100vw;
-  height: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -110,9 +109,9 @@ export const Sidebar = styled.div`
 `
 
 export const ExitLink = styled(Link) `
-  font-size: 35px;
+  font-size: 55px;
   color: #db3434;
-  top: 10px;
+  top: 1px;
   right: 20px;
   font-family: 'Raleway', serif;
   position: absolute;
