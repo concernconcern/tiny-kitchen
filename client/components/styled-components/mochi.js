@@ -1,7 +1,7 @@
 import React from 'react'
-const Mochi = () => {
+const Mochi = (props) => {
   return (<svg id="Layer_1"
-    height="200px" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 332">
+    height={props.height} data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 332">
     <g className="cls-1">
       <ellipse cx="132.5" cy="320" rx="67.5" ry="12" /></g>
     <path className="cls-2" d="M99.82,329.16h0a10.93,10.93,0,0,0,11.64-4.82,6.71,6.71,0,0,0,1.11-3.14L114.83,299a3.92,3.92,0,0,0,0-.6c-.27-4.93-1.15-6.55-6.16-7.7h0a9.56,9.56,0,0,0-11.43,7.15l-4.58,19.92A9.56,9.56,0,0,0,99.82,329.16Z" transform="translate(-8 -10)" />

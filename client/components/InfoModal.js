@@ -42,8 +42,8 @@ export default class InfoModal extends React.Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         ><div style={{ display: "flex", alignItems: "center" }}>
-            <Mochi />
-            <div style={{ padding: "20px" }}>Mochi the mouse is your personal cooking assistant<br /><br />
+            <Mochi height="30vh" />
+            <div style={{ padding: "0 60px" }}>Mochi the mouse is your personal cooking assistant<br /><br />
               To control Mochi's reading, you can say: <em>'start cooking'</em>, <em>'start'</em>, <em>'stop'</em>, or <em>'pause'</em><br />
               You can ask him unit conversion questions: e.g. <em>'what is one tablespoon to teaspoons'</em>, or <em>'convert one tablespoon to teaspoons'</em><br />
               You can also set a timer: e.g. <em>'set a timer for 5 minutes'</em>

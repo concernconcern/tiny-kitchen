@@ -62,7 +62,6 @@ export default class NotesModal extends React.Component {
             iconStyle={{ fontSize: "25px", padding: "0", color: "#59a5f6" }}
             iconClassName="material-icons"
             tooltip="Edit Notes"
-
             onClick={this.handleOpen}
             tooltipPosition="bottom-right">
             note_add

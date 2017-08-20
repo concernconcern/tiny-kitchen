@@ -1,32 +1,37 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { Bar, Logo, Links, SearchInput } from './styled-components'
-import SearchBar from './SearchBar'
+import { Bar, Logo, Links, SearchInput, NavLink, LogoWrap } from './styled-components'
+import Search from './SearchBar'
 import { Link } from 'react-router-dom'
 import Mochi from './styled-components/mochi'
+
 
 const Navbar = (props) => {
   const { children, isLoggedIn, handleClick } = props;
   return (
     <Bar>
-      <Mochi />
-      <Link to='/'><Logo>Tiny Kitchen</Logo></Link>
+      <LogoWrap>
+        <Mochi height="10vh" />
+        <Logo><a href="/">Tiny Kitchen</a></Logo>
+      </LogoWrap>
       {
         isLoggedIn
           ?
           <Links>
-            <SearchBar />
-            <Link to='/home'><span className="glyphicon glyphicon-user" style={{ color: "white" }} aria-hidden="true"></span></Link>
-            <a href='#' onClick={handleClick}>Logout</a>
+            <Search />
+            <Link to='/home'>
+              <i className="material-icons" style={{ color: "white", fontSize: "45px" }}>account_circle</i>
+            </Link>
+            <NavLink to="/" onClick={handleClick}>Logout</NavLink>
           </Links>
           :
           <Links>
-            <SearchBar />
-            <Link to='/login'>Login</Link>
-            <Link to='/signup'>Sign Up</Link>
+            <Search />
+            <NavLink to='/login'>Login</NavLink>
+            <NavLink to='/signup'>Sign Up</NavLink>
           </Links>
       }
-    </Bar>
+    </Bar >
   )
 }
 

@@ -26,6 +26,9 @@ class ViewRecipe extends React.Component {
     this.props.getRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid);
     this.props.isLoggedIn ? history.push(`/recipe/${this.props.match.params.recipeid}/user/${this.props.user.id}`) : ''
   }
+  componentWillUnmount() {
+
+  }
   handleCreateRecipeBox(e) {
     e.preventDefault()
     this.props.createRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
@@ -145,9 +148,9 @@ const mapDispatch = (dispatch) => {
     getRecipe: id => dispatch(action.getRecipe(id)),
     getRecipeBox: (userId, recipeId) => dispatch(action.getRecipeBox(userId, recipeId)),
     createRecipeBox: (userId, recipeId) => dispatch(action.addRecipeBox(userId, recipeId)),
+    removeRecipeBox: (userId, recipeId) => dispatch(action.removeRecipeBox(userId, recipeId)),
     isCooking: bool => dispatch(action.getCooking(bool)),
-    saveNote: (userId, recipeId, note) => dispatch(action.editRecipeBox(userId, recipeId, note)),
-    removeRecipeBox: (userId, recipeId) => dispatch(action.removeRecipeBox(userId, recipeId))
+    saveNote: (userId, recipeId, note) => dispatch(action.editRecipeBox(userId, recipeId, note))
   }
 }
 
