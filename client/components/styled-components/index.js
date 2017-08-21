@@ -92,7 +92,7 @@ export const Links = styled.div`
   width: 30vw;
   align-items: center;
   justify-content: space-around;
-  color: 
+  color:
 `
 export const List = styled.ul`
   color: grey;
@@ -332,4 +332,15 @@ display: flex;
 flex-direction: column;
 align-items: center;
 padding: 10px;
+`
+
+// Image upload
+export const ImageUploadCard = styled.div`
+  height: 400px;
+  width 400px;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #db3434;
 `

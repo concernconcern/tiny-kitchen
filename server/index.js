@@ -55,19 +55,14 @@ const createApp = () => {
   // static file-serving middleware
   app.use(express.static(path.join(__dirname, '..', 'public')))
 
-  // sends index.html
-  app.use('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public/index.html'))
-  })
 
-
+// Image upload route
 aws.config.region = 'us-east-2';
 
   app.get('/sign-s3', (req, res) => {
   const s3 = new aws.S3();
   const fileName = req.query['file-name'];
   const fileType = req.query['file-type'];
-  console.log('BUCKET!!!!!!!!', S3_BUCKET);
   const s3Params = {
     Bucket: 'tiny-kitchen',
     Key: fileName,
@@ -90,13 +85,18 @@ aws.config.region = 'us-east-2';
   });
 });
 
+
+  // sends index.html
+  app.use('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public/index.html'))
+  })
+
   // error handling endware
   app.use((err, req, res, next) => {
     console.error(err)
     console.error(err.stack)
     res.status(err.status || 500).send(err.message || 'Internal server error.')
   })
-
 }
 
 const startListening = () => {
