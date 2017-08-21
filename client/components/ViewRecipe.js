@@ -18,7 +18,6 @@ class ViewRecipe extends React.Component {
     }
     this.handleCreateRecipeBox = this.handleCreateRecipeBox.bind(this)
     this.handleRemoveRecipeBox = this.handleRemoveRecipeBox.bind(this)
-    this.handleAddGrocery = this.handleAddGrocery.bind(this)
     this.handleRequestClose = this.handleRequestClose.bind(this);
   }
 
@@ -54,8 +53,8 @@ class ViewRecipe extends React.Component {
     });
   }
 
-  handleAddGrocery(e) {
-    this.props.reallyAddGrocery(this.props.match.params.userid, e.target.value)
+  handleAddGrocery(ingredient, e) {
+    this.props.reallyAddGrocery(this.props.match.params.userid, ingredient)
   }
 
 
@@ -122,8 +121,19 @@ class ViewRecipe extends React.Component {
           }
           <Title secondary>Ingredients</Title>
           <List>
-            {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i.toString()}>{ingredient}<button type="button" className="btn btn-default btn-sm" onClick={this.handleAddGrocery} value={ingredient}>
-          <span className="glyphicon glyphicon-plus"></span></button></li>)}
+            {recipe.ingredients && recipe.ingredients.map((ingredient, i) =>
+              <li key={i.toString()}>{ingredient}
+                <IconButton
+                  style={{ width: "28px", height: "28px" }}
+                  iconStyle={{ fontSize: "20px", color: "#59a5f6" }}
+                  iconClassName="material-icons"
+                  tooltip="Add Grocery"
+                  tooltipPosition="bottom-right"
+                  onClick={this.handleAddGrocery.bind(this, ingredient)}
+                >
+                  add
+                  </IconButton>
+              </li>)}
           </List>
           <Title secondary>Directions</Title>
           <List directions>
