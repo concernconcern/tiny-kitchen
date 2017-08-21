@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ImageUploadCard } from './styled-components';
 import Dialog from 'material-ui/Dialog';
+import { NavLink, Input } from './styled-components'
 
 var divStyle = {
   width: '300px',
@@ -16,55 +17,60 @@ class ImgUpload extends React.Component {
       file: '',
       imagePreviewUrl: '',
       error: '',
-      successMsg: ''
+      successMsg: '',
+      open: false
     };
 
     this.handleImageChange = this.handleImageChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.getSignedRequest = this.getSignedRequest.bind(this);
     this.uploadFile = this.uploadFile.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
   }
 
-      /*
-      Function to carry out the actual PUT request to S3 using the signed request from the app.
-    */
-    uploadFile(file, signedRequest, url){
-      const xhr = new XMLHttpRequest();
-      xhr.open('PUT', signedRequest);
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4){
-          if (xhr.status === 200){
-            this.setState({successMsg: 'Image uploaded :)'})
-          }
-          else {
-            this.setState({error: 'Image upload failed :('})
-          }
-        }
-      };
-      xhr.send(file);
-    }
 
-    /*
-      Function to get the temporary signed request from the app.
-      If request successful, continue to upload the file using this signed
-      request.
-    */
-    getSignedRequest(file){
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4){
-          if (xhr.status === 200){
-            const response = JSON.parse(xhr.responseText);
-            this.uploadFile(file, response.signedRequest, response.url);
-          }
-          else {
-            this.setState({error: 'Image upload failed :( (could not get signed url)'});
-          }
+    handleClose () {
+    this.setState({ open: false });
+  }
+
+  handleOpen() {
+    this.setState({ open: true });
+  }
+
+  uploadFile(file, signedRequest, url){
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', signedRequest);
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4){
+        if (xhr.status === 200){
+          this.setState({successMsg: 'Image uploaded :)'})
         }
-      };
-      xhr.send();
-    }
+        else {
+          this.setState({error: 'Image upload failed :('})
+        }
+      }
+    };
+    xhr.send(file);
+  }
+
+
+  getSignedRequest(file){
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4){
+        if (xhr.status === 200){
+          const response = JSON.parse(xhr.responseText);
+          this.uploadFile(file, response.signedRequest, response.url);
+        }
+        else {
+          this.setState({error: 'Image upload failed :( (could not get signed url)'});
+        }
+      }
+    };
+    xhr.send();
+  }
 
 
   handleSubmit(e) {
@@ -106,9 +112,11 @@ class ImgUpload extends React.Component {
     }
 
     return (
+    <div>
+        <NavLink href="#" onClick={this.handleOpen}>Image Uplaod</NavLink>
       <Dialog
         contentStyle={{ width: "30%", display: "flex" }}
-        title={displayName}
+        title='Image Upload'
         modal={true}
         open={this.state.open}
         onRequestClose={this.handleClose}
@@ -130,6 +138,7 @@ class ImgUpload extends React.Component {
         </div>
       </ImageUploadCard>
       </Dialog>
+      </div>
     )
   }
 }
