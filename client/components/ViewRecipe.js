@@ -18,7 +18,7 @@ class ViewRecipe extends React.Component {
     }
     this.handleCreateRecipeBox = this.handleCreateRecipeBox.bind(this)
     this.handleRemoveRecipeBox = this.handleRemoveRecipeBox.bind(this)
-    this.handleAddGrocery = this.handleAddGrocery.bind(this)
+    this.handleRequestClose = this.handleRequestClose.bind(this);
   }
 
   componentDidMount() {
@@ -29,9 +29,7 @@ class ViewRecipe extends React.Component {
       this.props.getRecipeBox(this.props.user.id, this.props.match.params.recipeid)
     }
   }
-  componentWillUnmount() {
 
-  }
   handleCreateRecipeBox(e) {
     e.preventDefault()
     this.props.createRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
@@ -48,6 +46,7 @@ class ViewRecipe extends React.Component {
     })
     this.props.removeRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
   }
+<<<<<<< HEAD
   handleAddGrocery(e) {
     e.preventDefault();
     this.props.reallyAddGrocery(this.props.match.params.userid, e.target.value)
@@ -57,6 +56,25 @@ class ViewRecipe extends React.Component {
       open: false,
     });
   };
+=======
+
+  handleRequestClose() {
+    this.setState({
+      open: false,
+    });
+  }
+
+<<<<<<< HEAD
+  handleAddGrocery(ingredient, e) {
+    this.props.reallyAddGrocery(this.props.match.params.userid, ingredient)
+=======
+  handleAddGrocery(e) {
+    // console.log(e.target.value);
+    this.props.reallyAddGrocery(this.props.match.params.userid, e.target.value)
+>>>>>>> 57eb7215ad16578b311fefe58e5088e7c1439feb
+  }
+
+>>>>>>> ebf39918f97473434d651075e9b2cc5164b62304
 
   render() {
     const { recipe, recipebox, isLoggedIn } = this.props;
@@ -121,8 +139,27 @@ class ViewRecipe extends React.Component {
           }
           <Title secondary>Ingredients</Title>
           <List>
-            {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i.toString()}>{ingredient}<button type="button" className="btn btn-default btn-sm" onClick={this.handleAddGrocery} value={ingredient}>
-          <span className="glyphicon glyphicon-plus"></span></button></li>)}
+            {recipe.ingredients && recipe.ingredients.map((ingredient, i) =>
+<<<<<<< HEAD
+              <li key={i.toString()}>{ingredient}
+                <IconButton
+                  style={{ width: "28px", height: "28px" }}
+                  iconStyle={{ fontSize: "20px", color: "#59a5f6" }}
+                  iconClassName="material-icons"
+                  tooltip="Add Grocery"
+                  tooltipPosition="bottom-right"
+                  onClick={this.handleAddGrocery.bind(this, ingredient)}
+                >
+                  add
+                  </IconButton>
+=======
+              <li key={i.toString()}>
+              {ingredient}
+                <button type="button" className="btn btn-default btn-sm" onClick={this.handleAddGrocery} value={ingredient}>
+                  <span className="glyphicon glyphicon-plus"></span>
+                </button>
+>>>>>>> 57eb7215ad16578b311fefe58e5088e7c1439feb
+              </li>)}
           </List>
           <Title secondary>Directions</Title>
           <List directions>
@@ -159,8 +196,11 @@ const mapDispatch = (dispatch) => {
     removeRecipeBox: (userId, recipeId) => dispatch(action.removeRecipeBox(userId, recipeId)),
     isCooking: bool => dispatch(action.getCooking(bool)),
     saveNote: (userId, recipeId, note) => dispatch(action.editRecipeBox(userId, recipeId, note)),
-    removeRecipeBox: (userId, recipeId) => dispatch(action.removeRecipeBox(userId, recipeId)),
     reallyAddGrocery: (userId, ingredientText) => dispatch(action.reallyAddGrocery(userId, ingredientText))
+<<<<<<< HEAD
+=======
+
+>>>>>>> ebf39918f97473434d651075e9b2cc5164b62304
   }
 }
 
