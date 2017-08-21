@@ -5,7 +5,6 @@ import Search from './SearchBar'
 import { Link } from 'react-router-dom'
 import Mochi from './styled-components/mochi'
 
-
 const Navbar = (props) => {
   const { children, isLoggedIn, handleClick } = props;
   return (

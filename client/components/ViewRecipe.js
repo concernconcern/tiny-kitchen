@@ -23,8 +23,10 @@ class ViewRecipe extends React.Component {
   componentDidMount() {
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(false);
-    this.props.getRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid);
-    this.props.isLoggedIn ? history.push(`/recipe/${this.props.match.params.recipeid}/user/${this.props.user.id}`) : ''
+    if (this.props.user.id) {
+      history.push(`/recipe/${this.props.match.params.recipeid}/user/${this.props.user.id}`);
+      this.props.getRecipeBox(this.props.user.id, this.props.match.params.recipeid)
+    }
   }
   componentWillUnmount() {
 

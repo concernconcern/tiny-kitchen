@@ -312,8 +312,9 @@ export const SearchInput = styled.input`
   border: 1px solid #db7d7d;
   color: black
 `
-export const Clock = styled.div`
-  height: 100px;
-  width: 200px;
-  background-color: pink;
+export const TimeDisplay = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 10px;
 `

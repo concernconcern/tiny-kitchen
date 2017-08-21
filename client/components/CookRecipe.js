@@ -10,7 +10,7 @@ import { Textfit } from 'react-textfit';
 import ReactTestUtils from 'react-dom/test-utils';
 import InfoModal from './InfoModal';
 import Timer from './Timer';
-
+import IconButton from 'material-ui/IconButton';
 
 class CookRecipe extends React.Component {
 
