@@ -55,6 +55,7 @@ class ViewRecipe extends React.Component {
   }
 
   handleAddGrocery(e) {
+    // console.log(e.target.value);
     this.props.reallyAddGrocery(this.props.match.params.userid, e.target.value)
   }
 
@@ -122,8 +123,13 @@ class ViewRecipe extends React.Component {
           }
           <Title secondary>Ingredients</Title>
           <List>
-            {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i.toString()}>{ingredient}<button type="button" className="btn btn-default btn-sm" onClick={this.handleAddGrocery} value={ingredient}>
-          <span className="glyphicon glyphicon-plus"></span></button></li>)}
+            {recipe.ingredients && recipe.ingredients.map((ingredient, i) =>
+              <li key={i.toString()}>
+              {ingredient}
+                <button type="button" className="btn btn-default btn-sm" onClick={this.handleAddGrocery} value={ingredient}>
+                  <span className="glyphicon glyphicon-plus"></span>
+                </button>
+              </li>)}
           </List>
           <Title secondary>Directions</Title>
           <List directions>
