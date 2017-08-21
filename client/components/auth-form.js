@@ -48,7 +48,6 @@ class AuthForm extends React.Component {
         primary={true}
       />
     ];
-    //Check if this is being rendered by AddRecipe, if so, open automatically
     return (
       <div>
         <NavLink href="#" onClick={this.handleOpen}>{displayName}</NavLink>
@@ -82,12 +81,20 @@ class AuthForm extends React.Component {
               <label htmlFor='password'><small>Password</small></label>
               <Input name='password' type='password' />
             </div>
-            <div style={{ textAlign: 'right', padding: 8, margin: '24px -24px -44px -24px' }}>
+
+            <a href="/auth/google">
+              <img src="/google.png"
+                style={{ height: "50px", padding: "10px 0 0 0" }}
+                key="1"
+                label={`${displayName} w/ Google`}
+                primary={false}
+              /></a>
+            <div style={{ textAlign: 'right', padding: 8, margin: '24px -24px -24px -24px' }}>
               {actions}
             </div>
             {error && error.response && <div> {error.response.data} </div>}
           </form>
-          <a href='/auth/google'>{displayName} with Google</a>
+
         </Dialog>
       </div>
     )
