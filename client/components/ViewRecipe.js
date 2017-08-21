@@ -4,6 +4,7 @@ import { withRouter, Link } from 'react-router-dom'
 import { Wrapper, RecipeImg, ControlPanel, Message, AccentButton, TextArea, RecipeText, Notes, Title, List } from './styled-components'
 import history from '../history'
 import * as action from '../store'
+import Mochi from '../mochi'
 import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
 import NotesModal from './NotesModal';
@@ -18,9 +19,11 @@ class ViewRecipe extends React.Component {
     }
     this.handleCreateRecipeBox = this.handleCreateRecipeBox.bind(this)
     this.handleRemoveRecipeBox = this.handleRemoveRecipeBox.bind(this)
+    this.handleAddGrocery = this.handleAddGrocery.bind(this)
   }
 
   componentDidMount() {
+    Mochi.shutUp();
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(false);
     if (this.props.user.id) {
@@ -46,6 +49,9 @@ class ViewRecipe extends React.Component {
       message: 'Removed from your Recipe Box'
     })
     this.props.removeRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
+  }
+  handleAddGrocery(e) {
+    this.props.reallyAddGrocery(this.props.match.params.userid, e.target.value)
   }
   handleRequestClose = () => {
     this.setState({
@@ -116,7 +122,8 @@ class ViewRecipe extends React.Component {
           }
           <Title secondary>Ingredients</Title>
           <List>
-            {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient}</li>)}
+            {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i.toString()}>{ingredient}<button type="button" className="btn btn-default btn-sm" onClick={this.handleAddGrocery} value={ingredient}>
+          <span className="glyphicon glyphicon-plus"></span></button></li>)}
           </List>
           <Title secondary>Directions</Title>
           <List directions>
@@ -152,7 +159,9 @@ const mapDispatch = (dispatch) => {
     createRecipeBox: (userId, recipeId) => dispatch(action.addRecipeBox(userId, recipeId)),
     removeRecipeBox: (userId, recipeId) => dispatch(action.removeRecipeBox(userId, recipeId)),
     isCooking: bool => dispatch(action.getCooking(bool)),
-    saveNote: (userId, recipeId, note) => dispatch(action.editRecipeBox(userId, recipeId, note))
+    saveNote: (userId, recipeId, note) => dispatch(action.editRecipeBox(userId, recipeId, note)),
+    removeRecipeBox: (userId, recipeId) => dispatch(action.removeRecipeBox(userId, recipeId)),
+    reallyAddGrocery: (userId, ingredientText) => dispatch(action.reallyAddGrocery(userId, ingredientText))
   }
 }
 

@@ -5,12 +5,13 @@ import { Router, withRouter, Link } from 'react-router-dom';
 import { fetchOutput } from '../store';
 import { Wrapper, IngredientsView, AccentButton, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
 import * as action from '../store';
-import Mochi from '../mochi';
+import Mochi, {helpMenu} from '../mochi';
 import { Textfit } from 'react-textfit';
 import ReactTestUtils from 'react-dom/test-utils';
 import InfoModal from './InfoModal';
 import Timer from './Timer';
 import IconButton from 'material-ui/IconButton';
+
 
 class CookRecipe extends React.Component {
 
@@ -39,14 +40,20 @@ class CookRecipe extends React.Component {
       smart: true,
       indexes: ["*"],
       action: (i, wildcard) => {
-        let toggleWords = ['start cooking', 'start', 'stop', 'pause', 'play', 'read'];
+        let startWords = ['start cooking', 'start', 'stop', 'pause', 'play', 'read'];
+        let options = ['help', 'options', 'what can you do', 'commands'];
         if (wildcard === 'next' || wildcard === 'next step') {
           this.stepForward();
         } else if (wildcard === 'go back' || wildcard === 'back' || wildcard === 'previous') {
           this.stepBackward();
-        } else if (toggleWords.includes(wildcard)) {
+        } else if (options.includes(wildcard)) {
+          Mochi.say(helpMenu);
+        } else if (wildcard === 'exit'){
+          Mochi.shutUp();
+        } else if (startWords.includes(wildcard)) {
           this.toggleMochi();
-        } else {
+        } else if (!Mochi.isSpeaking()){
+          //doesn't send the things it says itself
           this.sendUserInput(wildcard);
         }
       }
@@ -136,7 +143,7 @@ class CookRecipe extends React.Component {
         <SecondaryWrap>
           <CurrentStep>
             <Textfit mode="multi">
-              <Title>Step {this.props.step + 1}:</Title>
+              <Title>Step {this.props.step + 1} of {recipe.directions.length}:</Title>
               <Directions>{recipe.directions[this.props.step]}</Directions>
             </Textfit>
           </CurrentStep>

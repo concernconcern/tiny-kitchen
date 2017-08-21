@@ -57,8 +57,13 @@ export const fetchOutput = (userInput) =>
     axios(makeRequestConfig(userInput))
     .then(res => {
       const output = res.data.result.fulfillment.displayText
-      dispatch(getOutput(output));
-      dispatch(getOutput(''))
+      if (output){
+        dispatch(getOutput(output));
+        dispatch(getOutput(''))
+      }
+      else{
+        dispatch(getOutput(''))
+      }
       if (res.data.result.action === 'setTimer'){
         const {amount, unit} = res.data.result.parameters.duration
         const timeInMs = convert(amount).from(unit).to('ms')
@@ -67,6 +72,18 @@ export const fetchOutput = (userInput) =>
     })
     .catch(err => console.log(err))
 }
+
+export const parseIngredient = (userInput) =>
+  dispatch => {
+    axios(makeRequestConfig(userInput))
+    .then(res => {
+      //get title and unit back from AI
+      const {title, unit} = res.data.result.parameters
+      const grocery = {title: title, unit: unit}
+      return grocery
+    })
+    .catch(err => console.log(err))
+  }
 
 
 

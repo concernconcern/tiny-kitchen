@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 import * as action from '../store'
+import { List } from './styled-components'
 /**
  * COMPONENT
  */
@@ -12,15 +13,14 @@ class UserGroceries extends React.Component{
   }
 
   componentDidMount(){
-    this.props.fetchUserRecipes(this.props.user.id)
+    this.props.fetchGroceries(this.props.user.id)
   }
   render(){
-    const {user, userRecipes} = this.props;
+    const {user, userGroceries} = this.props;
     return (
-      <div>
-        Welcome to the User Profile :)
-        You have {userRecipes.length} recipes
-      </div>
+      <List>
+      {userGroceries && userGroceries.map((grocery, i) => <li key={i}>{grocery}</li>)}
+      </List>
     )
   }
 
@@ -32,13 +32,13 @@ class UserGroceries extends React.Component{
 const mapState = (state) => {
   return {
     user: state.user,
-    userRecipes: state.userRecipes
+    userGroceries: state.groceries.map(grocery => grocery.title)
   }
 }
 
 const mapDispatch = (dispatch) => {
   return {
-    fetchUserRecipes: (userId) => dispatch(action.fetchUserRecipes(userId))
+    fetchGroceries: (userId) => dispatch(action.fetchGroceries(userId))
   }
 }
 
