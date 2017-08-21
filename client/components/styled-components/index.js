@@ -227,6 +227,11 @@ export const Add = styled.a`
   }
 `
 
+export const Time = styled.p`
+font-size: 30px;
+color: grey;
+`
+
 
 export const Directions = styled.div`
   height: 70vh;
