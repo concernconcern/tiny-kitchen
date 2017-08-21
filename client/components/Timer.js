@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, Add, Modify, Title, TimeDisplay } from './styled-components';
+import { Clock, Add, Modify, Time, Title, TimeDisplay } from './styled-components';
 import * as action from '../store';
 import { connect } from 'react-redux';
 import Mochi from '../mochi'
@@ -52,7 +52,7 @@ class Timer extends React.Component {
 
   changeTime(evt) {
     let time = this.props.time
-    switch (evt.target.name) {
+    switch (evt.target.id) {
       case 'hourAdd':
         this.props.changeTimer(time + (60 * 60 * 1000));
         break;
@@ -80,21 +80,25 @@ class Timer extends React.Component {
     let hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     let minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
     let seconds = Math.floor((ms % (1000 * 60)) / 1000);
-
+    let buttonStyle = { padding: "7px", width: "28px", height: "28px" }
+    let iconStyle = { fontSize: "20px", color: "#59a5f6" }
     return (
       <div>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <Title secondary>Timer</Title> {this.state.stopped ? <IconButton
-            iconStyle={{ fontSize: "35px", color: "#59a5f6" }}
-            iconClassName="material-icons"
-            tooltip="Start Timer"
-            onClick={this.toggleTimer}
-            tooltipPosition="bottom-right">
-            play_arrow
+          <Title secondary>Timer</Title> {this.state.stopped ?
+            <IconButton
+              style={buttonStyle}
+              iconStyle={iconStyle}
+              iconClassName="material-icons"
+              tooltip="Start Timer"
+              onClick={this.toggleTimer}
+              tooltipPosition="bottom-right">
+              play_arrow
         </IconButton>
             :
             <IconButton
-              iconStyle={{ fontSize: "35px", color: "#59a5f6" }}
+              style={buttonStyle}
+              iconStyle={iconStyle}
               iconClassName="material-icons"
               tooltip="Pause Timer"
               onClick={this.toggleTimer}
@@ -102,24 +106,27 @@ class Timer extends React.Component {
               pause
         </IconButton>}
           <IconButton
-            iconStyle={{ fontSize: "35px", color: "#59a5f6" }}
-            iconClassName="material-icons md-18"
+            style={buttonStyle}
+            iconStyle={iconStyle}
+            iconClassName="material-icons"
             tooltip="Reset Timer"
-            onClick={this.toggleTimer}
+            onClick={this.resetAlarm}
             tooltipPosition="bottom-right">
             stop
     </IconButton></div>
         <TimeDisplay>
-          <div>
-            <i className="material-icons" name="hourAdd" onClick={this.changeTime}>add</i>
-            <i className="material-icons" name="minutesAdd" onClick={this.changeTime}>add</i>
-            <i className="material-icons" name="secondsAdd" onClick={this.changeTime}>add</i>
+          <div style={{ display: "flex" }}>
+            <i className="material-icons" id="hourAdd" onClick={this.changeTime} >add</i>
+            <i className="material-icons" id="minutesAdd" onClick={this.changeTime}>add</i>
+            <i className="material-icons" id="secondsAdd" onClick={this.changeTime}>add</i>
           </div>
-          {twoDigits(hours) + ':' + twoDigits(minutes) + ':' + twoDigits(seconds)}
-          <div>
-            <i name="hourSub" className="material-icons" onClick={this.changeTime}> remove </i>
-            <i name="minutesSub" className="material-icons" onClick={this.changeTime}> remove </i>
-            <i name="secondsSub" className="material-icons" onClick={this.changeTime}>remove </i>
+          <Time>
+            {twoDigits(hours) + ':' + twoDigits(minutes) + ':' + twoDigits(seconds)}
+          </Time>
+          <div style={{ display: "flex" }}>
+            <i id="hourSub" className="material-icons" onClick={this.changeTime}> remove </i>
+            <i id="minutesSub" className="material-icons" onClick={this.changeTime}> remove </i>
+            <i id="secondsSub" className="material-icons" onClick={this.changeTime}>remove </i>
           </div>
         </TimeDisplay>
       </div >
