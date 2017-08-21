@@ -36,10 +36,6 @@ router.post('/:userId', (req, res, next) => {
     }})
   })
   .spread((groceryUser, created) => {
-    // if (!created){
-    //   console.log('groceryuser: ', groceryUser)
-    //   groceryUser.addQuantity(quantity, unit)
-    // }
     res.json(addedGrocery);
   })
   .catch(next);

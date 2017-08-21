@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
-import { Wrapper, Tiles } from './styled-components'
+import { Wrapper, Tiles, Title } from './styled-components'
 import Tile from './Tile'
 import * as action from '../store'
 
@@ -29,11 +29,16 @@ class AllRecipes extends React.Component {
     let { input, recipes, isLoggedIn, userId } = this.props;
     recipes = this.filterRecipes(recipes, input);
     return (
-      <Tiles>
-        {recipes.length && recipes.map((recipe, i) =>
-          <Link key={i} to={`/recipe/${recipe.id}`}><Tile recipe={recipe} /></Link>
-        )
-        }  </Tiles>
+      <Wrapper>
+        {
+          input.length && !recipes.length ? <Wrapper centered height><h3>No recipes found</h3></Wrapper> :
+          <Tiles>
+            {
+              recipes.length && recipes.map((recipe, i) => <Link key={i} to={`/recipe/${recipe.id}`}><Tile recipe={recipe} /></Link>)
+            }
+          </Tiles>
+        }
+      </Wrapper>
     )
   }
 }
