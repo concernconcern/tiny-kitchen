@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
 import { logout } from '../store'
 import Navbar from './Navbar'
+import { Wrapper } from './styled-components'
 /**
  * COMPONENT
  *  The Main component is our 'picture frame' - it displays the navbar and anything
@@ -14,10 +15,10 @@ const Main = (props) => {
   const { children, handleClick, isLoggedIn, cooking } = props
 
   return (
-    <div>
-      {!cooking ? (<Navbar handleClick={handleClick} isLoggedIn />) : null }
+    <Wrapper column>
+      {!cooking ? (<Navbar handleClick={handleClick} isLoggedIn={isLoggedIn} />) : null}
       {children}
-    </div>
+    </Wrapper>
   )
 }
 

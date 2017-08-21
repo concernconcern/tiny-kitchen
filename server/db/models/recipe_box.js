@@ -3,7 +3,7 @@ const db = require('../db')
 
 const RecipeBox = db.define('recipebox', {
   notes: {
-    type: Sequelize.ARRAY(Sequelize.STRING)
+    type: Sequelize.TEXT
   },
   picture_urls: {
     type: Sequelize.ARRAY(Sequelize.STRING)

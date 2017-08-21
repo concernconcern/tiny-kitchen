@@ -1,7 +1,7 @@
 import axios from 'axios'
 import history from '../history'
 import convert from 'convert-units';
-
+import {setTimer} from './timer'
 
 /**
  * ACTION TYPES
@@ -9,20 +9,26 @@ import convert from 'convert-units';
 
 const GET_OUTPUT = 'GET_OUTPUT'//get output string from api.ai
 
+//const CHANGE_TIMER_STATE = 'CHANGE_TIMER_STATE';
 /**
  * INITIAL STATE
  */
-const ai = '';
+const ai = ''
+
 
 /**
  * ACTION CREATORS
  */
 export const getOutput = output => ({type: GET_OUTPUT, output})
+
 /**
  * THUNK CREATORS
  *The query endpoint is used to process natural language in the form of text. The query requests *return structured data in JSON format with an action and parameters for that action
  */
- const token = require('../../secrets')
+ // const token = require('../../secrets')
+
+ const token = '32a6925a368448038ed4e3899b5422ca';
+
 
 
 const makeRequestConfig = (userInput) => {
@@ -51,31 +57,46 @@ export const fetchOutput = (userInput) =>
     axios(makeRequestConfig(userInput))
     .then(res => {
       const output = res.data.result.fulfillment.displayText
-      console.log(output)
-      dispatch(getOutput(output));
-      dispatch(getOutput(''))
+      if (output){
+        dispatch(getOutput(output));
+        dispatch(getOutput(''))
+      }
+      else{
+        dispatch(getOutput(''))
+      }
       if (res.data.result.action === 'setTimer'){
         const {amount, unit} = res.data.result.parameters.duration
         const timeInMs = convert(amount).from(unit).to('ms')
-
-        setTimeout(function(){
-          dispatch(getOutput('times up'))
-          dispatch(getOutput(''))
-        }, timeInMs)
+        dispatch(setTimer({time: timeInMs, fromAi: true}))
       }
     })
     .catch(err => console.log(err))
 }
+
+export const parseIngredient = (userInput) =>
+  dispatch => {
+    axios(makeRequestConfig(userInput))
+    .then(res => {
+      //get title and unit back from AI
+      const {title, unit} = res.data.result.parameters
+      const grocery = {title: title, unit: unit}
+      return grocery
+    })
+    .catch(err => console.log(err))
+  }
+
 
 
 /**
  * REDUCER
  */
 export default function (state = ai, action) {
+  let newState = Object.assign({}, state);
   switch (action.type) {
     case GET_OUTPUT:
-      return action.output
-    default:
-      return state
+      newState = action.output;
+      break;
+    default: return state;
   }
+  return newState;
 }

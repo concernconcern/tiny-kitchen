@@ -3,7 +3,6 @@ const Recipe = db.model('recipe');
 const axios = require('axios');
 const Promise = require('bluebird');
 const getJsonFromUrl = require('./server/recipe-to-json');
-require('./secrets'); //not for deployed use
 
 const recipeLinks = [
   {type: 'link', web_url: 'https://cooking.nytimes.com/recipes/1016833-spaghetti-and-drop-meatballs-with-tomato-sauce?action=click&module=Collection%20Page%20Recipe%20Card&region=Our%20Most%20Popular%20Weeknight%20Recipes%20of%202015&pgType=collection&rank=1', picture_url: 'https://static01.nyt.com/images/2015/09/25/dining/drop-meatballs/drop-meatballs-articleLarge.jpg'},
