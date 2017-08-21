@@ -5,12 +5,13 @@ import { Router, withRouter, Link } from 'react-router-dom';
 import { fetchOutput } from '../store';
 import { Wrapper, IngredientsView, AccentButton, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
 import * as action from '../store';
-import Mochi from '../mochi';
+import Mochi, {helpMenu} from '../mochi';
 import { Textfit } from 'react-textfit';
 import ReactTestUtils from 'react-dom/test-utils';
 import InfoModal from './InfoModal';
 import Timer from './Timer';
 import IconButton from 'material-ui/IconButton';
+
 
 class CookRecipe extends React.Component {
 
@@ -39,14 +40,20 @@ class CookRecipe extends React.Component {
       smart: true,
       indexes: ["*"],
       action: (i, wildcard) => {
-        let toggleWords = ['start cooking', 'start', 'stop', 'pause', 'play', 'read'];
+        let startWords = ['start cooking', 'start', 'stop', 'pause', 'play', 'read'];
+        let options = ['help', 'options', 'what can you do', 'commands'];
         if (wildcard === 'next' || wildcard === 'next step') {
           this.stepForward();
         } else if (wildcard === 'go back' || wildcard === 'back' || wildcard === 'previous') {
           this.stepBackward();
-        } else if (toggleWords.includes(wildcard)) {
+        } else if (options.includes(wildcard)) {
+          Mochi.say(helpMenu);
+        } else if (wildcard === 'exit'){
+          Mochi.shutUp();
+        } else if (startWords.includes(wildcard)) {
           this.toggleMochi();
-        } else {
+        } else if (!Mochi.isSpeaking()){
+          //doesn't send the things it says itself
           this.sendUserInput(wildcard);
         }
       }
@@ -136,7 +143,7 @@ class CookRecipe extends React.Component {
         <SecondaryWrap>
           <CurrentStep>
             <Textfit mode="multi">
-              <Title>Step {this.props.step + 1}:</Title>
+              <Title>Step {this.props.step + 1} of {recipe.directions.length}:</Title>
               <Directions>{recipe.directions[this.props.step]}</Directions>
             </Textfit>
           </CurrentStep>
@@ -159,22 +166,48 @@ class CookRecipe extends React.Component {
             {recipe.directions[this.props.step + 1]}
           </UpNext>
           <Controls>
-            <AccentButton disabled={backDisable} value="back" onClick={this.stepBackward}>
-              <span className="glyphicon glyphicon-step-backward" />
-            </AccentButton>
-            &nbsp; &nbsp;
-            <AccentButton type="button" onClick={this.toggleMochi}>
-              {
-                this.state.stopped ?
-                  <span className="glyphicon glyphicon-play" />
-                  :
-                  <span className="glyphicon glyphicon-pause" />
-              }
-            </AccentButton>
-            &nbsp; &nbsp;
-           <AccentButton disabled={forwardDisable} value="forward" onClick={this.stepForward} >
-              <span className="glyphicon glyphicon-step-forward" />
-            </AccentButton>
+            <IconButton
+              iconStyle={{ fontSize: "60px", color: "#59a5f6" }}
+              iconClassName="material-icons"
+              tooltip="Previous Step"
+              disabled={backDisable}
+              value="back"
+              onClick={this.stepBackward}
+              tooltipPosition="bottom-right">
+              keyboard_arrow_left
+        </IconButton>
+
+            {
+              this.state.stopped ?
+                <IconButton
+                  iconStyle={{ fontSize: "60px", color: "#59a5f6" }}
+                  iconClassName="material-icons"
+                  tooltip="Start Mochi"
+                  onClick={this.toggleMochi}
+                  tooltipPosition="bottom-right">
+                  play_circle_outline
+        </IconButton>
+                :
+                <IconButton
+                  iconStyle={{ fontSize: "60px", color: "#59a5f6" }}
+                  iconClassName="material-icons"
+                  tooltip="Pause Mochi"
+                  onClick={this.toggleMochi}
+                  tooltipPosition="bottom-right">
+                  pause
+        </IconButton>
+            }
+            <IconButton
+              disabled={forwardDisable}
+              iconStyle={{ fontSize: "60px", color: "#59a5f6" }}
+              iconClassName="material-icons"
+              tooltip="Next Step"
+              value="forward"
+              onClick={this.stepForward}
+              tooltipPosition="bottom-right">
+              keyboard_arrow_right
+        </IconButton>
+
           </Controls>
         </ControlPanel>
 

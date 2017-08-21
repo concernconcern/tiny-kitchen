@@ -8,6 +8,7 @@ const convert = require('convert-units');
 exports.momo = (req, res) => {
   const action = req.body.result.action;
   const parameters = req.body.result.parameters;
+  const speech = req.body.result.fulfillment.speech;
   let output;
   switch(action){
     case 'convert':
@@ -28,6 +29,8 @@ exports.momo = (req, res) => {
       output = `timer set for ${duration.amount} ${duration.unit}`;
       break;
 
+    default:
+      output = speech;
   }
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify({ 'speech': output, 'displayText': output }))

@@ -57,8 +57,13 @@ export const fetchOutput = (userInput) =>
     axios(makeRequestConfig(userInput))
     .then(res => {
       const output = res.data.result.fulfillment.displayText
-      dispatch(getOutput(output));
-      dispatch(getOutput(''))
+      if (output){
+        dispatch(getOutput(output));
+        dispatch(getOutput(''))
+      }
+      else{
+        dispatch(getOutput(''))
+      }
       if (res.data.result.action === 'setTimer'){
         const {amount, unit} = res.data.result.parameters.duration
         const timeInMs = convert(amount).from(unit).to('ms')

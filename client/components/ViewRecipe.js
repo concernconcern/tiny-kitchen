@@ -4,6 +4,7 @@ import { withRouter, Link } from 'react-router-dom'
 import { Wrapper, RecipeImg, ControlPanel, Message, AccentButton, TextArea, RecipeText, Notes, Title, List } from './styled-components'
 import history from '../history'
 import * as action from '../store'
+import Mochi from '../mochi'
 import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
 import NotesModal from './NotesModal';
@@ -19,9 +20,12 @@ class ViewRecipe extends React.Component {
     this.handleCreateRecipeBox = this.handleCreateRecipeBox.bind(this)
     this.handleRemoveRecipeBox = this.handleRemoveRecipeBox.bind(this)
     this.handleRequestClose = this.handleRequestClose.bind(this);
+    this.handleAddGrocery = this.handleAddGrocery.bind(this)
+
   }
 
   componentDidMount() {
+    Mochi.shutUp();
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(false);
     if (this.props.user.id) {
@@ -53,14 +57,9 @@ class ViewRecipe extends React.Component {
     });
   }
 
-<<<<<<< HEAD
+
   handleAddGrocery(ingredient, e) {
     this.props.reallyAddGrocery(this.props.match.params.userid, ingredient)
-=======
-  handleAddGrocery(e) {
-    // console.log(e.target.value);
-    this.props.reallyAddGrocery(this.props.match.params.userid, e.target.value)
->>>>>>> 57eb7215ad16578b311fefe58e5088e7c1439feb
   }
 
 
@@ -127,8 +126,8 @@ class ViewRecipe extends React.Component {
           }
           <Title secondary>Ingredients</Title>
           <List>
+
             {recipe.ingredients && recipe.ingredients.map((ingredient, i) =>
-<<<<<<< HEAD
               <li key={i.toString()}>{ingredient}
                 <IconButton
                   style={{ width: "28px", height: "28px" }}
@@ -140,13 +139,7 @@ class ViewRecipe extends React.Component {
                 >
                   add
                   </IconButton>
-=======
-              <li key={i.toString()}>
-              {ingredient}
-                <button type="button" className="btn btn-default btn-sm" onClick={this.handleAddGrocery} value={ingredient}>
-                  <span className="glyphicon glyphicon-plus"></span>
-                </button>
->>>>>>> 57eb7215ad16578b311fefe58e5088e7c1439feb
+
               </li>)}
           </List>
           <Title secondary>Directions</Title>
@@ -184,8 +177,8 @@ const mapDispatch = (dispatch) => {
     removeRecipeBox: (userId, recipeId) => dispatch(action.removeRecipeBox(userId, recipeId)),
     isCooking: bool => dispatch(action.getCooking(bool)),
     saveNote: (userId, recipeId, note) => dispatch(action.editRecipeBox(userId, recipeId, note)),
+    removeRecipeBox: (userId, recipeId) => dispatch(action.removeRecipeBox(userId, recipeId)),
     reallyAddGrocery: (userId, ingredientText) => dispatch(action.reallyAddGrocery(userId, ingredientText))
-
   }
 }
 
