@@ -8,7 +8,8 @@ export const Wrapper = styled.div`
   height: ${props => props.height ? '100vh' : ''};
   font-family: 'Roboto', sans-serif;
   flex-direction: ${props => props.column ? 'column' : 'row'};
-  justify-content: space-between;
+  justify-content: ${props => props.centered ? 'center' : 'space-between'};
+  ${props => props.centered ? 'padding-top: 20vh' : null}
 `
 export const RecipeImg = styled.img`
   height: ${props => props.secondary ? '300px' : '88vh'};
