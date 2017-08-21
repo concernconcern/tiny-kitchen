@@ -6,7 +6,6 @@ import PropTypes from 'prop-types'
 import history from './history'
 import { Main, Login, Signup, UserHome, ViewRecipe, CookRecipe, AddRecipe, AllRecipes, Search } from './components'
 import { me } from './store'
-
 /**`
  * COMPONENT
  */
