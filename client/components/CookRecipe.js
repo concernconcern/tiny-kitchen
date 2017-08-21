@@ -10,7 +10,7 @@ import { Textfit } from 'react-textfit';
 import ReactTestUtils from 'react-dom/test-utils';
 import InfoModal from './InfoModal';
 import Timer from './Timer';
-
+import IconButton from 'material-ui/IconButton';
 
 class CookRecipe extends React.Component {
 
@@ -142,7 +142,7 @@ class CookRecipe extends React.Component {
           </CurrentStep>
           <Sidebar>
             <InfoModal />
-            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}><span className="glyphicon glyphicon-remove" /></ExitLink>
+            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}><i className="material-icons" style={{ fontSize: "45px" }}>clear</i></ExitLink>
             <Title secondary>Ingredients</Title>
 
             <List>
