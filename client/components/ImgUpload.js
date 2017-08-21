@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { ImageUploadCard } from './styled-components';
+import Dialog from 'material-ui/Dialog';
 
 var divStyle = {
   width: '300px',
@@ -105,6 +106,13 @@ class ImgUpload extends React.Component {
     }
 
     return (
+      <Dialog
+        contentStyle={{ width: "30%", display: "flex" }}
+        title={displayName}
+        modal={true}
+        open={this.state.open}
+        onRequestClose={this.handleClose}
+      >
       <ImageUploadCard>
         <form onSubmit={this.handleSubmit}>
           <input
@@ -121,6 +129,7 @@ class ImgUpload extends React.Component {
           {imagePreview}
         </div>
       </ImageUploadCard>
+      </Dialog>
     )
   }
 }
