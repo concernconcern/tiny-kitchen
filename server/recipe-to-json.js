@@ -6,12 +6,15 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
   return axios.get(source_url)
     .then(apiRes => {
       const rawHtml = apiRes.data;
-      const sanitizedHtml = sanitizeHtml(rawHtml, {
-        allowedTags: ['title', 'img', 'ul', 'ol', 'li'],
+      let sanitizedHtml = sanitizeHtml(rawHtml, {
+        allowedTags: ['title', 'img', 'ul', 'ol', 'li', 'br'],
         allowedAttributes: {
           'img': ['src', 'data-src']
         }
       }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&');
+
+      // custom replacements for AllRecipes.com
+      sanitizedHtml = sanitizedHtml.replace(/Serving size has been adjusted!(.*?)\(uses your location\)/g, '').replace(/{{model.addEditText}}(.*?)<\/ul>/g, '').replace(/ADVERTISEMENT/g, '').replace(/<li> Add all ingredients to list <\/li>/g, '').replace(/ +/g, ' ');
       
       function findTitle(html) {
         const idx1 = html.indexOf('<title>');
@@ -45,7 +48,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
         return imgUrls.filter(el => !!el).filter(el => !!el.startsWith('http')).filter((el, idx, arr) => arr.indexOf(el) === idx);
       }
 
-      // find the first index where the first tag after 'listName' keyword is an ordered or unordered list
+      // find the first index where the first HTML tag after 'listName' keyword is an ordered or unordered list
       function findList(html, listName) {
         for (let i = 0; i < sanitizedHtml.length; i++) {
           let substring = sanitizedHtml.slice(i);
@@ -60,29 +63,43 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
         }
       }
 
-      // NEED TO CREATE LOGIC TO CONTROL FOR CONSECUTIVE LISTS WITHIN A SECTION (e.g. allrecipes.co.uk)
+      // find whether a list section is immediately followed by the same list (e.g. allrecipes.co.uk)
+      function listContinuation(html, closeList){
+        for (let i = 0; i < html.length; i++){
+          let substring = html.slice(i);
+          if (substring.startsWith('<')){
+            if (substring[1] === closeList[2]) return true;
+            else return false;
+          }
+        }
+      }
 
-      // trim html string to only the specified section (e.g. Ingredients, Preparation, etc.)
+      // trim html string to only the specified 'section' (e.g. Ingredients, Preparation, etc.)
       function clipSection(html, section) {
         if (!findList(html, section)) return;
         let clip = html.slice(findList(html, section));
 
         // find whether ol or ul is used in the DOM
-        let closeList = clip.indexOf('<ol>') < clip.indexOf('<ul>') ? '</ol>' : '</ul>'
+        let closeList = clip.indexOf('<ol>') < clip.indexOf('<ul>') && clip.indexOf('<ol>') !== -1 ? '</ol>' : '</ul>'
 
         let idx2 = clip.indexOf(closeList);
+        while (listContinuation(clip.slice(idx2 + 5), closeList)) {
+          idx2 = clip.indexOf(closeList, idx2+1)
+        }
         clip = clip.slice(0, idx2);
         return clip;
       };
 
       // convert ingredients and directions sections to array
       function createArray(section) {
-        const list = section.child.find(el => el.tag === 'ul' || el.tag === 'ol');
-        const elements = list.child.reduce((acc, el) => {
-          if (el.child) return acc.concat(el.child[0].text);
-          else return acc;
+        const lists = section.child.filter(el => el.tag === 'ul' || el.tag === 'ol');
+        const elements = lists.reduce((acc, list) => {
+          return acc.concat(list.child.reduce((acc, el) => {
+            if (el.child) return acc.concat(el.child[0].text);
+            else return acc;
+          }, []))
         }, [])
-        return elements;
+        return elements.filter(el => el !== ' ');
       }
 
       // GET TITLE AND PICTURE URL
@@ -92,14 +109,22 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
       if (!picture_url) picture_url = findImages(sanitizedHtml);
 
       // GET INGREDIENTS
-      let ingredients = html2json(clipSection(sanitizedHtml, 'Ingredients'));
-      ingredients = createArray(ingredients);
+      let ingredients = clipSection(sanitizedHtml, 'Ingredients');
+      if (ingredients) {
+        ingredients = html2json(ingredients);
+        ingredients = createArray(ingredients);
+      } 
+
+      // slice the html string to begin where ingredients list ends before moving on to directions
+      sanitizedHtml = sanitizedHtml.slice(findList(sanitizedHtml, 'Ingredients') + clipSection(sanitizedHtml, 'Ingredients').length + 5)
 
       // run clipSection for the first instruction keyword that is followed by ordered or unordered list
       const directionsKeywords = ['Preparation', 'Instructions', 'Method', 'Directions'];
-      let directions = html2json(clipSection(sanitizedHtml, directionsKeywords.find(el => !!findList(sanitizedHtml, el))));
-      directions = createArray(directions);
-
+      let directions = clipSection(sanitizedHtml, directionsKeywords.find(el => !!findList(sanitizedHtml, el)));
+      if (directions) {
+        directions = html2json(directions)
+        directions = createArray(directions);
+      }
 
       const obj = {
         title,
@@ -110,5 +135,8 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
       }
 
       return obj;
+    })
+    .catch(err => {
+      return err;
     })
 }

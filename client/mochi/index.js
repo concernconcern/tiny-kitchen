@@ -17,4 +17,5 @@ Mochi.initialize({
     console.error("mochi couldn't be initialized: ", err);
   })
 
+export const helpMenu = 'To start cooking, say start, start cooking, play, or read. To pause, say pause or stop. To go to the next step, say next, next step. To go to the previous step, say back, go back, or previous. You can also ask me questions like how many teaspoons are in one tablespoon, or ask me to set a timer for you';
 export default Mochi;

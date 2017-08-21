@@ -83,6 +83,7 @@ export const Logo = styled.h1`
 export const LogoWrap = styled.div`
   display: flex;
   width: 40vw;
+  align-items: center;
 `
 
 export const Links = styled.div`
@@ -184,15 +185,16 @@ export const Button = styled.button`
   }
 `
 export const AccentButton = styled.button`
- background:#53BDFF;
- outline: none;
- color:white;
- border: 1px solid #35A6FF;
-padding: 15px 20px;
- border-radius: 5px;
- &:hover{
-   background: #3bb8f7;
- }
+  background: ${props => props.small ? '#C4CCE0' : '#53BDFF'};
+  outline: none;
+  color:white;
+  border: 1px solid ${props => props.small ? '#C4CCE0' : '#35A6FF'};
+  padding: ${props => props.small ? '4px 8px' : '15px 20px'};
+  border-radius: 5px;
+  &:hover{
+    background: ${props => props.small ? '#cfd6e6' : '#3bb8f7'};
+  }
+  ${props => props.small ? 'font-size: 10px;' : null}
 `
 
 export const Modify = styled.a`
@@ -227,6 +229,11 @@ export const Add = styled.a`
   }
 `
 
+export const Time = styled.p`
+font-size: 30px;
+color: grey;
+`
+
 
 export const Directions = styled.div`
   height: 70vh;
@@ -242,8 +249,9 @@ export const CurrentStep = styled.div`
 `
 export const ControlPanel = styled.div`
   display: flex;
-  padding: 20px;
+  padding: ${props => props.profile ? '0px 0px 10px 0px' : '20px'};
   align-items: center;
+  justify-content: ${props => props.profile ? 'space-between' : 'flex-start'};
 `
 export const UpNext = styled.div`
   flex: 3;
@@ -269,18 +277,25 @@ export const ProfileUpperArea = styled.div`
 export const ProfileCard = styled.div`
   flex:2
   height: 25vh;
-  width: 30vw;
+  width: 400px;
   display: flex;
   padding: 25px;
-  justify-content: space-around;
   flex-direction: ${props => props.column ? 'column' : 'row'};
 `
 
 export const ProfilePicArea = styled.div`
-  
+  flex: 1;
 `
 
 export const ProfileInfoArea = styled.div`
+  flex: 3;
+  margin: 0px 0px 0px 20px;
+`
+export const Heading = styled.h1`
+  font-size: ${props => props.secondary ? '15px' : '25px'};
+  color: grey;
+  margin: 0px;
+  font-family: 'Playfair Display', serif;
 `
 
 export const ProfileWarning = styled.h2`

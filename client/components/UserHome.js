@@ -12,11 +12,11 @@ export default class UserHome extends React.Component {
   render() {
     return (
       <div>
-        <UserNav />
-        <Switch>
-          <Route exact path='/home/groceries' component={UserGroceries} />
-          <Route exact path ='/home/recipes' component={UserRecipes} />
-        </Switch>
+        <UserNav/>
+          <Switch>
+            <Route exact path='/home/groceries' component={UserGroceries}/>
+            <Route path='/home' component={UserRecipes}/>
+          </Switch>
       </div>
     )
   }

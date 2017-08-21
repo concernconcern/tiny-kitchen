@@ -4,6 +4,7 @@ import { withRouter, Link } from 'react-router-dom'
 import { Wrapper, RecipeImg, ControlPanel, Message, AccentButton, TextArea, RecipeText, Notes, Title, List } from './styled-components'
 import history from '../history'
 import * as action from '../store'
+import Mochi from '../mochi'
 import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
 import NotesModal from './NotesModal';
@@ -22,6 +23,7 @@ class ViewRecipe extends React.Component {
   }
 
   componentDidMount() {
+    Mochi.shutUp();
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(false);
     if (this.props.user.id) {
@@ -46,6 +48,7 @@ class ViewRecipe extends React.Component {
     })
     this.props.removeRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
   }
+<<<<<<< HEAD
 
   handleRequestClose() {
     this.setState({
@@ -63,6 +66,16 @@ class ViewRecipe extends React.Component {
 >>>>>>> 57eb7215ad16578b311fefe58e5088e7c1439feb
   }
 
+=======
+  handleAddGrocery(e) {
+    this.props.reallyAddGrocery(this.props.match.params.userid, e.target.value)
+  }
+  handleRequestClose = () => {
+    this.setState({
+      open: false,
+    });
+  };
+>>>>>>> 54d649efb980e62b0a2f449d4078c23689e2d791
 
   render() {
     const { recipe, recipebox, isLoggedIn } = this.props;
@@ -185,7 +198,10 @@ const mapDispatch = (dispatch) => {
     isCooking: bool => dispatch(action.getCooking(bool)),
     saveNote: (userId, recipeId, note) => dispatch(action.editRecipeBox(userId, recipeId, note)),
     reallyAddGrocery: (userId, ingredientText) => dispatch(action.reallyAddGrocery(userId, ingredientText))
+<<<<<<< HEAD
 
+=======
+>>>>>>> 54d649efb980e62b0a2f449d4078c23689e2d791
   }
 }
 
