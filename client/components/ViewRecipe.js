@@ -4,7 +4,6 @@ import { withRouter, Link } from 'react-router-dom'
 import { Wrapper, RecipeImg, ControlPanel, Message, AccentButton, TextArea, RecipeText, Notes, Title, List } from './styled-components'
 import history from '../history'
 import * as action from '../store'
-import Mochi from '../mochi'
 import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
 import NotesModal from './NotesModal';
@@ -19,11 +18,12 @@ class ViewRecipe extends React.Component {
     }
     this.handleCreateRecipeBox = this.handleCreateRecipeBox.bind(this)
     this.handleRemoveRecipeBox = this.handleRemoveRecipeBox.bind(this)
+    this.handleRequestClose = this.handleRequestClose.bind(this);
     this.handleAddGrocery = this.handleAddGrocery.bind(this)
+
   }
 
   componentDidMount() {
-    Mochi.shutUp();
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(false);
     if (this.props.user.id) {
@@ -31,9 +31,7 @@ class ViewRecipe extends React.Component {
       this.props.getRecipeBox(this.props.user.id, this.props.match.params.recipeid)
     }
   }
-  componentWillUnmount() {
 
-  }
   handleCreateRecipeBox(e) {
     e.preventDefault()
     this.props.createRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
@@ -50,14 +48,17 @@ class ViewRecipe extends React.Component {
     })
     this.props.removeRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
   }
-  handleAddGrocery(e) {
-    this.props.reallyAddGrocery(this.props.match.params.userid, e.target.value)
-  }
-  handleRequestClose = () => {
+
+  handleRequestClose() {
     this.setState({
       open: false,
     });
-  };
+  }
+
+  handleAddGrocery(ingredient, e) {
+    this.props.reallyAddGrocery(this.props.match.params.userid, ingredient)
+  }
+
 
   render() {
     const { recipe, recipebox, isLoggedIn } = this.props;
@@ -122,8 +123,21 @@ class ViewRecipe extends React.Component {
           }
           <Title secondary>Ingredients</Title>
           <List>
-            {recipe.ingredients && recipe.ingredients.map((ingredient, i) => <li key={i.toString()}>{ingredient}<button type="button" className="btn btn-default btn-sm" onClick={this.handleAddGrocery} value={ingredient}>
-          <span className="glyphicon glyphicon-plus"></span></button></li>)}
+            {recipe.ingredients && recipe.ingredients.map((ingredient, i) =>
+              <li key={i.toString()}>{ingredient}
+              {isLoggedIn ? 
+                <IconButton
+                  style={{ width: "28px", height: "28px" }}
+                  iconStyle={{ fontSize: "20px", color: "#59a5f6" }}
+                  iconClassName="material-icons"
+                  tooltip="Add Grocery"
+                  tooltipPosition="bottom-right"
+                  onClick={this.handleAddGrocery.bind(this, ingredient)}
+                >
+                  add
+                </IconButton> : null
+              }
+              </li>)}
           </List>
           <Title secondary>Directions</Title>
           <List directions>

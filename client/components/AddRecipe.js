@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
 import { Wrapper, SecondaryWrap, Button, Modify, Message, RecipeImg, RecipeText, Form, Title, List, Input, Box, TextArea } from './styled-components'
+import ErrorModal from './ErrorModal';
 import * as action from '../store'
 import history from '../history'
 import { GridList, GridTile } from 'material-ui/GridList'
@@ -11,13 +12,14 @@ class AddRecipe extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      highlighted: null
+      highlighted: null,
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.addField = this.addField.bind(this);
     this.deleteField = this.deleteField.bind(this);
     this.selectPic = this.selectPic.bind(this);
+    this.handleClose = this.handleChange.bind(this);
   }
   componentDidMount() {
     let recipeUrl = this.props.location.search.slice(5);
@@ -60,53 +62,63 @@ class AddRecipe extends React.Component {
     this.setState({ highlighted: +e.target.id })
     this.props.getRecipeSuccess(recipe)
   }
+
+
   render() {
     let recipe = this.props.recipe;
     let recipeUrl = this.props.location.search.slice(5);
     return (
       this.props.user.id ?
-        <Form onSubmit={this.handleSubmit}>
-          <Input title type="text" name="title" onChange={this.handleChange} value={recipe && recipe.title} />
-          <Title secondary>Choose the Correct Picture:</Title>
-          <div style={styles.root}>
-            {recipe.picture_url.length &&
-              <GridList style={styles.gridList} cols={2.2}>
-                {recipe.picture_url.map((pic, i) => {
-                  return (<GridTile
-                    onClick={this.selectPic}
-                    rows={1.1}
-                    key={i}
-                    id={i}
-                  >
-                    {i === this.state.highlighted ?
-                      <img id={i} src={pic} style={{ "objectFit": "cover", "height": "200px", "width": "auto", "border": "5px solid #db3434" }} />
-                      : <img id={i} src={pic} style={{ "objectFit": "cover", "height": "200px", "width": "auto", "border": "5px solid transparent" }} />
-                    }  </GridTile>)
-                })
-                }
-              </GridList>
+      <div>
+        {recipe.parseError ? <ErrorModal /> : null}
+          <Form onSubmit={this.handleSubmit}>
+            <Input title type="text" name="title" onChange={this.handleChange} value={recipe && recipe.title} />
+            {recipe.parseError ?
+              <Title secondary>Upload a Picture:</Title> :
+              <div>
+                <Title secondary>Choose the Correct Picture:</Title>
+                <div style={styles.root}>
+                  {recipe.picture_url &&
+                    <GridList style={styles.gridList} cols={2.2}>
+                      {recipe.picture_url.map((pic, i) => {
+                        return (<GridTile
+                          onClick={this.selectPic}
+                          rows={1.1}
+                          key={i}
+                          id={i}
+                        >
+                          {i === this.state.highlighted ?
+                            <img id={i} src={pic} style={{ "objectFit": "cover", "height": "200px", "width": "auto", "border": "5px solid #db3434" }} />
+                            : <img id={i} src={pic} style={{ "objectFit": "cover", "height": "200px", "width": "auto", "border": "5px solid transparent" }} />
+                          }  </GridTile>)
+                      })
+                      }
+                    </GridList>
+                  }
+                </div>
+              </div>
             }
-          </div>
-          <SecondaryWrap>
-            <Box>
-              <Title secondary>Ingredients</Title> {
-                recipe.ingredients.map((ingredient, i) =>
-                { return (<div><Modify x href="#" onClick={this.deleteField} name="ingredients" id={i}>x</Modify> <Input type="text" key={i} id={i} name="ingredients" value={ingredient} style={{ height: "auto" }} onChange={this.handleChange} /></div>) })}
-              <Modify href="#" onClick={this.addField} name="ingredients">+</Modify>
-            </Box>
-            <Box>
-              <Title secondary>Directions</Title> {
-                recipe.directions.map((direction, i) =>
-                { return (<div><Modify x href="#" onClick={this.deleteField} name="directions" id={i}>x</Modify>  <TextArea type="text" key={i} id={i} name="directions" value={direction} onChange={this.handleChange} /></div>) })
-              }
-              <Modify href="#" onClick={this.addField} name="directions">+</Modify>
-            </Box>
-          </SecondaryWrap>
-          <SecondaryWrap>
-            <Button type="submit">ADD RECIPE</Button>
-            {recipe.error ? <Message>Sorry, recipe already exists</Message> : ''}
-          </SecondaryWrap>
-        </Form>
+            <SecondaryWrap>
+              <Box>
+                <Title secondary>Ingredients</Title> {
+                  recipe.ingredients && recipe.ingredients.map((ingredient, i) =>
+                  { return (<div key={i}><Modify x href="#" onClick={this.deleteField} name="ingredients" id={i}>x</Modify> <Input type="text" key={i} id={i} name="ingredients" value={ingredient} style={{ height: "auto" }} onChange={this.handleChange} /></div>) })}
+                <Modify href="#" onClick={this.addField} name="ingredients">+</Modify>
+              </Box>
+              <Box>
+                <Title secondary>Directions</Title> {
+                  recipe.directions && recipe.directions.map((direction, i) =>
+                  { return (<div key={i}><Modify x href="#" onClick={this.deleteField} name="directions" id={i}>x</Modify>  <TextArea type="text" key={i} id={i} name="directions" value={direction} onChange={this.handleChange} /></div>) })
+                }
+                <Modify href="#" onClick={this.addField} name="directions">+</Modify>
+              </Box>
+            </SecondaryWrap>
+            <SecondaryWrap>
+              <Button type="submit">ADD RECIPE</Button>
+              {recipe.error ? <Message>Sorry, recipe already exists</Message> : ''}
+            </SecondaryWrap>
+          </Form>
+        </div>
         : <Login chromeUrl={recipeUrl} />
     )
   }

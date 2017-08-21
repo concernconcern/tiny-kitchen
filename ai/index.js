@@ -1,5 +1,6 @@
 /*
 * Cloud Function
+gcloud beta functions deploy helloHttp --stage-bucket [BUCKET_NAME] --trigger-http
 */
 'use strict';
 
@@ -20,7 +21,8 @@ exports.momo = (req, res) => {
         }
         else return name
       });
-      const toNumber = convert(fromNumber).from(fromName).to(toName);
+      const toNumberRaw = convert(fromNumber).from(fromName).to(toName);
+      const toNumber = toNumberRaw.toFixed(1);
       output = `${fromNumber} ${fromName} is ${toNumber} ${toName}`;
       break;
 

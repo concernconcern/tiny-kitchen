@@ -8,7 +8,8 @@ export const Wrapper = styled.div`
   height: ${props => props.height ? '100vh' : ''};
   font-family: 'Roboto', sans-serif;
   flex-direction: ${props => props.column ? 'column' : 'row'};
-  justify-content: space-between;
+  justify-content: ${props => props.centered ? 'center' : 'space-between'};
+  ${props => props.centered ? 'padding-top: 20vh' : null}
 `
 export const RecipeImg = styled.img`
   height: ${props => props.secondary ? '300px' : '88vh'};
@@ -22,7 +23,29 @@ export const RecipeText = styled.div`
   padding: 25px;
   overflow: auto;
 `
-export const NavLink = styled(Link) `
+
+export const NavLink = styled.a`
+color: white;
+font-family: Roboto, 'sans-serif';
+text-transform: uppercase;
+transition: border-bottom 1s linear;
+border-bottom: 1px solid transparent;
+font-size: 14px;
+padding: 10px;
+cursor: pointer;
+font-weight:bold;
+&:hover{
+  text-decoration: none;
+  color: white;
+  border-bottom: 1px solid white;
+}
+&:focus{
+    text-decoration: none;
+    color: white;
+}
+`
+
+export const NavLinkR = styled(Link) `
   color: white;
   font-family: Roboto, 'sans-serif';
   text-transform: uppercase;
@@ -60,17 +83,17 @@ export const Bar = styled.div`
   background: #db3434;
   color: white;
 `
-export const Logo = styled.h1`
+export const Logo = styled.a`
   font-size: 40px;
   padding: 0 20px;
   text-decoration: none;
   border-bottom: 2px solid transparent;
-  transition: border-bottom 1s linear;
   font-family: 'Bad Script', cursive;
   color: white;
-    &:hover{
-      border-bottom: 2px solid white;
-    }
+     &:hover {
+       color: white;
+       text-decoration: none;
+     }
     &:active {
       color: white;
       text-decoration: none;
@@ -89,10 +112,9 @@ export const LogoWrap = styled.div`
 export const Links = styled.div`
   font-size: 20px;
   display: flex;
-  width: 30vw;
   align-items: center;
+  width: 35vw;
   justify-content: space-around;
-  color:
 `
 export const List = styled.ul`
   color: grey;
@@ -112,6 +134,22 @@ export const TileTitle = styled.h2`
   margin: 0px;
   font-family: 'Playfair Display', serif;
 `
+export const TileLink = styled(Link) `
+cursor:pointer;
+&:hover {
+  color: white;
+  text-decoration: none;
+}
+&:active {
+ color: white;
+ text-decoration: none;
+}
+&:focus {
+ color: white;
+ text-decoration: none;
+}
+`
+
 export const Input = styled.input`
   font-family: ${props => props.title ? 'Playfair Display, serif' : 'Roboto, sans-serif'};
   font-size: ${props => props.title ? '50px' : '14px'};
@@ -121,6 +159,9 @@ export const Input = styled.input`
   height: auto;
   margin: 5px;
   border: 1px solid #db7d7d;
+  &:active {
+    background-color: green;
+}
 `
 export const Box = styled.div`
   padding: 10px;

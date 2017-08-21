@@ -6,12 +6,17 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
   return axios.get(source_url)
     .then(apiRes => {
       const rawHtml = apiRes.data;
+      
+      // handle non-html responses
+      if (typeof rawHtml !== 'string') return {};
+
       let sanitizedHtml = sanitizeHtml(rawHtml, {
         allowedTags: ['title', 'img', 'ul', 'ol', 'li', 'br'],
         allowedAttributes: {
           'img': ['src', 'data-src']
         }
       }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&');
+      console.log(typeof sanitizedHtml);
 
       // custom replacements for AllRecipes.com
       sanitizedHtml = sanitizedHtml.replace(/Serving size has been adjusted!(.*?)\(uses your location\)/g, '').replace(/{{model.addEditText}}(.*?)<\/ul>/g, '').replace(/ADVERTISEMENT/g, '').replace(/<li> Add all ingredients to list <\/li>/g, '').replace(/ +/g, ' ');
@@ -137,6 +142,6 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
       return obj;
     })
     .catch(err => {
-      return err;
+      return {};
     })
 }
