@@ -3,24 +3,48 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 import * as action from '../store'
-import { List } from './styled-components'
+import { List, AccentButton, Box, Modify } from './styled-components'
 /**
  * COMPONENT
  */
 class UserGroceries extends React.Component{
   constructor(props){
     super(props)
+    this.state = {
+      edit: false
+    }
+    this.handleEdit = this.handleEdit.bind(this)
   }
 
   componentDidMount(){
     this.props.fetchGroceries(this.props.user.id)
   }
+
+  handleEdit(){
+    this.setState({edit: true})
+  }
+
   render(){
     const {user, userGroceries} = this.props;
     return (
-      <List>
-      {userGroceries && userGroceries.map((grocery, i) => <li key={i}>{grocery}</li>)}
-      </List>
+      this.state.edit ?
+      <Box>
+      {
+        userGroceries && userGroceries.map((grocery, i) =>
+         <div>
+           <Modify x href="#" onClick={this.deleteField} name="groceries" id={i}>x</Modify>
+           <input type="text" key={i.toString()} id={i} name="groceries" value={grocery} style={{ height: "auto", width: "auto" }} onChange={this.handleChange} />
+         </div>)
+      }
+      <Modify href="#" onClick={this.addField} name="groceries">+</Modify>
+      </Box>
+      :
+      <div>
+        <AccentButton small value="edit" onClick={this.handleEdit}>Edit</AccentButton>
+        <List key={i.toString()}>
+        {userGroceries && userGroceries.map((grocery, i) => <li key={i}>{grocery}</li>)}
+        </List>
+      </div>
     )
   }
 
