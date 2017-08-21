@@ -2,12 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ImageUploadCard } from './styled-components';
 import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import { NavLink, Input } from './styled-components'
 
 var divStyle = {
   width: '300px',
   height: '300px',
-  border: '1px solid gray'
+  border: '1px solid grey'
 };
 
 class ImgUpload extends React.Component {
@@ -18,7 +19,8 @@ class ImgUpload extends React.Component {
       imagePreviewUrl: '',
       error: '',
       successMsg: '',
-      open: false
+      open: false,
+      imgUrl: ''
     };
 
     this.handleImageChange = this.handleImageChange.bind(this);
@@ -29,6 +31,9 @@ class ImgUpload extends React.Component {
     this.handleOpen = this.handleOpen.bind(this);
   }
 
+  componentWillMount(){
+    this.handleOpen();
+  }
 
     handleClose () {
     this.setState({ open: false });
@@ -44,7 +49,8 @@ class ImgUpload extends React.Component {
     xhr.onreadystatechange = () => {
       if (xhr.readyState === 4){
         if (xhr.status === 200){
-          this.setState({successMsg: 'Image uploaded :)'})
+          this.setState({successMsg: 'Image uploaded :)'});
+          this.setState({imgUrl: url});
         }
         else {
           this.setState({error: 'Image upload failed :('})
@@ -111,9 +117,18 @@ class ImgUpload extends React.Component {
       imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
     }
 
+    const actions = [
+      <FlatButton
+        key="1"
+        label="Close"
+        primary={true}
+        onClick={this.handleClose}
+      />,
+    ];
+
     return (
     <div>
-        <NavLink href="#" onClick={this.handleOpen}>Image Uplaod</NavLink>
+      <NavLink href="#" onClick={this.handleOpen}>Image Uplaod</NavLink>
       <Dialog
         contentStyle={{ width: "30%", display: "flex" }}
         title='Image Upload'
@@ -136,9 +151,12 @@ class ImgUpload extends React.Component {
         <div className="imgPreview" style={divStyle}>
           {imagePreview}
         </div>
+        <div style={{ textAlign: 'right', padding: 8, margin: '24px -24px -24px -24px' }}>
+              {actions}
+        </div>
       </ImageUploadCard>
       </Dialog>
-      </div>
+    </div>
     )
   }
 }
@@ -148,4 +166,3 @@ const mapState = null;
 const mapDispatch = null;
 
 export default connect(mapState, mapDispatch)(ImgUpload);
-// export default connect(mapState, mapDispatch)(ImgUpload);

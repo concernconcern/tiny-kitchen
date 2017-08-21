@@ -383,5 +383,4 @@ export const ImageUploadCard = styled.div`
   display: flex;
   align-items: center;
   padding: 10px;
-  border: 1px solid #db3434;
 `
