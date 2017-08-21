@@ -7,7 +7,6 @@ const GroceryUser = require('./groceryUser')
 Recipe.belongsToMany(User, {through: RecipeBox});
 User.belongsToMany(Recipe, {through: RecipeBox});
 
-User.belongsToMany(User, { as: 'follower', through: 'follows' }); //creates friends join table
 
 Grocery.belongsToMany(User, {through: GroceryUser});
 User.belongsToMany(Grocery, {through: GroceryUser});

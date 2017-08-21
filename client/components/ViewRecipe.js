@@ -53,8 +53,14 @@ class ViewRecipe extends React.Component {
     });
   }
 
+<<<<<<< HEAD
   handleAddGrocery(ingredient, e) {
     this.props.reallyAddGrocery(this.props.match.params.userid, ingredient)
+=======
+  handleAddGrocery(e) {
+    // console.log(e.target.value);
+    this.props.reallyAddGrocery(this.props.match.params.userid, e.target.value)
+>>>>>>> 57eb7215ad16578b311fefe58e5088e7c1439feb
   }
 
 
@@ -122,6 +128,7 @@ class ViewRecipe extends React.Component {
           <Title secondary>Ingredients</Title>
           <List>
             {recipe.ingredients && recipe.ingredients.map((ingredient, i) =>
+<<<<<<< HEAD
               <li key={i.toString()}>{ingredient}
                 <IconButton
                   style={{ width: "28px", height: "28px" }}
@@ -133,6 +140,13 @@ class ViewRecipe extends React.Component {
                 >
                   add
                   </IconButton>
+=======
+              <li key={i.toString()}>
+              {ingredient}
+                <button type="button" className="btn btn-default btn-sm" onClick={this.handleAddGrocery} value={ingredient}>
+                  <span className="glyphicon glyphicon-plus"></span>
+                </button>
+>>>>>>> 57eb7215ad16578b311fefe58e5088e7c1439feb
               </li>)}
           </List>
           <Title secondary>Directions</Title>
