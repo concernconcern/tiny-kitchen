@@ -3,52 +3,92 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { auth, authChrome } from '../store'
 import * as action from '../store'
-/**
- * COMPONENT
- */
+import { NavLink, Input } from './styled-components'
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+
 class AuthForm extends React.Component {
   constructor(props) {
     super(props);
-    this.chrome = this.chrome.bind(this);
+    this.state = {
+      open: false,
+    };
   }
-  chrome(evt) {
+  componentWillMount() {
+    this.props.chromeUrl ? this.handleOpen() : ''
+  }
+  handleOpen = () => {
+    this.setState({ open: true });
+  };
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+  chrome = (evt) => {
     this.props.handleSubmit(evt, this.props.chromeUrl);
   }
   render() {
+    console.log(this.props)
     const { name, displayName, error, handleSubmit } = this.props;
     let chromeUrl = this.props.chromeUrl ? this.props.chromeUrl : ''
-    const submit = chromeUrl.length ? this.chrome : handleSubmit
+    const submit = chromeUrl.length ? this.chrome : handleSubmit;
+
+    const actions = [
+      <FlatButton
+        key="1"
+        label="Cancel"
+        primary={false}
+        onClick={this.handleClose}
+      />,
+      <FlatButton
+        key="2"
+        label={displayName}
+        primary={true}
+        onClick={this.handleClose}
+        type="submit"
+        primary={true}
+      />
+    ];
+    //Check if this is being rendered by AddRecipe, if so, open automatically
     return (
       <div>
-        <form onSubmit={submit} name={name}>
-          {
-            displayName === 'Sign Up' ?
-              <div>
+        <NavLink href="#" onClick={this.handleOpen}>{displayName}</NavLink>
+        <Dialog
+          contentStyle={{ width: "30%", display: "flex" }}
+          title={displayName}
+          modal={true}
+          open={this.state.open}
+          onRequestClose={this.handleClose}
+        >
+          <form onSubmit={submit} name={name}>
+            {
+              displayName === 'Sign Up' ?
                 <div>
-                  <label htmlFor='name'><small>First Name</small></label>
-                  <input name='firstName' type='text' />
+                  <div>
+                    <label htmlFor='name'><small>First Name</small></label>
+                    <Input name='firstName' type='text' />
+                  </div>
+                  <div>
+                    <label htmlFor='name'><small>Last Name</small></label>
+                    <Input name='lastName' type='text' />
+                  </div>
                 </div>
-                <div>
-                  <label htmlFor='name'><small>Last Name</small></label>
-                  <input name='lastName' type='text' />
-                </div>
-              </div>
-              : null
-          }
-          <div>
-            <label htmlFor='email'><small>Email</small></label>
-            <input name='email' type='text' />
-          </div>
-          <div>
-            <label htmlFor='password'><small>Password</small></label>
-            <input name='password' type='password' />
-          </div>
-          <div>
-            <button type='submit'>{displayName}</button>
-          </div>
-          {error && error.response && <div> {error.response.data} </div>}
-        </form>
-        <a href='/auth/google'>{displayName} with Google</a>
+                : null
+            }
+            <div>
+              <label htmlFor='email'><small>Email</small></label>
+              <Input name='email' type='text' />
+            </div>
+            <div>
+              <label htmlFor='password'><small>Password</small></label>
+              <Input name='password' type='password' />
+            </div>
+            <div style={{ textAlign: 'right', padding: 8, margin: '24px -24px -44px -24px' }}>
+              {actions}
+            </div>
+            {error && error.response && <div> {error.response.data} </div>}
+          </form>
+          <a href='/auth/google'>{displayName} with Google</a>
+        </Dialog>
       </div>
     )
   }
