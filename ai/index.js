@@ -20,7 +20,8 @@ exports.momo = (req, res) => {
         }
         else return name
       });
-      const toNumber = convert(fromNumber).from(fromName).to(toName);
+      const toNumberRaw = convert(fromNumber).from(fromName).to(toName);
+      const toNumber = toNumberRaw.toFixed(1);
       output = `${fromNumber} ${fromName} is ${toNumber} ${toName}`;
       break;
 
