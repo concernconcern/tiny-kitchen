@@ -3,19 +3,20 @@ import { SearchInput } from './styled-components'
 import * as action from '../store'
 import { withRouter, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import SearchBar from 'material-ui-search-bar'
 
-
-class SearchBar extends React.Component{
-  constructor(props){
+class Search extends React.Component {
+  constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
   }
-
-  handleChange(event){
-    this.props.newInput(event.target.value);
+  handleChange(event) {
+    this.props.newInput(event);
   }
-  render(){
-    return (<SearchInput onChange={this.handleChange}/>)
+  render() {
+    return (<SearchBar
+      onRequestSearch={() => console.log("searching")}
+      onChange={this.handleChange} />)
   }
 }
 
@@ -33,4 +34,4 @@ const mapDispatch = (dispatch) => {
 
 // The `withRouter` wrapper makes sure that updates are not blocked
 // when the url changes
-export default withRouter(connect(mapState, mapDispatch)(SearchBar))
+export default withRouter(connect(mapState, mapDispatch)(Search))
