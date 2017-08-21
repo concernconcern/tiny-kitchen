@@ -2,14 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
 import {connect} from 'react-redux'
-import { ProfileUpperArea, ProfileCard, ProfilePic, ProfilePicArea, ProfileInfoArea, Links, AccentButton, ControlPanel, Heading } from './styled-components'
+import { ProfileUpperArea, ProfileCard, ProfilePic, ProfilePicArea, ProfileInfoArea, Links, AccentButton, ControlPanel, Heading, Title } from './styled-components'
 import Tile from './Tile'
 import * as action from '../store'
 /**
  * COMPONENT
  */
-class UserNav extends React.Component{
-  constructor(props){
+class UserNav extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
       editName: false,
@@ -22,25 +22,25 @@ class UserNav extends React.Component{
     this.handleDone = this.handleDone.bind(this);
   }
 
-  handleNameClick(event){
-    const {value} = event.target;
+  handleNameClick(event) {
+    const { value } = event.target;
     const editName = value === 'edit' ? true : false;
-    this.setState({editName});
+    this.setState({ editName });
   }
 
-  handleEmailClick(event){
-    const {value} = event.target;
+  handleEmailClick(event) {
+    const { value } = event.target;
     const editEmail = value === 'edit' ? true : false;
-    this.setState({editEmail});
+    this.setState({ editEmail });
   }
 
-  handleChange(event, type){
+  handleChange(event, type) {
     let newState = this.state;
     newState[type] = event.target.value
     this.setState(newState);
   }
 
-  handleDone(event, type){
+  handleDone(event, type) {
     let newState = this.state;
     let field = type === 'name' ? 'editName' : 'editEmail';
     newState[field] = false;
@@ -50,11 +50,11 @@ class UserNav extends React.Component{
     this.props.updateUser(info, type);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.fetchUserRecipes(this.props.user.id)
   }
-  render(){
-    const {user, userRecipes} = this.props;
+  render() {
+    const { user, userRecipes } = this.props;
     return (
       <div>
         <ProfileUpperArea column>
@@ -89,10 +89,10 @@ class UserNav extends React.Component{
               </div>
             </ProfileInfoArea>
           </ProfileCard>
-            <Links>
-              <Link to='/home/recipes'>Recipes</Link>
-              <Link to='/home/groceries'>Groceries</Link>
-            </Links>
+          <Links >
+            <Title secondary ><Link style={{ color: "#5e5e5e" }} to='/home/recipes'>Recipes</Link></Title>
+            <Title secondary><Link style={{ color: "#5e5e5e" }} to='/home/groceries'>Groceries</Link></Title>
+          </Links>
         </ProfileUpperArea>
       </div>
     )

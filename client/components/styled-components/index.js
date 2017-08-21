@@ -11,45 +11,87 @@ export const Wrapper = styled.div`
   justify-content: space-between;
 `
 export const RecipeImg = styled.img`
-  height: ${props => props.secondary ? '300px' : '90vh'};
+  height: ${props => props.secondary ? '300px' : '88vh'};
   width: ${props => props.secondary ? '760px' : '50vw'};
   margin: ${props => props.secondary ? '30px 0 00' : ''};
   object-fit: cover;
 `
 export const RecipeText = styled.div`
-  height: 90vh;
+  height: 88vh;
   width: 50vw;
   padding: 25px;
   overflow: auto;
 `
+export const NavLink = styled(Link) `
+  color: white;
+  font-family: Roboto, 'sans-serif';
+  text-transform: uppercase;
+  font-size: 14px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight:bold;
+  &:hover{
+    text-decoration: none;
+    color: white;
+  }
+  &:focus{
+      text-decoration: none;
+      color: white;
+  }
+`
+
 export const Title = styled.h1`
   font-size: ${props => props.secondary ? '25px' : '50px'};
-  color: ${props => props.secondary ? 'grey' : 'black'};
+  color: ${props => props.secondary ? '#5e5e5e' : 'black'};
   padding: ${props => props.secondary ? '12px' : '0 0 20px 0'};
   margin: 0;
   font-family: 'Playfair Display', serif;
 `
 export const Bar = styled.div`
   width: 100vw;
-  height: 100px;
+  height: 12vh;
+  padding: 20px;
   display: flex;
+  z-index: 1;
+  box-shadow: -1px -5px 28px 3px rgba(0,0,0,0.75);
   justify-content: space-between;
   align-items: center;
-  flex-direction: ${props => props.column ? 'column' : 'row'};
+  flex-direction: row;
   background: #db3434;
   color: white;
 `
 export const Logo = styled.h1`
   font-size: 40px;
   padding: 0 20px;
-  font-family: 'Playfair Display', serif;
-  color:white;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-bottom 1s linear;
+  font-family: 'Bad Script', cursive;
+  color: white;
+    &:hover{
+      border-bottom: 2px solid white;
+    }
+    &:active {
+      color: white;
+      text-decoration: none;
+    }
+    &:focus {
+      color: white;
+      text-decoration: none;
+    }
 `
-export const Links = styled.h1`
+export const LogoWrap = styled.div`
+  display: flex;
+  width: 40vw;
+`
+
+export const Links = styled.div`
   font-size: 20px;
   display: flex;
   width: 30vw;
+  align-items: center;
   justify-content: space-around;
+  color: 
 `
 export const List = styled.ul`
   color: grey;
@@ -83,7 +125,7 @@ export const Box = styled.div`
   padding: 10px;
 `
 export const TextArea = styled.textarea`
-  font-family: Roboto, sans-serif;
+  font-family: 'Roboto', sans-serif;
   display: inline;
   font-size: 14px;
   width: 400px;
@@ -110,11 +152,11 @@ export const Sidebar = styled.div`
 `
 
 export const ExitLink = styled(Link) `
-  font-size: 35px;
-  color: #db3434;
-  top: 10px;
+  font-size: 55px;
+  color: #db3434 !important;
+  top: 1px;
   right: 20px;
-  font-family: 'Raleway', serif;
+  font-family: 'Roboto', serif;
   position: absolute;
   cursor: pointer;
   &:hover{
@@ -135,7 +177,7 @@ export const Button = styled.button`
   outline: none;
   height: ${props => props.add ? '50px' : '50px'};
   width: ${props => props.add ? '50px' : '400px'};
-  font-family: Roboto, sans-serif;
+  font-family: 'Roboto', sans-serif;
   letter-spacing: 3px;
   &:hover{
     background:#c91a1a;
@@ -279,8 +321,9 @@ export const SearchInput = styled.input`
   border: 1px solid #db7d7d;
   color: black
 `
-export const Clock = styled.div`
-  height: 100px;
-  width: 200px;
-  background-color: pink;
+export const TimeDisplay = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 10px;
 `

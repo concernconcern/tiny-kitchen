@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const db = require('../db/db');
 const User = db.model('user');
-const Follower = db.model('follows');
 const RecipeBox = db.model('recipebox');
 const Recipe = db.model('recipe');
 const Promise = require('bluebird')
@@ -56,63 +55,6 @@ router.delete('/:userId', (req, res, next) => {
   User.findById(id)
     .then(user => user.destroy())
     .then(res.send('User destroyed'))
-    .catch(next);
-});
-
-
-/* FOLLOWERS */
-
-// POST /api/users/:userId/follow (:userId follows an id in the body)
-router.post('/:userId/follow', (req, res, next) => {
-  const followerId = req.params.userId;
-  const userId = req.body.userId;
-  let followerUser;
-  User.findById(followerId)
-    .then(follower => {
-      followerUser = follower;
-      User.findById(userId)
-        .then(follow => {
-          follow.addFollower(followerUser);
-        });
-    })
-    .then(res.send(followerId + ' followed ' + userId))
-    .catch(next);
-});
-
-// DELETE /api/users/:userId/follow (userId unfollows and id in the body)
-router.delete('/:userId/follow', (req, res, next) => {
-  const followerId = req.params.userId;
-  const userId = req.body.userId;
-  let followerUser;
-  User.findById(followerId)
-    .then(follower => {
-      followerUser = follower;
-      User.findById(userId)
-        .then(follow => {
-          follow.removeFollower(followerUser);
-        });
-    })
-    .then(res.send(followerId + ' unfollowed ' + userId))
-    .catch(next);
-});
-
-// GET /api/users/:userId/followers (who follows user)
-router.get('/:userId/followers', (req, res, next) => {
-  const id = req.params.userId;
-  Follower.findAll({
-    where: { userId: id }
-  })
-    .then(followers => res.json(followers))
-    .catch(next);
-});
-
-//GET /api/users/:userId/following (who a user follows)
-router.get('/:userId/following', (req, res, next) => {
-  const id = req.params.userId;
-  Follower.findAll({
-    where: { followerId: id },
-  })
-    .then(followees => res.json(followees))
     .catch(next);
 });
 
