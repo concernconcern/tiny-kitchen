@@ -52,6 +52,8 @@ export const Bar = styled.div`
   height: 12vh;
   padding: 20px;
   display: flex;
+  z-index: 1;
+  box-shadow: -1px -5px 28px 3px rgba(0,0,0,0.75);
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
@@ -62,16 +64,21 @@ export const Logo = styled.h1`
   font-size: 40px;
   padding: 0 20px;
   text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-bottom 1s linear;
   font-family: 'Bad Script', cursive;
   color: white;
-  &:active {
-    color: white;
-    text-decoration: none;
-  }
-  &:focus {
-    color: white;
-    text-decoration: none;
-  }
+    &:hover{
+      border-bottom: 2px solid white;
+    }
+    &:active {
+      color: white;
+      text-decoration: none;
+    }
+    &:focus {
+      color: white;
+      text-decoration: none;
+    }
 `
 export const LogoWrap = styled.div`
   display: flex;
@@ -84,7 +91,7 @@ export const Links = styled.div`
   width: 30vw;
   align-items: center;
   justify-content: space-around;
-
+  color: 
 `
 export const List = styled.ul`
   color: grey;
@@ -146,7 +153,7 @@ export const Sidebar = styled.div`
 
 export const ExitLink = styled(Link) `
   font-size: 55px;
-  color: #db3434;
+  color: #db3434 !important;
   top: 1px;
   right: 20px;
   font-family: 'Roboto', serif;
