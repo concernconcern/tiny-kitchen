@@ -83,6 +83,7 @@ export const Logo = styled.h1`
 export const LogoWrap = styled.div`
   display: flex;
   width: 40vw;
+  align-items: center;
 `
 
 export const Links = styled.div`
