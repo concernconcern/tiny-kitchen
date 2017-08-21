@@ -166,22 +166,48 @@ class CookRecipe extends React.Component {
             {recipe.directions[this.props.step + 1]}
           </UpNext>
           <Controls>
-            <AccentButton disabled={backDisable} value="back" onClick={this.stepBackward}>
-              <span className="glyphicon glyphicon-step-backward" />
-            </AccentButton>
-            &nbsp; &nbsp;
-            <AccentButton type="button" onClick={this.toggleMochi}>
-              {
-                this.state.stopped ?
-                  <span className="glyphicon glyphicon-play" />
-                  :
-                  <span className="glyphicon glyphicon-pause" />
-              }
-            </AccentButton>
-            &nbsp; &nbsp;
-           <AccentButton disabled={forwardDisable} value="forward" onClick={this.stepForward} >
-              <span className="glyphicon glyphicon-step-forward" />
-            </AccentButton>
+            <IconButton
+              iconStyle={{ fontSize: "60px", color: "#59a5f6" }}
+              iconClassName="material-icons"
+              tooltip="Previous Step"
+              disabled={backDisable}
+              value="back"
+              onClick={this.stepBackward}
+              tooltipPosition="bottom-right">
+              keyboard_arrow_left
+        </IconButton>
+
+            {
+              this.state.stopped ?
+                <IconButton
+                  iconStyle={{ fontSize: "60px", color: "#59a5f6" }}
+                  iconClassName="material-icons"
+                  tooltip="Start Mochi"
+                  onClick={this.toggleMochi}
+                  tooltipPosition="bottom-right">
+                  play_circle_outline
+        </IconButton>
+                :
+                <IconButton
+                  iconStyle={{ fontSize: "60px", color: "#59a5f6" }}
+                  iconClassName="material-icons"
+                  tooltip="Pause Mochi"
+                  onClick={this.toggleMochi}
+                  tooltipPosition="bottom-right">
+                  pause
+        </IconButton>
+            }
+            <IconButton
+              disabled={forwardDisable}
+              iconStyle={{ fontSize: "60px", color: "#59a5f6" }}
+              iconClassName="material-icons"
+              tooltip="Next Step"
+              value="forward"
+              onClick={this.stepForward}
+              tooltipPosition="bottom-right">
+              keyboard_arrow_right
+        </IconButton>
+
           </Controls>
         </ControlPanel>
 
