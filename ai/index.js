@@ -1,5 +1,6 @@
 /*
 * Cloud Function
+gcloud beta functions deploy helloHttp --stage-bucket [BUCKET_NAME] --trigger-http
 */
 'use strict';
 
