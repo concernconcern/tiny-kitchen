@@ -2,32 +2,11 @@ body {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   margin: 0;
-  a {
-    text-decoration: none;
-    color: white;
-  }
-  a:hover {
-    text-decoration: none;
-    color: white;
-  }
-  a:focus {
-    text-decoration: none;
-    color: white;
-  }
-  a:visited {
-    text-decoration: none;
-    color: white;
-  }
-  a:active {
-    text-decoration: none;
-    color: white;
-  }
   label {
     display: block;
   }
-  nav a {
-    display: inline-block;
-    margin: 1em;
+  a {
+    text-decoration: none;
   }
 }
 

@@ -14,15 +14,12 @@ export default class InfoModal extends React.Component {
   state = {
     open: false,
   };
-
   handleOpen = () => {
     this.setState({ open: true });
   };
-
   handleClose = () => {
     this.setState({ open: false });
   };
-
   render() {
     const actions = [
       <FlatButton
@@ -41,7 +38,8 @@ export default class InfoModal extends React.Component {
           modal={false}
           open={this.state.open}
           onRequestClose={this.handleClose}
-        ><div style={{ display: "flex", alignItems: "center" }}>
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
             <Mochi height="30vh" />
             <div style={{ padding: "0 60px" }}>Mochi the mouse is your personal cooking assistant<br /><br />
               To control Mochi's reading, you can say: <em>'start cooking'</em>, <em>'start'</em>, <em>'stop'</em>, or <em>'pause'</em><br />
