@@ -7,6 +7,7 @@ import * as action from '../store'
 import history from '../history'
 import { GridList, GridTile } from 'material-ui/GridList'
 import { Login } from './auth-form'
+import ImgUpload from './ImgUpload';
 
 class AddRecipe extends React.Component {
   constructor(props) {
@@ -74,7 +75,7 @@ class AddRecipe extends React.Component {
           <Form onSubmit={this.handleSubmit}>
             <Input title type="text" name="title" onChange={this.handleChange} value={recipe && recipe.title} />
             {recipe.parseError ?
-              <Title secondary>Upload a Picture:</Title> :
+              <div><Title secondary>Upload a Picture:</Title> <ImgUpload type='addRecipe' /></div> :
               <div>
                 <Title secondary>Choose the Correct Picture:</Title>
                 <div style={styles.root}>

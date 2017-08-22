@@ -3,13 +3,15 @@ import { connect } from 'react-redux';
 import { ImageUploadCard } from './styled-components';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
 import { NavLink, Input, ControlPanel } from './styled-components';
 import * as action from '../store';
 
 var divStyle = {
-  width: '300px',
-  height: '300px',
-  border: '1px solid grey'
+  width: '250px',
+  height: '250px',
+  border: '1px solid grey',
+  textAlign: 'center'
 };
 
 class ImgUpload extends React.Component {
@@ -33,12 +35,14 @@ class ImgUpload extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this); //submits the url to db
   }
 
-  // componentWillMount(){
-
-  // }
-
   handleClose () {
-    this.setState({ open: false });
+    this.setState({
+      file: '',
+      imagePreviewUrl: '',
+      error: '',
+      successMsg: '',
+      open: false,
+      imgUrl: '' });
   }
 
   handleOpen() {
@@ -46,11 +50,18 @@ class ImgUpload extends React.Component {
   }
 
   handleSubmit() {
-    console.log(this.props.type);
-    if (this.props.type === 'userImg'){
-      this.props.updateUser(this.state.imgUrl, 'picture_url');
+    if (this.state.imgUrl === '') {
+      this.setState({error: 'Please upload image or add image url'});
+    } else {
+      if (this.props.type === 'userImg'){
+        this.props.updateUser(this.state.imgUrl, 'picture_url');
+      } else if (this.props.type === 'addRecipe') {
+        let recipe = {};
+        recipe.picture_url = [this.state.imgUrl];
+        this.props.getRecipeSuccess(recipe);
+      }
+      this.handleClose();
     }
-    this.handleClose();
   }
 
   uploadFile(file, signedRequest, url){
@@ -63,7 +74,7 @@ class ImgUpload extends React.Component {
           this.setState({imgUrl: url});
         }
         else {
-          this.setState({error: 'Image upload failed :('})
+          this.setState({error: 'Image upload failed'})
         }
       }
     };
@@ -81,7 +92,7 @@ class ImgUpload extends React.Component {
           this.uploadFile(file, response.signedRequest, response.url);
         }
         else {
-          this.setState({error: 'Image upload failed :( (could not get signed url)'});
+          this.setState({error: 'Image upload failed (could not get signed url)'});
         }
       }
     };
@@ -91,9 +102,10 @@ class ImgUpload extends React.Component {
 
   handleUpload(event) {
     event.preventDefault();
+    this.setState({error: ''});
     if (this.state.file !== '') { this.getSignedRequest(this.state.file); }
     else {
-      this.setState({error: 'Please select and image to upload first!'});
+      this.setState({error: 'Please select an image to upload first'});
     }
   }
 
@@ -101,7 +113,6 @@ class ImgUpload extends React.Component {
     event.preventDefault();
 
     this.setState({error: ''});
-    console.log(event.target.name, event.target.value);
 
     if (event.target.name === 'textbox') {
       this.setState({imagePreviewUrl: event.target.value, imgUrl: event.target.value});
@@ -131,7 +142,7 @@ class ImgUpload extends React.Component {
     if (imagePreviewUrl) {
       imagePreview = (<img style={divStyle} src={imagePreviewUrl} />);
     } else {
-      imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
+      imagePreview = (<div className="previewText">Please select an image for preview</div>);
     }
 
     const actions = [
@@ -151,7 +162,7 @@ class ImgUpload extends React.Component {
 
     return (
     <div>
-        <i onClick={this.handleOpen} className="material-icons" style={{ fontSize: "30px", position: "absolute", color: "#a5a5a5", top: "150px", cursor: "pointer", left: "75px" }}>insert_photo</i>
+        <i onClick={this.handleOpen} className="material-icons" style={{ fontSize: "30px", color: "#a5a5a5", cursor: "pointer" }}>insert_photo</i>
       <Dialog
         contentStyle={{ width: "30%", display: "flex" }}
         title='Image Upload'
@@ -160,27 +171,27 @@ class ImgUpload extends React.Component {
         open={this.state.open}
         onRequestClose={this.handleClose}
       >
+      <center>
       <ImageUploadCard>
-        Upload an image...
+
+        <form> Image Url:<input type="text" name='textbox' onChange={this.handleImageChange} /></form>
+
         <form>
-          <input
+        Image Upload:<input
             name='imgfile'
             type="file"
             onChange={this.handleImageChange} />
-          <button className="submitButton"
-            type="submit"
-            onClick={this.handleUpload}>Upload Image</button>
-            {this.state.error !== '' ? <p>{this.state.error}</p> : null}
-            {this.state.successMsg !== '' ? <p>{this.state.successMsg}</p> : null}
-        </form>
-        or enter a url...
-        <form> <input type="text" name='textbox' onChange={this.handleImageChange} /></form>
-        <br />
+          <br />
         <div className="imgPreview" style={divStyle}>
           {imagePreview}
         </div>
+          <FlatButton label="Upload Image" onClick={this.handleUpload}><i className="material-icons"  style={{ color: "black", cursor: "pointer"}}>file_upload</i></FlatButton>
 
+            {this.state.error !== '' ? <p style={{ color: "red" }}>{this.state.error}</p> : null}
+            {this.state.successMsg !== '' ? <p style={{ color: "green" }}>{this.state.successMsg}</p> : null}
+        </form>
       </ImageUploadCard>
+      </center>
       </Dialog>
     </div>
     )
@@ -191,7 +202,8 @@ class ImgUpload extends React.Component {
 const mapState = null;
 const mapDispatch = (dispatch) => {
   return {
-    updateUser: (info, type) => dispatch(action.updateUser(info, type))
+    updateUser: (info, type) => dispatch(action.updateUser(info, type)),
+    getRecipeSuccess: (recipe) => dispatch(action.getRecipeSuccess(recipe))
 
   }
 };

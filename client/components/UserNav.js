@@ -5,7 +5,6 @@ import {connect} from 'react-redux'
 import { ProfileUpperArea, ProfileCard, ProfilePic, ProfilePicArea, ProfileInfoArea, Links, AccentButton, ControlPanel, Heading, Title } from './styled-components'
 import Tile from './Tile'
 import ImgUpload from './ImgUpload';
-import InfoModal from './InfoModal';
 import * as action from '../store'
 /**
  * COMPONENT
