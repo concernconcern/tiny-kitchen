@@ -12,45 +12,49 @@ module.exports = router;
 router.get('/:userId', (req, res, next) => {
   const id = req.params.userId;
   GroceryUser.findAll({
-    where: {userId: id}
+    where: { userId: id }
   })
-  .then(groceryusers =>
-    Promise.map(groceryusers, groceryuser => {
-      return Grocery.findById(groceryuser.groceryId)
-    }))
-  .then(userGroceries => res.json(userGroceries))
-  .catch(next);
+    .then(groceryusers =>
+      Promise.map(groceryusers, groceryuser => {
+        return Grocery.findById(groceryuser.groceryId)
+      }))
+    .then(userGroceries => res.json(userGroceries))
+    .catch(next);
 });
 
 // POST
 router.post('/:userId', (req, res, next) => {
-  const {title, quantity, unit} = req.body;
+  const { title, quantity, unit } = req.body;
   const userId = req.params.userId;
   let addedGrocery;
-  Grocery.findOrCreate({where: {
-    title: title
-  }})
-  .spread((grocery, created) => {
-    addedGrocery = grocery;
-    return GroceryUser.findOrCreate({where: {
-      groceryId: grocery.id,
-      userId: userId
-    }})
+  Grocery.findOrCreate({
+    where: {
+      title: title
+    }
   })
-  .spread((groceryUser, created) => {
-    res.json(addedGrocery);
-  })
-  .catch(next);
+    .spread((grocery, created) => {
+      addedGrocery = grocery;
+      return GroceryUser.findOrCreate({
+        where: {
+          groceryId: grocery.id,
+          userId: userId
+        }
+      })
+    })
+    .spread((groceryUser, created) => {
+      res.json(addedGrocery);
+    })
+    .catch(next);
 });
 
 // POST
 router.post('/:userId/email', (req, res, next) => {
   // create reusable transporter object using the default SMTP transport
-  const {user, userGroceries} = req.body;
-  let buildEmail = function(groceries){
+  const { user, userGroceries } = req.body;
+  let buildEmail = function (groceries) {
     let message = '<h3>Your groceries:</h3><ul>';
     groceries.forEach(grocery => {
-      message = message.concat(`<li>${grocery}</li>`)
+      message = message.concat(`<li>${grocery.title}</li>`)
     })
     message = message.concat('</ul>')
     return message;
@@ -61,8 +65,8 @@ router.post('/:userId/email', (req, res, next) => {
     port: 465,
     secure: true, // secure:true for port 465, secure:false for port 587
     auth: {
-        user: process.env.TK_GMAIL_ADDRESS,
-        pass: process.env.TK_GMAIL_PASSWORD
+      user: process.env.TK_GMAIL_ADDRESS,
+      pass: process.env.TK_GMAIL_PASSWORD
     }
   });
 
@@ -78,7 +82,7 @@ router.post('/:userId/email', (req, res, next) => {
   // send mail with defined transport object
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-        return console.log(error);
+      return console.log(error);
     }
     console.log('Message %s sent: %s', info.messageId, info.response);
     res.json(transporter.sendMail);
@@ -86,29 +90,29 @@ router.post('/:userId/email', (req, res, next) => {
 });
 
 router.put('/:userId/list', (req, res, next) => {
-  let {updatedGroceries} = req.body;
+  let { updatedGroceries } = req.body;
 
   const userId = req.params.userId;
   User.findById(userId)
-  .then(user => {
-    return user.getGroceries()
-  })
-  .then(groceries => {
-    groceries = groceries.map(grocery => {
-      let updatedGrocery = updatedGroceries.find(g => g.id === grocery.id);
-      if (updatedGrocery) grocery.newTitle = updatedGrocery.title;
-      return grocery;
-    }).filter(g => !!g.newTitle);
-
-    let promises = groceries.map(grocery => {
-      return grocery.update({title: grocery.newTitle})
+    .then(user => {
+      return user.getGroceries()
     })
+    .then(groceries => {
+      groceries = groceries.map(grocery => {
+        let updatedGrocery = updatedGroceries.find(g => g.id === grocery.id);
+        if (updatedGrocery) grocery.newTitle = updatedGrocery.title;
+        return grocery;
+      }).filter(g => !!g.newTitle);
 
-    return Promise.all(promises);
-  })
-  .then(results => {
-    res.send(results);
-  })
+      let promises = groceries.map(grocery => {
+        return grocery.update({ title: grocery.newTitle })
+      })
+
+      return Promise.all(promises);
+    })
+    .then(results => {
+      res.send(results);
+    })
 })
 
 // DELETE
@@ -117,9 +121,9 @@ router.delete('/:userId/:groceryId', (req, res, next) => {
   const userId = req.params.userId;
   const groceryId = req.params.groceryId;
   GroceryUser.findOne({
-    where: {userId, groceryId}
+    where: { userId, groceryId }
   })
-  .then(groceryUser => groceryUser.destroy())
-  .then(destroyed => {res.send(groceryId)})
-  .catch(next);
+    .then(groceryUser => groceryUser.destroy())
+    .then(destroyed => { res.send(groceryId) })
+    .catch(next);
 });
