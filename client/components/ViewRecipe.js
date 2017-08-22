@@ -14,13 +14,9 @@ class ViewRecipe extends React.Component {
     this.state = {
       editing: false,
       open: false,
-      message: ''
+      message: '',
+      showGrocery: false
     }
-    this.handleCreateRecipeBox = this.handleCreateRecipeBox.bind(this)
-    this.handleRemoveRecipeBox = this.handleRemoveRecipeBox.bind(this)
-    this.handleRequestClose = this.handleRequestClose.bind(this);
-    this.handleAddGrocery = this.handleAddGrocery.bind(this)
-
   }
 
   componentDidMount() {
@@ -32,11 +28,11 @@ class ViewRecipe extends React.Component {
     }
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.props.resetRecipe();
   }
 
-  handleCreateRecipeBox(e) {
+  handleCreateRecipeBox = (e) => {
     e.preventDefault()
     this.props.createRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
     this.setState({
@@ -44,65 +40,80 @@ class ViewRecipe extends React.Component {
       message: 'Added to your Recipe Box'
     })
   }
-  handleRemoveRecipeBox(e) {
+  handleRemoveRecipeBox = (e) => {
     e.preventDefault()
     this.setState({
       open: true,
+      showGrocery: false,
       message: 'Removed from your Recipe Box'
     })
     this.props.removeRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
   }
 
-  handleRequestClose() {
+  handleRequestClose = () => {
     this.setState({
       open: false,
     });
   }
 
-  handleAddGrocery(ingredient, e) {
+  handleAddGrocery = (ingredient, e) => {
     this.props.reallyAddGrocery(this.props.match.params.userid, ingredient)
+    this.setState({
+      open: true,
+      message: `${ingredient} was added to your grocery list!`
+    })
   }
 
 
   render() {
     const { recipe, recipebox, isLoggedIn } = this.props;
-
+    const controlPanel = { fontSize: "45px", color: "#59a5f6" };
     return (
       <Wrapper >
         <RecipeImg src={recipe.picture_url} />
         <RecipeText>
           <Title>{recipe && recipe.title}</Title>
           {isLoggedIn ?
-            <ControlPanel style={{ padding: "0" }}>
+            <ControlPanel style={{ padding: "0px" }}>
               <a href={`/recipe/${recipe.id}/cook`} >
                 <IconButton
-                  iconStyle={{ fontSize: "45px", color: "#59a5f6" }}
+                  iconStyle={controlPanel}
                   iconClassName="material-icons"
                   tooltip="Cooking Mode"
                   tooltipPosition="bottom-right">
                   play_circle_outline
                 </IconButton>
               </a>&nbsp;&nbsp;
-            {recipebox && recipebox.hasOwnProperty("notes") ?
+
+              {recipebox && recipebox.hasOwnProperty("notes") ?
                 <div style={{ display: "flex" }}>
                   <a href="#" onClick={this.handleRemoveRecipeBox} >
                     <IconButton
-                      iconStyle={{ fontSize: "45px", color: "#59a5f6" }}
+                      iconStyle={controlPanel}
                       iconClassName="material-icons"
                       tooltip="Remove from Recipe Box"
                       tooltipPosition="bottom-right">
                       remove_circle_outline
               </IconButton>
+                  </a>&nbsp;&nbsp;
+                  <a href="#" onClick={() => this.setState({ showGrocery: !this.state.showGrocery })}>
+                    <IconButton
+                      iconStyle={controlPanel}
+                      iconClassName="material-icons"
+                      tooltip="Toggle Grocery Mode"
+                      tooltipPosition="bottom-right">
+                      add_shopping_cart
+                </IconButton>
                   </a>
                 </div>
                 :
                 <a href="#" onClick={this.handleCreateRecipeBox}>
                   <IconButton
-                    iconStyle={{ fontSize: "45px", color: "#59a5f6" }}
+                    iconStyle={controlPanel}
                     iconClassName="material-icons"
                     tooltip="Add to Box"
                     tooltipPosition="bottom-right">
-                    playlist_add
+                    add
                 </IconButton>
                 </a>
 
@@ -110,7 +121,6 @@ class ViewRecipe extends React.Component {
 
             </ControlPanel> : ''
           }
-          {/*/ Render if there is a recipebox, render textarea if in editing mode/*/}
           {
             recipebox && recipebox.hasOwnProperty("notes") ?
               <div><div style={{ display: "flex", alignItems: "center" }}> <Title secondary>My Notes
@@ -128,19 +138,20 @@ class ViewRecipe extends React.Component {
           <Title secondary>Ingredients</Title>
           <List>
             {recipe.ingredients && recipe.ingredients.map((ingredient, i) =>
-              <li key={i.toString()}>{ingredient}
-              {isLoggedIn ? 
-                <IconButton
-                  style={{ width: "28px", height: "28px" }}
-                  iconStyle={{ fontSize: "20px", color: "#59a5f6" }}
-                  iconClassName="material-icons"
-                  tooltip="Add Grocery"
-                  tooltipPosition="bottom-right"
-                  onClick={this.handleAddGrocery.bind(this, ingredient)}
-                >
-                  add
-                </IconButton> : null
-              }
+              <li style={{ display: "flex", left: "0" }} key={i.toString()}>
+                {isLoggedIn & this.state.showGrocery ?
+                  <IconButton
+                    style={{ width: "20px", height: "20px", padding: "0", margin: "0 10px" }}
+                    iconStyle={{ fontSize: "20px", color: "#59a5f6", padding: "0" }}
+                    iconClassName="material-icons"
+                    tooltip="Add Grocery"
+                    tooltipPosition="bottom-right"
+                    onClick={this.handleAddGrocery.bind(this, ingredient)}
+                  >
+                    add
+                </IconButton> : <span> - &nbsp;&nbsp;</span>
+                }
+                {ingredient}
               </li>)}
           </List>
           <Title secondary>Directions</Title>
@@ -154,7 +165,7 @@ class ViewRecipe extends React.Component {
             onRequestClose={this.handleRequestClose}
           />
         </RecipeText>
-      </Wrapper>
+      </Wrapper >
     )
   }
 }
