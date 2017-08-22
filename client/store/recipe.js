@@ -70,7 +70,6 @@ export default function (state = recipe, action) {
     case GET_RECIPE_FAIL:
       return Object.assign({}, state, { error: true });
     case RESET_RECIPE:
-      console.log('state', recipe);
       return recipe;
     default:
       return state
