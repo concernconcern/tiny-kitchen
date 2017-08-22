@@ -4,7 +4,6 @@ import { withRouter, Link } from 'react-router-dom'
 import { Wrapper, RecipeImg, ControlPanel, Message, AccentButton, TextArea, RecipeText, Notes, Title, List } from './styled-components'
 import history from '../history'
 import * as action from '../store'
-import Mochi from '../mochi'
 import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
 import NotesModal from './NotesModal';
@@ -25,7 +24,6 @@ class ViewRecipe extends React.Component {
   }
 
   componentDidMount() {
-    Mochi.shutUp();
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(false);
     if (this.props.user.id) {
@@ -56,7 +54,6 @@ class ViewRecipe extends React.Component {
       open: false,
     });
   }
-
 
   handleAddGrocery(ingredient, e) {
     this.props.reallyAddGrocery(this.props.match.params.userid, ingredient)

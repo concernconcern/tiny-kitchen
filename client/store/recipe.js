@@ -40,6 +40,10 @@ export const chromeRecipe = (url) =>
   dispatch =>
     axios.post(`/api/recipe-sources`, { url })
       .then(res => {
+        if (Object.keys(res.data).length === 0) {
+          res.data.title = 'Recipe Title';
+          res.data.parseError = true;
+        }
         res.data.selected_pic = ''
         dispatch(getRecipeSuccess(res.data))
       })
