@@ -79,7 +79,16 @@ class ViewRecipe extends React.Component {
                   play_circle_outline
                 </IconButton>
               </a>&nbsp;&nbsp;
-            {recipebox && recipebox.hasOwnProperty("notes") ?
+              <a href="#" >
+                <IconButton
+                  iconStyle={{ fontSize: "45px", color: "#59a5f6" }}
+                  iconClassName="material-icons"
+                  tooltip="Toggle Groceries"
+                  tooltipPosition="bottom-right">
+                  add_shopping_cart
+                </IconButton>
+              </a>
+              {recipebox && recipebox.hasOwnProperty("notes") ?
                 <div style={{ display: "flex" }}>
                   <a href="#" onClick={this.handleRemoveRecipeBox} >
                     <IconButton
@@ -98,7 +107,7 @@ class ViewRecipe extends React.Component {
                     iconClassName="material-icons"
                     tooltip="Add to Box"
                     tooltipPosition="bottom-right">
-                    playlist_add
+                    add
                 </IconButton>
                 </a>
 
@@ -124,19 +133,20 @@ class ViewRecipe extends React.Component {
           <Title secondary>Ingredients</Title>
           <List>
             {recipe.ingredients && recipe.ingredients.map((ingredient, i) =>
-              <li key={i.toString()}>{ingredient}
-              {isLoggedIn ? 
-                <IconButton
-                  style={{ width: "28px", height: "28px" }}
-                  iconStyle={{ fontSize: "20px", color: "#59a5f6" }}
-                  iconClassName="material-icons"
-                  tooltip="Add Grocery"
-                  tooltipPosition="bottom-right"
-                  onClick={this.handleAddGrocery.bind(this, ingredient)}
-                >
-                  add
+              <li style={{ display: "flex", left: "0" }} key={i.toString()}>
+                {isLoggedIn ?
+                  <IconButton
+                    style={{ width: "20px", height: "20px", padding: "0", margin: "0 10px" }}
+                    iconStyle={{ fontSize: "20px", color: "#59a5f6", padding: "0" }}
+                    iconClassName="material-icons"
+                    tooltip="Add Grocery"
+                    tooltipPosition="bottom-right"
+                    onClick={this.handleAddGrocery.bind(this, ingredient)}
+                  >
+                    add
                 </IconButton> : null
-              }
+                }
+                {ingredient}
               </li>)}
           </List>
           <Title secondary>Directions</Title>
