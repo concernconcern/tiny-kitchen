@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { ImageUploadCard } from './styled-components';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import { NavLink, Input } from './styled-components'
+import { NavLink, Input, ControlPanel } from './styled-components';
+import * as action from '../store';
 
 var divStyle = {
   width: '300px',
@@ -23,24 +24,33 @@ class ImgUpload extends React.Component {
       imgUrl: ''
     };
 
-    this.handleImageChange = this.handleImageChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.getSignedRequest = this.getSignedRequest.bind(this);
-    this.uploadFile = this.uploadFile.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.handleOpen = this.handleOpen.bind(this);
+    this.handleImageChange = this.handleImageChange.bind(this); //shows img preview
+    this.handleUpload = this.handleUpload.bind(this); //triggers get signed request if a file is chosen
+    this.getSignedRequest = this.getSignedRequest.bind(this); //gets amazon url
+    this.uploadFile = this.uploadFile.bind(this); //actually uploads to amazon
+    this.handleClose = this.handleClose.bind(this); //closes modal
+    this.handleOpen = this.handleOpen.bind(this); //opens modal
+    this.handleSubmit = this.handleSubmit.bind(this); //submits the url to db
   }
 
-  componentWillMount(){
-    this.handleOpen();
-  }
+  // componentWillMount(){
 
-    handleClose () {
+  // }
+
+  handleClose () {
     this.setState({ open: false });
   }
 
   handleOpen() {
     this.setState({ open: true });
+  }
+
+  handleSubmit() {
+    console.log(this.props.type);
+    if (this.props.type === 'userImg'){
+      this.props.updateUser(this.state.imgUrl, 'picture_url');
+    }
+    this.handleClose();
   }
 
   uploadFile(file, signedRequest, url){
@@ -79,33 +89,40 @@ class ImgUpload extends React.Component {
   }
 
 
-  handleSubmit(e) {
-    e.preventDefault();
+  handleUpload(event) {
+    event.preventDefault();
     if (this.state.file !== '') { this.getSignedRequest(this.state.file); }
     else {
       this.setState({error: 'Please select and image to upload first!'});
     }
   }
 
-  handleImageChange(e) {
+  handleImageChange(event) {
+    event.preventDefault();
+
     this.setState({error: ''});
-    e.preventDefault();
+    console.log(event.target.name, event.target.value);
 
-    let reader = new FileReader();
-    let file = e.target.files[0];
+    if (event.target.name === 'textbox') {
+      this.setState({imagePreviewUrl: event.target.value, imgUrl: event.target.value});
+    } else {
 
-    if (file === null){
-      this.setState({error:'No file selected.'});
+      let reader = new FileReader();
+      let file = event.target.files[0];
+
+      if (file === null){
+        this.setState({error:'No file selected.'});
+      }
+
+      reader.onloadend = () => {
+        this.setState({
+          file: file,
+          imagePreviewUrl: reader.result
+        });
+      }
+
+      reader.readAsDataURL(file);
     }
-
-    reader.onloadend = () => {
-      this.setState({
-        file: file,
-        imagePreviewUrl: reader.result
-      });
-    }
-
-    reader.readAsDataURL(file);
   }
 
   render() {
@@ -120,40 +137,49 @@ class ImgUpload extends React.Component {
     const actions = [
       <FlatButton
         key="1"
-        label="Close"
-        primary={true}
+        label="Cancel"
+        primary={false}
         onClick={this.handleClose}
       />,
+      <FlatButton
+        key="2"
+        label="Submit"
+        primary={true}
+        onClick={this.handleSubmit}
+      />
     ];
 
     return (
     <div>
-      <NavLink href="#" onClick={this.handleOpen}>Image Uplaod</NavLink>
+        <i onClick={this.handleOpen} className="material-icons" style={{ fontSize: "30px", position: "absolute", color: "#a5a5a5", top: "150px", cursor: "pointer", left: "75px" }}>insert_photo</i>
       <Dialog
         contentStyle={{ width: "30%", display: "flex" }}
         title='Image Upload'
-        modal={true}
+        actions={actions}
+        modal={false}
         open={this.state.open}
         onRequestClose={this.handleClose}
       >
       <ImageUploadCard>
-        <form onSubmit={this.handleSubmit}>
+        Upload an image...
+        <form>
           <input
+            name='imgfile'
             type="file"
             onChange={this.handleImageChange} />
           <button className="submitButton"
             type="submit"
-            onClick={this.handleSubmit}>Upload Image</button>
+            onClick={this.handleUpload}>Upload Image</button>
             {this.state.error !== '' ? <p>{this.state.error}</p> : null}
             {this.state.successMsg !== '' ? <p>{this.state.successMsg}</p> : null}
         </form>
+        or enter a url...
+        <form> <input type="text" name='textbox' onChange={this.handleImageChange} /></form>
         <br />
         <div className="imgPreview" style={divStyle}>
           {imagePreview}
         </div>
-        <div style={{ textAlign: 'right', padding: 8, margin: '24px -24px -24px -24px' }}>
-              {actions}
-        </div>
+
       </ImageUploadCard>
       </Dialog>
     </div>
@@ -163,6 +189,11 @@ class ImgUpload extends React.Component {
 
 
 const mapState = null;
-const mapDispatch = null;
+const mapDispatch = (dispatch) => {
+  return {
+    updateUser: (info, type) => dispatch(action.updateUser(info, type))
+
+  }
+};
 
 export default connect(mapState, mapDispatch)(ImgUpload);

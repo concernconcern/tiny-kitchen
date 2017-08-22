@@ -4,6 +4,8 @@ import { withRouter, Link } from 'react-router-dom'
 import {connect} from 'react-redux'
 import { ProfileUpperArea, ProfileCard, ProfilePic, ProfilePicArea, ProfileInfoArea, Links, AccentButton, ControlPanel, Heading, Title } from './styled-components'
 import Tile from './Tile'
+import ImgUpload from './ImgUpload';
+import InfoModal from './InfoModal';
 import * as action from '../store'
 /**
  * COMPONENT
@@ -15,11 +17,14 @@ class UserNav extends React.Component {
       editName: false,
       editEmail: false,
       name: '',
-      email: ''
+      email: '',
+      editImg: false
     }
+
     this.handleNameClick = this.handleNameClick.bind(this);
     this.handleEmailClick = this.handleEmailClick.bind(this);
     this.handleDone = this.handleDone.bind(this);
+
   }
 
   handleNameClick(event) {
@@ -58,13 +63,17 @@ class UserNav extends React.Component {
     return (
       <div>
         <ProfileUpperArea column>
+
           <ProfileCard>
             <ProfilePicArea>
-              <ProfilePic src={user.picture_url} />
+
+
+             <ProfilePic  src={user.picture_url}/>
+
             </ProfilePicArea>
             <ProfileInfoArea>
               <div>
-                {this.state.editName ? 
+                {this.state.editName ?
                   <ControlPanel profile>
                     <input onChange={(e) => this.handleChange(e, 'name')}></input>
                     <AccentButton small type="submit" onClick={(e) => this.handleDone(e, 'name')}>Done</AccentButton>
@@ -86,6 +95,7 @@ class UserNav extends React.Component {
                     <AccentButton small value="edit" name="email" onClick={this.handleEmailClick}>Edit</AccentButton>
                   </ControlPanel>
                 }
+                <ImgUpload type='userImg' />
               </div>
             </ProfileInfoArea>
           </ProfileCard>

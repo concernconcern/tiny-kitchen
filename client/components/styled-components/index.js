@@ -347,7 +347,8 @@ export const ProfileWarning = styled.h2`
   font-family: 'Playfair Display', serif;
 `
 export const ProfilePic = styled.img`
-  max-height: 80px;
+  max-height: 150px;
+  max-width: 150px
   border-radius: 50%;
 `
 
