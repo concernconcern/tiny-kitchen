@@ -125,7 +125,7 @@ class ViewRecipe extends React.Component {
           <List>
             {recipe.ingredients && recipe.ingredients.map((ingredient, i) =>
               <li key={i.toString()}>{ingredient}
-              {isLoggedIn ? 
+              {isLoggedIn ?
                 <IconButton
                   style={{ width: "28px", height: "28px" }}
                   iconStyle={{ fontSize: "20px", color: "#59a5f6" }}
@@ -174,7 +174,6 @@ const mapDispatch = (dispatch) => {
     removeRecipeBox: (userId, recipeId) => dispatch(action.removeRecipeBox(userId, recipeId)),
     isCooking: bool => dispatch(action.getCooking(bool)),
     saveNote: (userId, recipeId, note) => dispatch(action.editRecipeBox(userId, recipeId, note)),
-    removeRecipeBox: (userId, recipeId) => dispatch(action.removeRecipeBox(userId, recipeId)),
     reallyAddGrocery: (userId, ingredientText) => dispatch(action.reallyAddGrocery(userId, ingredientText))
   }
 }

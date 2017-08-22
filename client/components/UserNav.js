@@ -68,7 +68,7 @@ class UserNav extends React.Component {
             <ProfilePicArea>
 
 
-             <ProfilePic  src={user.picture_url}/>
+             <ProfilePic src={user.picture_url} />
 
             </ProfilePicArea>
             <ProfileInfoArea>
