@@ -16,8 +16,8 @@ const walkthrough = {
   'From an individual recipe page, you will have the option to enter cooking mode. In fact, you\'re in cooking mode right now!',
   'Here, you will be able to speak with me, Mochi. If you would like me to read the recipe steps, simply hit the play button. You can also say: \'start cooking\', \'start\', \'stop\', or \'pause.\'',
   'You can also ask me unit conversion questions, like \'what is one pound in ounces\', or \'convert one tablespoon to teaspoons.\' You can also ask me to set a timer, for example, \'set a timer for 5 minutes.\'',
-  'If you have enjoyed the recipe, you can add it to your personal recipe box once you exit cooking mode. On the recipe page, you can add notes to the recipe and add individual ingredients to your grocery list.',
-  'To begin using cooking mode, grocery list, and other features, simply sign in to Tiny Kitchen or create a new account. Happy cooking!'
+  'If you enjoy a particular recipe, you can add it to your recipe box once you exit cooking mode. You can also add notes to the recipe and add individual ingredients to your grocery list.',
+  'To begin using cooking mode, grocery list, and other features, simply sign or create a new account. Happy cooking!'
   ]
 }
 

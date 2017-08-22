@@ -27,9 +27,13 @@ class ViewRecipe extends React.Component {
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(false);
     if (this.props.user.id) {
-      history.push(`/recipe/${this.props.match.params.recipeid}/user/${this.props.user.id}`);
+      // history.push(`/recipe/${this.props.match.params.recipeid}/user/${this.props.user.id}`);
       this.props.getRecipeBox(this.props.user.id, this.props.match.params.recipeid)
     }
+  }
+
+  componentWillUnmount(){
+    this.props.resetRecipe();
   }
 
   handleCreateRecipeBox(e) {
@@ -175,7 +179,8 @@ const mapDispatch = (dispatch) => {
     isCooking: bool => dispatch(action.getCooking(bool)),
     saveNote: (userId, recipeId, note) => dispatch(action.editRecipeBox(userId, recipeId, note)),
     removeRecipeBox: (userId, recipeId) => dispatch(action.removeRecipeBox(userId, recipeId)),
-    reallyAddGrocery: (userId, ingredientText) => dispatch(action.reallyAddGrocery(userId, ingredientText))
+    reallyAddGrocery: (userId, ingredientText) => dispatch(action.reallyAddGrocery(userId, ingredientText)),
+    resetRecipe: () => dispatch(action.resetRecipe())
   }
 }
 
