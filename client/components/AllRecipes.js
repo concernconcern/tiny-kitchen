@@ -25,6 +25,15 @@ class AllRecipes extends React.Component {
     })
   }
 
+  // tileLink(recipe, isLoggedIn){
+  //   if (recipe.title === 'Welcome to Tiny Kitchen') {
+  //     if (isLoggedIn) return `/recipe/${recipe.id}/cook`;
+  //     else return `/#`
+  //   } else {
+  //     return `/recipe/${recipe.id}`
+  //   }
+  // }
+
   render() {
     let { input, recipes, isLoggedIn, userId } = this.props;
     recipes = this.filterRecipes(recipes, input);
@@ -34,7 +43,8 @@ class AllRecipes extends React.Component {
           input.length && !recipes.length ? <Wrapper centered height><h3>No recipes found</h3></Wrapper> :
           <Tiles>
             {
-              recipes.length && recipes.map((recipe, i) => <TileLink key={i} to={`/recipe/${recipe.id}`}><Tile recipe={recipe} /></TileLink>)
+              recipes.length && recipes.map((recipe, i) => <TileLink key={i} to={recipe.title === 'Welcome to Tiny Kitchen' ? `/recipe/${recipe.id}/cook` : `/recipe/${recipe.id}`}><Tile recipe={recipe} /></TileLink>)
+              // recipes.length && recipes.map((recipe, i) => <TileLink key={i} to={this.tileLink(recipe, isLoggedIn)}><Tile recipe={recipe} /></TileLink>)
             }
           </Tiles>
         }

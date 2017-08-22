@@ -10,7 +10,15 @@ const walkthrough = {
   source_url: 'http://localhost:8080/',
   picture_url: '',
   ingredients: [],
-  directions: 'Welcome'
+  directions: ['Press play to get started...',
+  'Welcome to Tiny Kichen, an intelligent cooking app featuring me, Mochi. I\'m an AI cooking assistant who can read recipe steps, set timers, and perform unit conversions based on voice commands.',
+  'On the home page, you will find plenty of recipes to get you started, or you can add recipes from elsewhere on the web using the Tiny Kitchen Chrome Extension.',
+  'From an individual recipe page, you will have the option to enter cooking mode. In fact, you\'re in cooking mode right now!',
+  'Here, you will be able to speak with me, Mochi. If you would like me to read the recipe steps, simply hit the play button. You can also say: \'start cooking\', \'start\', \'stop\', or \'pause.\'',
+  'You can also ask me unit conversion questions, like \'what is one pound in ounces\', or \'convert one tablespoon to teaspoons.\' You can also ask me to set a timer, for example, \'set a timer for 5 minutes.\'',
+  'If you have enjoyed the recipe, you can add it to your personal recipe box once you exit cooking mode. On the recipe page, you can add notes to the recipe and add individual ingredients to your grocery list.',
+  'To begin using cooking mode, grocery list, and other features, simply sign in to Tiny Kitchen or create a new account. Happy cooking!'
+  ]
 }
 
 const recipeLinks = [
@@ -67,6 +75,7 @@ function buildRecipes(){
     recipesData.forEach(recipe => {
       promises.push(Recipe.build(recipe));
     });
+    promises.unshift(Recipe.build(walkthrough));
     return promises;
   })
 }
