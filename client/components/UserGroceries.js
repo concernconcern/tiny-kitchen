@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 import * as action from '../store'
 import { List } from './styled-components'
+import axios from './axios';
 /**
  * COMPONENT
  */
@@ -18,8 +19,9 @@ class UserGroceries extends React.Component{
 
   handleClick(){
     console.log('clicked')
+
   }
-  
+
   render(){
     const {user, userGroceries} = this.props;
     return (
