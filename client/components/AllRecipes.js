@@ -5,18 +5,17 @@ import { Wrapper, Tiles, TileLink } from './styled-components'
 import Tile from './Tile'
 import * as action from '../store'
 
-
 class AllRecipes extends React.Component {
   constructor(props) {
     super(props);
-    this.filterRecipes.bind(this);
   }
 
   componentDidMount() {
     this.props.getRecipes();
+    this.props.isCooking(false);
   }
 
-  filterRecipes(recipes, input) {
+  filterRecipes = (recipes, input) => {
     input = input.toLowerCase();
     return recipes.filter(recipe => {
       return recipe.title.toLowerCase().includes(input) ||
@@ -24,7 +23,9 @@ class AllRecipes extends React.Component {
         recipe.ingredients.join().toLowerCase().includes(input)
     })
   }
-
+  getUrl = (recipeId, userId, title) => {
+    return recipeId == 1 ? `/recipe/${recipeId}/cook` : userId ? `/recipe/${recipeId}/user/${userId}` : `/recipe/${recipeId}`
+  }
   render() {
     let { input, recipes, isLoggedIn, userId } = this.props;
     return (
@@ -34,7 +35,9 @@ class AllRecipes extends React.Component {
             <Tiles>
               {
                 recipes.length && recipes.map((recipe, i) =>
-                  <TileLink key={i} to={userId ? `/recipe/${recipe.id}/user/${userId}` : `/recipe/${recipe.id}`} > <Tile recipe={recipe} /></TileLink>
+                  <TileLink key={i} to={this.getUrl(recipe.id, userId, recipe.title)}>
+                    <Tile recipe={recipe} isWelcome={recipe.id == 1} />
+                  </TileLink>
                 )
               }
             </Tiles>
@@ -58,7 +61,8 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    getRecipes: id => dispatch(action.getRecipes())
+    getRecipes: id => dispatch(action.getRecipes()),
+    isCooking: bool => dispatch(action.getCooking(bool))
   }
 }
 

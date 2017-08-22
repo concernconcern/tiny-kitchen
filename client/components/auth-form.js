@@ -86,7 +86,6 @@ class AuthForm extends React.Component {
                 style={{ height: "50px", padding: "10px 0 0 0" }}
                 key="1"
                 label={`${displayName} w/ Google`}
-                primary={false}
               /></a>
             <div style={{ textAlign: 'right', padding: 8, margin: '24px -24px -24px -24px' }}>
               {actions}

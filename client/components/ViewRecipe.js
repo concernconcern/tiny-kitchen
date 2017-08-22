@@ -25,7 +25,6 @@ class ViewRecipe extends React.Component {
     if (this.props.match.params.userid) this.props.getRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
   }
   componentWillReceiveProps(props) {
-    console.log(props.user.id)
     props.user.id == this.props.match.params.userid ? this.setState({ permissions: true }) : ''
   }
   componentWillUnmount() {
@@ -68,8 +67,8 @@ class ViewRecipe extends React.Component {
   render() {
     const { recipe, recipebox, isLoggedIn, user } = this.props;
     const { permissions } = this.state;
-    console.log(permissions)
     const controlPanel = { fontSize: "45px", color: "#59a5f6" };
+
     return (
       <Wrapper >
         <RecipeImg src={recipe.picture_url} />
