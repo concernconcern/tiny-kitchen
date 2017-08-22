@@ -27,7 +27,6 @@ class AuthForm extends React.Component {
     this.props.handleSubmit(evt, this.props.chromeUrl);
   }
   render() {
-    console.log(this.props)
     const { name, displayName, error, handleSubmit } = this.props;
     let chromeUrl = this.props.chromeUrl ? this.props.chromeUrl : ''
     const submit = chromeUrl.length ? this.chrome : handleSubmit;
