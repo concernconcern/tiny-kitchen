@@ -32,6 +32,10 @@ class ViewRecipe extends React.Component {
     }
   }
 
+  componentWillUnmount(){
+    this.props.resetRecipe();
+  }
+
   handleCreateRecipeBox(e) {
     e.preventDefault()
     this.props.createRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
@@ -185,7 +189,8 @@ const mapDispatch = (dispatch) => {
     isCooking: bool => dispatch(action.getCooking(bool)),
     saveNote: (userId, recipeId, note) => dispatch(action.editRecipeBox(userId, recipeId, note)),
     removeRecipeBox: (userId, recipeId) => dispatch(action.removeRecipeBox(userId, recipeId)),
-    reallyAddGrocery: (userId, ingredientText) => dispatch(action.reallyAddGrocery(userId, ingredientText))
+    reallyAddGrocery: (userId, ingredientText) => dispatch(action.reallyAddGrocery(userId, ingredientText)),
+    resetRecipe: () => dispatch(action.resetRecipe())
   }
 }
 

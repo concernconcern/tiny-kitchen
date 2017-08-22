@@ -5,6 +5,22 @@ const Promise = require('bluebird');
 const getJsonFromUrl = require('./server/recipe-to-json');
 require('./secrets'); //not for deployed use
 
+const walkthrough = {
+  title: 'Welcome to Tiny Kitchen',
+  source_url: 'http://localhost:8080/',
+  picture_url: '',
+  ingredients: [],
+  directions: ['Press play to get started...',
+  'Welcome to Tiny Kichen, an intelligent cooking app featuring me, Mochi. I\'m an AI cooking assistant who can read recipe steps, set timers, and perform unit conversions based on voice commands.',
+  'On the home page, you will find plenty of recipes to get you started, or you can add recipes from elsewhere on the web using the Tiny Kitchen Chrome Extension.',
+  'From an individual recipe page, you will have the option to enter cooking mode. In fact, you\'re in cooking mode right now!',
+  'Here, you will be able to speak with me, Mochi. If you would like me to read the recipe steps, simply hit the play button. You can also say: \'start cooking\', \'start\', \'stop\', or \'pause.\'',
+  'You can also ask me unit conversion questions, like \'what is one pound in ounces\', or \'convert one tablespoon to teaspoons.\' You can also ask me to set a timer, for example, \'set a timer for 5 minutes.\'',
+  'If you enjoy a particular recipe, you can add it to your recipe box once you exit cooking mode. You can also add notes to the recipe and add individual ingredients to your grocery list.',
+  'To begin using cooking mode, grocery list, and other features, simply sign or create a new account. Happy cooking!'
+  ]
+}
+
 const recipeLinks = [
   {type: 'link', web_url: 'https://cooking.nytimes.com/recipes/1016833-spaghetti-and-drop-meatballs-with-tomato-sauce?action=click&module=Collection%20Page%20Recipe%20Card&region=Our%20Most%20Popular%20Weeknight%20Recipes%20of%202015&pgType=collection&rank=1', picture_url: 'https://static01.nyt.com/images/2015/09/25/dining/drop-meatballs/drop-meatballs-articleLarge.jpg'},
   {type: 'link', web_url: 'https://cooking.nytimes.com/recipes/1016841-rigatoni-and-cauliflower-al-forno?action=click&module=Collection%20Page%20Recipe%20Card&region=Our%20Most%20Popular%20Weeknight%20Recipes%20of%202015&pgType=collection&rank=2', picture_url: 'https://static01.nyt.com/images/2014/10/01/dining/01KITCHEN3/01KITCHEN3-articleLarge.jpg'},
@@ -59,6 +75,7 @@ function buildRecipes(){
     recipesData.forEach(recipe => {
       promises.push(Recipe.build(recipe));
     });
+    promises.unshift(Recipe.build(walkthrough));
     return promises;
   })
 }
