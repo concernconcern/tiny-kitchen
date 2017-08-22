@@ -5,12 +5,13 @@ import { Router, withRouter, Link } from 'react-router-dom';
 import { fetchOutput } from '../store';
 import { Wrapper, IngredientsView, AccentButton, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
 import * as action from '../store';
-import Mochi, {helpMenu} from '../mochi';
+import Mochi, { helpMenu } from '../mochi';
 import { Textfit } from 'react-textfit';
 import ReactTestUtils from 'react-dom/test-utils';
 import InfoModal from './InfoModal';
 import Timer from './Timer';
 import IconButton from 'material-ui/IconButton';
+import history from '../history'
 
 
 class CookRecipe extends React.Component {
@@ -25,11 +26,7 @@ class CookRecipe extends React.Component {
       forwardDisable: forward,
       backDisable: back
     }
-    this.sendUserInput = this.sendUserInput.bind(this);
-    this.toggleMochi = this.toggleMochi.bind(this);
-    this.stepBackward = this.stepBackward.bind(this);
-    this.stepForward = this.stepForward.bind(this);
-    this.exit = this.exit.bind(this);
+
   }
 
   componentDidMount() {
@@ -48,11 +45,11 @@ class CookRecipe extends React.Component {
           this.stepBackward();
         } else if (options.includes(wildcard)) {
           Mochi.say(helpMenu);
-        } else if (wildcard === 'exit'){
+        } else if (wildcard === 'exit') {
           Mochi.shutUp();
         } else if (startWords.includes(wildcard)) {
           this.toggleMochi();
-        } else if (!Mochi.isSpeaking()){
+        } else if (!Mochi.isSpeaking()) {
           //doesn't send the things it says itself
           this.sendUserInput(wildcard);
         }
@@ -84,11 +81,11 @@ class CookRecipe extends React.Component {
 
   }
 
-  sendUserInput(userInput) {
+  sendUserInput = (userInput) => {
     return this.props.submitUserInput(userInput)
   }
 
-  toggleMochi() {
+  toggleMochi = () => {
     if (!this.state.stopped) {
       Mochi.shutUp()
       this.setState({ stopped: true })
@@ -100,7 +97,7 @@ class CookRecipe extends React.Component {
   }
 
 
-  stepForward() {
+  stepForward = () => {
     let newStep = this.props.step + 1;
     if (this.props.recipe && newStep < this.props.recipe.directions.length) {
       Mochi.shutUp();
@@ -114,7 +111,7 @@ class CookRecipe extends React.Component {
     }
   }
 
-  stepBackward() {
+  stepBackward = () => {
 
     let newStep = this.props.step - 1;
     if (newStep >= 0) {
@@ -129,14 +126,15 @@ class CookRecipe extends React.Component {
     }
   }
 
-  exit() {
+  exit = (e, link) => {
     Mochi.shutUp();
+    if (link) history.push(link)
   }
 
 
   render() {
     let { forwardDisable, backDisable } = this.state
-    let { recipe } = this.props;
+    let { recipe, userId } = this.props;
     return (
 
       <Wrapper column height>
@@ -149,7 +147,7 @@ class CookRecipe extends React.Component {
           </CurrentStep>
           <Sidebar>
             <InfoModal />
-            <ExitLink to={`/recipe/${recipe.id}`} onClick={this.exit}><i className="material-icons" style={{ fontSize: "45px" }}>clear</i></ExitLink>
+            <ExitLink to={recipe.id == 1 ? "/" : `/recipe/${recipe.id}/user/${userId}`} onClick={this.exit}><i className="material-icons" style={{ fontSize: "45px" }}>clear</i></ExitLink>
             <Title secondary>Ingredients</Title>
 
             <List>
@@ -176,7 +174,6 @@ class CookRecipe extends React.Component {
               tooltipPosition="bottom-right">
               keyboard_arrow_left
         </IconButton>
-
             {
               this.state.stopped ?
                 <IconButton
@@ -203,7 +200,7 @@ class CookRecipe extends React.Component {
               iconClassName="material-icons"
               tooltip="Next Step"
               value="forward"
-              onClick={this.stepForward}
+              onClick={this.props.step === recipe.directions.length - 1 ? e => this.exit(e, `/recipe/${recipe.id}`) : this.stepForward}
               tooltipPosition="bottom-right">
               keyboard_arrow_right
         </IconButton>
@@ -223,7 +220,7 @@ const mapState = (state) => {
     mochiSays: state.ai,
     step: state.currentStep,
     stepToSay: state.sayStep,
-
+    userId: state.user.id
   };
 };
 const mapDispatch = (dispatch) => {

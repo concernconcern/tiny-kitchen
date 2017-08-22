@@ -118,7 +118,6 @@ export const Links = styled.div`
 `
 export const List = styled.ul`
   color: grey;
-  margin: 0 25px;
   list-style-type: ${props => props.directions ? 'decimal' : 'square'};
 `
 

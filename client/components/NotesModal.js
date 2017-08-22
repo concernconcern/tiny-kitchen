@@ -65,7 +65,7 @@ export default class NotesModal extends React.Component {
             onClick={this.handleOpen}
             tooltipPosition="bottom-right">
             note_add
-  </IconButton>
+        </IconButton>
         </a>
         <Dialog
           title="My notes"
