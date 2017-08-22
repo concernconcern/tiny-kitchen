@@ -27,18 +27,20 @@ class AllRecipes extends React.Component {
 
   render() {
     let { input, recipes, isLoggedIn, userId } = this.props;
-    recipes = this.filterRecipes(recipes, input);
     return (
       <Wrapper>
         {
           input.length && !recipes.length ? <Wrapper centered height><h3>No recipes found</h3></Wrapper> :
-          <Tiles>
-            {
-              recipes.length && recipes.map((recipe, i) => <TileLink key={i} to={recipe.title === 'Welcome to Tiny Kitchen' ? `/recipe/${recipe.id}/cook` : `/recipe/${recipe.id}`}><Tile recipe={recipe} /></TileLink>)
-            }
-          </Tiles>
+            <Tiles>
+              {
+                recipes.length && recipes.map((recipe, i) =>
+                  <TileLink key={i} to={userId ? `/recipe/${recipe.id}/user/${userId}` : `/recipe/${recipe.id}`} > <Tile recipe={recipe} /></TileLink>
+                )
+              }
+            </Tiles>
         }
       </Wrapper>
+
     )
   }
 }

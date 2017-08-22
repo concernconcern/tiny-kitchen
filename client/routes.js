@@ -27,12 +27,12 @@ class Routes extends Component {
             <Route exact path='/recipe/:recipeid' component={ViewRecipe} />
             <Route exact path='/recipe/:recipeid/cook' component={CookRecipe} />
             <Route path='/add-recipe' component={AddRecipe} />
+            <Route exact path='/recipe/:recipeid/user/:userid' component={ViewRecipe} />
             {
               isLoggedIn &&
               <Switch>
                 <Route path='/home' component={UserHome} />
                 <Route path='/add-recipe' component={AddRecipe} />
-                <Route exact path='/recipe/:recipeid/user/:userid' component={ViewRecipe} />
               </Switch>
             }
           </Switch>

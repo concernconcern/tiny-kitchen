@@ -12,7 +12,7 @@ class ViewRecipe extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editing: false,
+      permissions: false,
       open: false,
       message: '',
       showGrocery: false
@@ -22,12 +22,12 @@ class ViewRecipe extends React.Component {
   componentDidMount() {
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(false);
-    if (this.props.user.id) {
-      history.push(`/recipe/${this.props.match.params.recipeid}/user/${this.props.user.id}`);
-      this.props.getRecipeBox(this.props.user.id, this.props.match.params.recipeid)
-    }
+    if (this.props.match.params.userid) this.props.getRecipeBox(this.props.match.params.userid, this.props.match.params.recipeid)
   }
-
+  componentWillReceiveProps(props) {
+    console.log(props.user.id)
+    props.user.id == this.props.match.params.userid ? this.setState({ permissions: true }) : ''
+  }
   componentWillUnmount() {
     this.props.resetRecipe();
   }
@@ -66,7 +66,9 @@ class ViewRecipe extends React.Component {
 
 
   render() {
-    const { recipe, recipebox, isLoggedIn } = this.props;
+    const { recipe, recipebox, isLoggedIn, user } = this.props;
+    const { permissions } = this.state;
+    console.log(permissions)
     const controlPanel = { fontSize: "45px", color: "#59a5f6" };
     return (
       <Wrapper >
@@ -123,13 +125,13 @@ class ViewRecipe extends React.Component {
           }
           {
             recipebox && recipebox.hasOwnProperty("notes") ?
-              <div><div style={{ display: "flex", alignItems: "center" }}> <Title secondary>My Notes
+              <div><div style={{ display: "flex", alignItems: "center" }}> <Title secondary>Notes
               </Title>
-                <NotesModal
+                {permissions ? <NotesModal
                   notes={this.props.recipebox.notes}
                   user={this.props.match.params.userid}
                   recipe={this.props.match.params.recipeid}
-                  saveNote={this.props.saveNote} />
+                  saveNote={this.props.saveNote} /> : ''}
               </div>
 
                 <Notes>{this.props.recipebox.notes}</Notes>
