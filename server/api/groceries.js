@@ -41,6 +41,11 @@ router.post('/:userId', (req, res, next) => {
   .catch(next);
 });
 
+// POST
+router.post('/:userId/email', (req, res, next) => {
+  console.log('email')
+})
+
 // DELETE
 router.delete('/:userId/:groceryId', (req, res, next) => {
   const userId = req.params.userId;

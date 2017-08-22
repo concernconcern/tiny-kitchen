@@ -15,12 +15,20 @@ class UserGroceries extends React.Component{
   componentDidMount(){
     this.props.fetchGroceries(this.props.user.id)
   }
+
+  handleClick(){
+    console.log('clicked')
+  }
+  
   render(){
     const {user, userGroceries} = this.props;
     return (
-      <List>
-      {userGroceries && userGroceries.map((grocery, i) => <li key={i}>{grocery}</li>)}
-      </List>
+      <div>
+        <List>
+        {userGroceries && userGroceries.map((grocery, i) => <li key={i}>{grocery}</li>)}
+        </List>
+        <button onClick={this.handleClick}>Email Me</button>
+      </div>
     )
   }
 
