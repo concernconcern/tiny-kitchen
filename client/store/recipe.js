@@ -6,6 +6,7 @@ import history from '../history'
  */
 const GET_RECIPE_SUCCESS = 'GET_RECIPE_SUCCESS'
 const GET_RECIPE_FAIL = 'GET_RECIPE_FAIL'
+const RESET_RECIPE = 'RESET_RECIPE'
 /**
  * INITIAL STATE
  */
@@ -25,6 +26,7 @@ const recipe = {
  */
 export const getRecipeSuccess = (recipe) => ({ type: GET_RECIPE_SUCCESS, recipe })
 export const getRecipeFail = () => ({ type: GET_RECIPE_FAIL })
+export const resetRecipe = () => ({type: RESET_RECIPE})
 
 /**
  * THUNK CREATORS
@@ -67,6 +69,8 @@ export default function (state = recipe, action) {
       return action.recipe;
     case GET_RECIPE_FAIL:
       return Object.assign({}, state, { error: true });
+    case RESET_RECIPE:
+      return recipe;
     default:
       return state
   }

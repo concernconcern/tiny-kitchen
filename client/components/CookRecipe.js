@@ -11,6 +11,7 @@ import ReactTestUtils from 'react-dom/test-utils';
 import InfoModal from './InfoModal';
 import Timer from './Timer';
 import IconButton from 'material-ui/IconButton';
+import history from '../history'
 
 
 class CookRecipe extends React.Component {
@@ -129,8 +130,9 @@ class CookRecipe extends React.Component {
     }
   }
 
-  exit() {
+  exit(e, link) {
     Mochi.shutUp();
+    if (link) history.push(link)
   }
 
 
@@ -203,7 +205,7 @@ class CookRecipe extends React.Component {
               iconClassName="material-icons"
               tooltip="Next Step"
               value="forward"
-              onClick={this.stepForward}
+              onClick={this.props.step === recipe.directions.length - 1 ? e => this.exit(e, `/recipe/${recipe.id}`) : this.stepForward}
               tooltipPosition="bottom-right">
               keyboard_arrow_right
         </IconButton>

@@ -34,7 +34,7 @@ class AllRecipes extends React.Component {
           input.length && !recipes.length ? <Wrapper centered height><h3>No recipes found</h3></Wrapper> :
           <Tiles>
             {
-              recipes.length && recipes.map((recipe, i) => <TileLink key={i} to={`/recipe/${recipe.id}`}><Tile recipe={recipe} /></TileLink>)
+              recipes.length && recipes.map((recipe, i) => <TileLink key={i} to={recipe.title === 'Welcome to Tiny Kitchen' ? `/recipe/${recipe.id}/cook` : `/recipe/${recipe.id}`}><Tile recipe={recipe} /></TileLink>)
             }
           </Tiles>
         }
