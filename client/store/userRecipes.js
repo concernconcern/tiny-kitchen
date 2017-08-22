@@ -10,7 +10,6 @@ const getUserRecipes = (recipes) => ({type: GET_USER_RECIPES, recipes})
 export const fetchUserRecipes = (userId) => dispatch =>
   axios.get(`/api/users/${userId}/recipebox`)
     .then(res => {
-      console.log('response from axios: ', res.data)
       dispatch(getUserRecipes(res.data))
     })
     .catch(err => console.log(err))

@@ -73,7 +73,7 @@ class UserGroceries extends React.Component{
       <Box>
       {
         this.state.totalFields.map((grocery, i) =>
-         <div>
+         <div key={i}>
            <Modify x href="#" onClick={this.removeField} name="groceries" id={i}>x</Modify>
            <Input type="text" key={i.toString()} id={i} name="groceries" value={grocery} style={{ height: "auto", width: "auto" }} onChange={this.handleChange} />
          </div>)

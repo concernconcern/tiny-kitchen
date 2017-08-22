@@ -25,17 +25,21 @@ export const fetchGroceries = (userId) =>
 //without AI
 export const reallyAddGrocery = (userId, ingredientText) =>
   dispatch => {
-    console.log('ingredient:', ingredientText)
     axios.post(`/api/groceries/${userId}`, {title: ingredientText})
     .then(res => dispatch(addGrocery(res.data)))
     .catch(err => console.log(err))
   }
 export const submitGroceryList = (userId, groceryList) =>
-  dispatch =>
-    Promise.all(groceryList.map((grocery, i) => {
-      axios.post(`/api/groceries/${userId}`, {title: grocery})
+  dispatch => {
+    console.log('groceyr list', groceryList)
+    return Promise.all(groceryList.map((grocery, i) => {
+      axios.post(`/api/groceries/${userId}/list`, {groceryList})
     }))
+    .then(res => {
+      console.log('res data', res)
+    })
     .catch(err => console.log(err))
+  }
 
 export const deleteGroceryFromUser = (userId, groceryId) =>
   dispatch => {
