@@ -27,7 +27,7 @@ class ViewRecipe extends React.Component {
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(false);
     if (this.props.user.id) {
-      // history.push(`/recipe/${this.props.match.params.recipeid}/user/${this.props.user.id}`);
+      history.push(`/recipe/${this.props.match.params.recipeid}/user/${this.props.user.id}`);
       this.props.getRecipeBox(this.props.user.id, this.props.match.params.recipeid)
     }
   }
