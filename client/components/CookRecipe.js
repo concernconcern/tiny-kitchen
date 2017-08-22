@@ -64,11 +64,15 @@ class CookRecipe extends React.Component {
           this.stepBackward()
         else if (event.key === 'ArrowUp' || event.key === 'ArrowRight')
           this.stepForward()
-        else
-          return
+        else if (event.key === 'Escape') this.exit();
+        else return;
       }
     });
 
+  }
+
+  componentWillUnmount() {
+    this.props.clearStep();
   }
 
   componentDidUpdate() {
@@ -233,6 +237,9 @@ const mapDispatch = (dispatch) => {
     changeStepTo(newStep, directions) {
       dispatch(action.getStep(newStep))
       dispatch(action.sayStep(newStep, directions))
+    },
+    clearStep(){
+      dispatch(action.getStep(0));
     }
   };
 };
