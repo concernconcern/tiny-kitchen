@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 import * as action from '../store'
+import axios from 'axios';
 import { List, AccentButton, Box, Modify, Input, Form, Button } from './styled-components'
 import IconButton from 'material-ui/IconButton';
 /**
@@ -11,9 +12,11 @@ import IconButton from 'material-ui/IconButton';
 class UserGroceries extends React.Component{
   constructor(props){
     super(props)
+    this.handleClick = this.handleClick.bind(this);
     this.state = {
       edit: false,
-      totalFields: []
+      totalFields: [],
+      editedGroceries: []
     }
     this.handleEdit = this.handleEdit.bind(this);
     this.addField = this.addField.bind(this);
@@ -27,6 +30,14 @@ class UserGroceries extends React.Component{
     this.props.fetchGroceries(this.props.user.id)
   }
 
+  handleClick(e){
+    const {user, userGroceries} = this.props;
+    axios.post(`/api/groceries/${user.id}/email`, {user, userGroceries})
+    .then(res => {
+      console.log(res.data);
+    })
+  }
+
   handleEdit(){
     this.setState({edit: true,
       totalFields: [...this.props.userGroceries]
@@ -35,8 +46,9 @@ class UserGroceries extends React.Component{
 
   handleSubmit(e){
     e.preventDefault();
+    let editedGroceries = this.state.editedGroceries;
     let newGroceryList = [...this.state.totalFields];
-    this.props.makeGroceryList(this.props.user.id, newGroceryList);
+    this.props.makeGroceryList(this.props.user.id, editedGroceries);
     this.setState({edit: false, totalFields: []})
   }
 
@@ -48,6 +60,7 @@ class UserGroceries extends React.Component{
 
   removeField(e) {
     e.preventDefault();
+    this.props.deleteGroceryFromUser(this.props.user.id, e.target.id);
     this.setState({
       totalFields: this.state.totalFields.filter((grocery, i) =>
       Number(i) !== Number(e.target.id))
@@ -61,8 +74,13 @@ class UserGroceries extends React.Component{
 
   helperChangeField(fieldId, content){
     let newTotalFields = [...this.state.totalFields];
-    newTotalFields[fieldId] = content;
-    this.setState({totalFields: newTotalFields});
+    newTotalFields[fieldId].title = content;
+
+    let field = newTotalFields[fieldId];
+
+    let editedGroceries = this.state.editedGroceries;
+    if (!editedGroceries.find(el => el.id === field.id)) editedGroceries.push(field);
+    this.setState({totalFields: newTotalFields, editedGroceries});
   }
 
   render(){
@@ -73,9 +91,9 @@ class UserGroceries extends React.Component{
       <Box>
       {
         this.state.totalFields.map((grocery, i) =>
-         <div key={i}>
-           <Modify x href="#" onClick={this.removeField} name="groceries" id={i}>x</Modify>
-           <Input type="text" key={i.toString()} id={i} name="groceries" value={grocery} style={{ height: "auto", width: "auto" }} onChange={this.handleChange} />
+         <div key={grocery.id}>
+           <Modify x href="#" onClick={this.removeField} name="groceries" id={grocery.id}>x</Modify>
+           <Input type="text" key={grocery.id} id={i} name="groceries" value={grocery.title} style={{ height: "auto", width: "auto" }} onChange={this.handleChange} />
          </div>)
       }
       <IconButton
@@ -94,8 +112,9 @@ class UserGroceries extends React.Component{
       <div>
         <AccentButton small value="edit" onClick={this.handleEdit}>Edit</AccentButton>
         <List>
-        {userGroceries && userGroceries.map((grocery, i) => <li key={i.toString()}>{grocery}</li>)}
+        {userGroceries && userGroceries.map((grocery, i) => <li key={grocery.id}>{grocery.title}</li>)}
         </List>
+        <button onClick={this.handleClick}>Email Me</button>        
       </div>
     )
   }
@@ -108,7 +127,7 @@ class UserGroceries extends React.Component{
 const mapState = (state) => {
   return {
     user: state.user,
-    userGroceries: state.groceries.map(grocery => grocery.title)
+    userGroceries: state.groceries
   }
 }
 
@@ -117,7 +136,8 @@ const mapDispatch = (dispatch) => {
     fetchGroceries: (userId) => dispatch(action.fetchGroceries(userId)),
     makeGroceryList: (userId, newGroceryList) => {
       dispatch(action.submitGroceryList(userId, newGroceryList))
-    }
+    },
+    deleteGroceryFromUser: (userId, groceryId) => dispatch(action.deleteGroceryFromUser(userId, groceryId))
   }
 }
 
