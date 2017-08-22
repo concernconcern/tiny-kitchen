@@ -32,7 +32,8 @@ export const reallyAddGrocery = (userId, ingredientText) =>
     .then(res => dispatch(addGrocery(res.data)))
     .catch(err => console.log(err))
   }
-export const submitGroceryList = (userId, updatedGroceries) =>
+
+  export const submitGroceryList = (userId, updatedGroceries) =>
   dispatch => {
     return axios.put(`/api/groceries/${userId}/list`, {updatedGroceries})    
     .then(res => dispatch(updateGroceries(res.data)))
