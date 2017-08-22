@@ -4,6 +4,7 @@ import * as action from '../store'
 import { withRouter, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import SearchBar from 'material-ui-search-bar'
+import history from '../history'
 
 class Search extends React.Component {
   constructor(props) {
@@ -11,6 +12,8 @@ class Search extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
   handleChange(event) {
+    const pathname = this.props.location.pathname;
+    if (pathname !== '/' && !pathname.startsWith('/home')) history.push('/')
     this.props.newInput(event);
   }
   render() {

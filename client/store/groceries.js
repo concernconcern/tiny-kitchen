@@ -1,5 +1,6 @@
 import axios from 'axios';
 import parseIngredient from './ai';
+import history from '../history'
 // Action Types
 const GET_GROCERIES = 'GET_GROCERIES';
 const ADD_GROCERY = 'ADD_GROCERY';
@@ -24,11 +25,22 @@ export const fetchGroceries = (userId) =>
 //without AI
 export const reallyAddGrocery = (userId, ingredientText) =>
   dispatch => {
-    console.log('ingredient:', ingredientText)
     axios.post(`/api/groceries/${userId}`, {title: ingredientText})
     .then(res => dispatch(addGrocery(res.data)))
     .catch(err => console.log(err))
   }
+export const submitGroceryList = (userId, groceryList) =>
+  dispatch => {
+    console.log('groceyr list', groceryList)
+    return Promise.all(groceryList.map((grocery, i) => {
+      axios.post(`/api/groceries/${userId}/list`, {groceryList})
+    }))
+    .then(res => {
+      console.log('res data', res)
+    })
+    .catch(err => console.log(err))
+  }
+
 export const deleteGroceryFromUser = (userId, groceryId) =>
   dispatch => {
     axios.delete(`/api/groceries/${userId}/${groceryId}`)

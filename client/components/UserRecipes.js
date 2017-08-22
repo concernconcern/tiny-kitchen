@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Link, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Recipes, Tiles, ProfileWarning } from './styled-components'
+import { Recipes, Tiles, ProfileWarning, TileLink } from './styled-components'
 import Tile from './Tile'
 import * as action from '../store'
 /**
@@ -35,7 +35,7 @@ class UserRecipes extends React.Component {
         {
           userRecipes.length ?
             <Tiles>
-              {userRecipes.map((recipe, i) => <Link key={i} to={`/recipe/${recipe.id}`}><Tile recipe={recipe} /></Link>)}
+              {userRecipes.map((recipe, i) => <TileLink key={i} to={`/recipe/${recipe.id}`}><Tile recipe={recipe} /></TileLink>)}
             </Tiles>
             :
             <ProfileWarning>You have no recipes! Go add some!</ProfileWarning>

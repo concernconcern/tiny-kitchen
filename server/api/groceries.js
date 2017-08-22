@@ -2,6 +2,7 @@ const router = require('express').Router();
 const db = require('../db/db');
 const Grocery = db.model('grocery');
 const GroceryUser = db.model('groceryUser');
+const User = db.model('user');
 const Promise = require('bluebird');
 const nodemailer = require('nodemailer');
 require('../../secrets');
@@ -24,7 +25,6 @@ router.get('/:userId', (req, res, next) => {
 // POST
 router.post('/:userId', (req, res, next) => {
   const {title, quantity, unit} = req.body;
-  console.log('title: ', title)
   const userId = req.params.userId;
   let addedGrocery;
   Grocery.findOrCreate({where: {
@@ -83,6 +83,24 @@ router.post('/:userId/email', (req, res, next) => {
     console.log('Message %s sent: %s', info.messageId, info.response);
     res.json(transporter.sendMail);
   });
+});
+
+router.post('/:userId/list', (req, res, next) => {
+  const {groceryList} = req.body;
+  const userId = req.params.userId;
+  User.findById(userId)
+  .then(user => {
+    return user.getGroceries()
+  })
+  .then(groceries => {
+    let promises = groceries.map(grocery => {
+      return grocery.update({title: 'foo'})
+    })
+    return Promise.all(promises)
+  })
+  .then(results => {
+    console.log('results', results);
+  })
 })
 
 // DELETE
@@ -96,5 +114,3 @@ router.delete('/:userId/:groceryId', (req, res, next) => {
   .then(res.send(groceryId + ' grocery deleted from list'))
   .catch(next);
 });
-
-
