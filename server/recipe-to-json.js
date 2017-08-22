@@ -16,8 +16,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
           'img': ['src', 'data-src']
         }
       }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&');
-      console.log(typeof sanitizedHtml);
-
+      
       // custom replacements for AllRecipes.com
       sanitizedHtml = sanitizedHtml.replace(/Serving size has been adjusted!(.*?)\(uses your location\)/g, '').replace(/{{model.addEditText}}(.*?)<\/ul>/g, '').replace(/ADVERTISEMENT/g, '').replace(/<li> Add all ingredients to list <\/li>/g, '').replace(/ +/g, ' ');
       
@@ -114,17 +113,20 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
       if (!picture_url) picture_url = findImages(sanitizedHtml);
 
       // GET INGREDIENTS
-      let ingredients = clipSection(sanitizedHtml, 'Ingredients');
+      const ingredientsKeywords = ['Ingredients', "What You'll Need"]
+      let ingredientKeyword = ingredientsKeywords.find(el => !!findList(sanitizedHtml, el));
+      let ingredients = clipSection(sanitizedHtml, ingredientKeyword);
       if (ingredients) {
         ingredients = html2json(ingredients);
         ingredients = createArray(ingredients);
-      } 
+      }
 
       // slice the html string to begin where ingredients list ends before moving on to directions
-      sanitizedHtml = sanitizedHtml.slice(findList(sanitizedHtml, 'Ingredients') + clipSection(sanitizedHtml, 'Ingredients').length + 5)
+      sanitizedHtml = sanitizedHtml.slice(findList(sanitizedHtml, ingredientKeyword) + clipSection(sanitizedHtml, ingredientKeyword).length + 5)
 
       // run clipSection for the first instruction keyword that is followed by ordered or unordered list
-      const directionsKeywords = ['Preparation', 'Instructions', 'Method', 'Directions'];
+      const directionsKeywords = ['Preparation', 'Instructions', 'Method', 'Directions', 'How to Make It'];
+
       let directions = clipSection(sanitizedHtml, directionsKeywords.find(el => !!findList(sanitizedHtml, el)));
       if (directions) {
         directions = html2json(directions)
