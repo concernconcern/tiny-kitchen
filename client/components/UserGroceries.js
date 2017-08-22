@@ -4,22 +4,26 @@ import { withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 import * as action from '../store'
 import { List } from './styled-components'
-import axios from './axios';
+import axios from 'axios';
 /**
  * COMPONENT
  */
 class UserGroceries extends React.Component{
   constructor(props){
     super(props)
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount(){
     this.props.fetchGroceries(this.props.user.id)
   }
 
-  handleClick(){
-    console.log('clicked')
-
+  handleClick(e){
+    const {user, userGroceries} = this.props;
+    axios.post(`/api/groceries/${user.id}/email`, {user, userGroceries})
+    .then(res => {
+      console.log(res.data);
+    })
   }
 
   render(){

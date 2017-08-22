@@ -3,6 +3,8 @@ const db = require('../db/db');
 const Grocery = db.model('grocery');
 const GroceryUser = db.model('groceryUser');
 const Promise = require('bluebird');
+const nodemailer = require('nodemailer');
+require('../../secrets');
 module.exports = router;
 
 //get groceries from a user
@@ -43,7 +45,44 @@ router.post('/:userId', (req, res, next) => {
 
 // POST
 router.post('/:userId/email', (req, res, next) => {
-  console.log('email')
+  // create reusable transporter object using the default SMTP transport
+  const {user, userGroceries} = req.body;
+  let buildEmail = function(groceries){
+    let message = '<h3>Your groceries:</h3><ul>';
+    groceries.forEach(grocery => {
+      message = message.concat(`<li>${grocery}</li>`)
+    })
+    message = message.concat('</ul>')
+    return message;
+  }
+
+  let transporter = nodemailer.createTransport({
+    service: "Gmail",
+    port: 465,
+    secure: true, // secure:true for port 465, secure:false for port 587
+    auth: {
+        user: process.env.TK_GMAIL_ADDRESS,
+        pass: process.env.TK_GMAIL_PASSWORD
+    }
+  });
+
+  // setup email data with unicode symbols
+  let mailOptions = {
+    from: `"Tiny Kitchen" <${process.env.TK_GMAIL_ADDRESS}>`, // sender address
+    to: user.email, // list of receivers
+    subject: 'Your Grocery List', // Subject line
+    text: buildEmail(userGroceries), // plain text body
+    html: buildEmail(userGroceries) // html body
+  };
+
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+        return console.log(error);
+    }
+    console.log('Message %s sent: %s', info.messageId, info.response);
+    res.json(transporter.sendMail);
+  });
 })
 
 // DELETE
@@ -57,3 +96,5 @@ router.delete('/:userId/:groceryId', (req, res, next) => {
   .then(res.send(groceryId + ' grocery deleted from list'))
   .catch(next);
 });
+
+
