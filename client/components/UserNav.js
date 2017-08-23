@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import { ProfileUpperArea, ProfileCard, ProfilePic, ProfilePicArea, ProfileInfoArea, Links, AccentButton, ControlPanel, Heading, Title } from './styled-components'
 import Tile from './Tile'
 import ImgUpload from './ImgUpload';
@@ -66,7 +66,7 @@ class UserNav extends React.Component {
             <ProfilePicArea>
 
 
-             <ProfilePic src={user.picture_url} />
+              <ProfilePic src={user.picture_url} />
 
             </ProfilePicArea>
             <ProfileInfoArea>
@@ -97,12 +97,12 @@ class UserNav extends React.Component {
               </div>
             </ProfileInfoArea>
           </ProfileCard>
-          <Links >
-            <Title secondary ><Link style={{ color: "#5e5e5e" }} to='/home/recipes'>Recipes</Link></Title>
+          <Links style={{ width: "55vw" }}>
+            <Title secondary><Link style={{ color: "#5e5e5e" }} to='/home/recipes'>Recipes</Link></Title>
             <Title secondary><Link style={{ color: "#5e5e5e" }} to='/home/groceries'>Groceries</Link></Title>
           </Links>
         </ProfileUpperArea>
-      </div>
+      </div >
     )
   }
 
