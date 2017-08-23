@@ -7,12 +7,14 @@ import * as action from '../store'
 import history from '../history'
 import { GridList, GridTile } from 'material-ui/GridList'
 import { Login } from './auth-form'
+import ImgUpload from './ImgUpload';
 
 class AddRecipe extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       highlighted: null,
+      newRecipe: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,7 +25,11 @@ class AddRecipe extends React.Component {
   }
   componentDidMount() {
     let recipeUrl = this.props.location.search.slice(5);
-    this.props.chromeRecipe(recipeUrl);
+    if (recipeUrl !== '') this.props.chromeRecipe(recipeUrl);
+    else {
+      if(this.state.newRecipe === false) this.setState({newRecipe: true});
+    }
+
   }
   handleChange(evt) {
     let recipe = Object.assign({}, this.props.recipe);
@@ -46,6 +52,7 @@ class AddRecipe extends React.Component {
   addField(e) {
     e.preventDefault();
     let recipe = Object.assign({}, this.props.recipe);
+    if (!recipe[e.target.name]) recipe[e.target.name] = [];
     recipe[e.target.name] = [...recipe[e.target.name], `New ${e.target.name.slice(0, -1)}`];
     this.props.getRecipeSuccess(recipe)
   }
@@ -73,8 +80,29 @@ class AddRecipe extends React.Component {
         {recipe.parseError ? <ErrorModal /> : null}
           <Form onSubmit={this.handleSubmit}>
             <Input title type="text" name="title" onChange={this.handleChange} value={recipe && recipe.title} />
-            {recipe.parseError ?
-              <Title secondary>Upload a Picture:</Title> :
+            {(recipe.parseError || this.state.newRecipe) ?
+               <div><Title secondary>Upload a Picture:</Title> <ImgUpload type="addRecipe" />
+               <div style={styles.root}>
+                  {recipe.picture_url &&
+                    <GridList style={styles.gridList} cols={2.2}>
+                      {recipe.picture_url.map((pic, i) => {
+                        return (<GridTile
+                          onClick={this.selectPic}
+                          rows={1.1}
+                          key={i}
+                          id={i}
+                        >
+                          {i === this.state.highlighted ?
+                            <img id={i} src={pic} style={{ "objectFit": "cover", "height": "200px", "width": "auto", "border": "5px solid #db3434" }} />
+                            : <img id={i} src={pic} style={{ "objectFit": "cover", "height": "200px", "width": "auto", "border": "5px solid transparent" }} />
+                          }  </GridTile>)
+                      })
+                      }
+                    </GridList>
+                  }
+                </div>
+
+               </div> :
               <div>
                 <Title secondary>Choose the Correct Picture:</Title>
                 <div style={styles.root}>
@@ -103,14 +131,14 @@ class AddRecipe extends React.Component {
                 <Title secondary>Ingredients</Title> {
                   recipe.ingredients && recipe.ingredients.map((ingredient, i) =>
                   { return (<div key={i}><Modify x href="#" onClick={this.deleteField} name="ingredients" id={i}>x</Modify> <Input type="text" key={i} id={i} name="ingredients" value={ingredient} style={{ height: "auto" }} onChange={this.handleChange} /></div>) })}
-                <Modify href="#" onClick={this.addField} name="ingredients">+</Modify>
+                <Modify onClick={this.addField} name="ingredients">+</Modify>
               </Box>
               <Box>
                 <Title secondary>Directions</Title> {
                   recipe.directions && recipe.directions.map((direction, i) =>
                   { return (<div key={i}><Modify x href="#" onClick={this.deleteField} name="directions" id={i}>x</Modify>  <TextArea type="text" key={i} id={i} name="directions" value={direction} onChange={this.handleChange} /></div>) })
                 }
-                <Modify href="#" onClick={this.addField} name="directions">+</Modify>
+                <Modify onClick={this.addField} name="directions">+</Modify>
               </Box>
             </SecondaryWrap>
             <SecondaryWrap>

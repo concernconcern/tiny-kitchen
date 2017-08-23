@@ -50,7 +50,7 @@ class CookRecipe extends React.Component {
           this.stepBackward();
         }
         else if (i === 11) {
-          Mochi.shutUp();
+          this.sendUserInput(wildcard);
         }
       }
     }, {
@@ -68,11 +68,20 @@ class CookRecipe extends React.Component {
           this.stepBackward()
         else if (event.key === 'ArrowUp' || event.key === 'ArrowRight')
           this.stepForward()
-        else
-          return
+        else if (event.key === 'Escape'){
+          let recipe = this.props.recipe;
+          let userId = this.props.userId;
+          let link = recipe.id == 1 ? "/" : `/recipe/${recipe.id}/user/${userId}`
+         this.exit(null, link);
+       }
+        else return;
       }
     });
 
+  }
+
+  componentWillUnmount() {
+    this.props.clearStep();
   }
 
   componentDidUpdate() {
@@ -89,7 +98,6 @@ class CookRecipe extends React.Component {
     if (this.props.stepToSay !== '' && !this.state.stopped && this.props.step !== 0 && !this.state.stepSaid){
       Mochi.say(this.props.stepToSay)
     }
-
   }
 
   sendUserInput (userInput) {
@@ -110,6 +118,7 @@ class CookRecipe extends React.Component {
 
   stepForward () {
     this.setState({stepSaid: false})
+
     let newStep = this.props.step + 1;
     if (this.props.recipe && newStep < this.props.recipe.directions.length) {
       Mochi.shutUp();
@@ -140,11 +149,11 @@ class CookRecipe extends React.Component {
         forwardDisable,
         backDisable
       });
+
       if (!this.state.stepSaid){
         //Mochi.say(this.props.stepToSay)
         this.setState({stepSaid: true})
       }
-
     }
   }
 
@@ -255,6 +264,9 @@ const mapDispatch = (dispatch) => {
     changeStepTo(newStep, directions) {
       dispatch(action.getStep(newStep))
       dispatch(action.sayStep(newStep, directions))
+    },
+    clearStep(){
+      dispatch(action.getStep(0));
     }
   };
 };

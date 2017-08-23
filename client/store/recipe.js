@@ -26,7 +26,7 @@ const recipe = {
  */
 export const getRecipeSuccess = (recipe) => ({ type: GET_RECIPE_SUCCESS, recipe })
 export const getRecipeFail = () => ({ type: GET_RECIPE_FAIL })
-export const resetRecipe = () => ({type: RESET_RECIPE})
+export const resetRecipe = () => ({ type: RESET_RECIPE })
 
 /**
  * THUNK CREATORS
@@ -51,11 +51,12 @@ export const chromeRecipe = (url) =>
       })
       .catch(err => console.log(err))
 
-export const submitRecipe = (recipe) =>
-  dispatch =>
+export const submitRecipe = (recipe, userId) =>
+  (dispatch, getState) =>
     axios.post(`/api/recipes`, recipe)
       .then(res => {
-        history.push(`/recipe/${res.data.id}`)
+        let userId = getState().user.id;
+        history.push(`/recipe/${res.data.id}/user/${userId}`)
         dispatch(getRecipeSuccess(res.data))
       })
       .catch(err => { dispatch(getRecipeFail()) })
