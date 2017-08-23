@@ -53,7 +53,7 @@ const recipeLinks = [
 function getRecipes(){
   return axios.get(`https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.NYT_KEY}&query=recipe`)
   .then(apiRes => {
-    const recipes = apiRes.data.response.docs.concat(recipeLinks);
+    const recipes = apiRes.data.response.docs.filter(el => !el.headline.name.includes('Ravaiya')).concat(recipeLinks);
 
     const promises = [];
     recipes.forEach(recipe => {
