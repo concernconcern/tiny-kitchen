@@ -12,7 +12,7 @@ const Navbar = (props) => {
     <Bar>
       <LogoWrap>
         <Mochi height="10vh" />
-        <Logo href="/">Tiny Kitchen</Logo>
+        <Link to='/' style={{ textDecoration: 'none' }}><Logo>Tiny Kitchen</Logo></Link>
       </LogoWrap>
       {
         isLoggedIn
