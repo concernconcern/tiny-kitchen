@@ -51,19 +51,10 @@ export const logout = () =>
       .catch(err => console.log(err))
 
 
-export const updateUser = (info, type) => {
-  let object = {};
-  if (type === 'name') {
-    let first_name = info.split(' ')[0];
-    let last_name = info.split(' ')[1];
-    object.first_name = first_name;
-    object.last_name = last_name;
-  } else {
-    object[type] = info;
-  }
+export const updateUser = (info) => {
   return (dispatch, getState) => {
     const id = getState().user.id;
-    axios.put(`/api/users/${id}`, object)
+    axios.put(`/api/users/${id}`, info)
       .then(res => {
         dispatch(getUser(res.data))
       })

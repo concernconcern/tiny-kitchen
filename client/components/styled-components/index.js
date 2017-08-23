@@ -10,7 +10,15 @@ export const Wrapper = styled.div`
   flex-direction: ${props => props.column ? 'column' : 'row'};
   justify-content: ${props => props.centered ? 'center' : 'space-between'};
   ${props => props.centered ? 'padding-top: 20vh' : null}
+  ${props => props.center ? 'align-items: center;' : null}
 `
+export const CenterWrap = styled.div`
+  display: flex;
+  width: 100vw;
+  align-items: center;
+  flex-direction: column;
+`
+
 export const RecipeImg = styled.img`
   height: ${props => props.secondary ? '300px' : '88vh'};
   width: ${props => props.secondary ? '760px' : '50vw'};
@@ -158,9 +166,6 @@ export const Input = styled.input`
   height: auto;
   margin: 5px;
   border: 1px solid #db7d7d;
-  &:active {
-    background-color: green;
-}
 `
 export const Box = styled.div`
   padding: 10px;
@@ -225,14 +230,16 @@ export const Button = styled.button`
   }
 `
 export const AccentButton = styled.button`
-  background: ${props => props.small ? '#C4CCE0' : '#53BDFF'};
+  background: ${props => props.small ? '#75cdf9' : '#53BDFF'};
   outline: none;
   color:white;
-  border: 1px solid ${props => props.small ? '#C4CCE0' : '#35A6FF'};
+  border: 1px solid ${props => props.small ? '#75cdf9' : '#35A6FF'};
   padding: ${props => props.small ? '4px 8px' : '15px 20px'};
   border-radius: 5px;
+  font-family: Roboto, 'sans-serif';
+  text-transform: uppercase;
   &:hover{
-    background: ${props => props.small ? '#cfd6e6' : '#3bb8f7'};
+    background: ${props => props.small ? '#80d3fc' : '#3bb8f7'};
   }
   ${props => props.small ? 'font-size: 10px;' : null}
 `
@@ -308,10 +315,9 @@ export const Controls = styled.div`
 `
 //user profile styles
 export const ProfileUpperArea = styled.div`
-  height: 35vh;
   flex: 1;
   display: flex;
-  padding: 25px;
+  padding: 2vw;
   flex-direction: ${props => props.column ? 'column' : 'row'};
 `
 export const ProfileCard = styled.div`
@@ -381,6 +387,7 @@ export const ImageUploadCard = styled.div`
   width 400px;
   flex-direction: column;
   display: flex;
-
+  justify-content: center;
+  align-items: center;
   padding: 10px;
 `
