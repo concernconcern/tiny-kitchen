@@ -34,7 +34,6 @@ router.post('/:userId/bulk', (req, res, next) => {
       }
     }))
   .then(groceries => {
-    console.log('groceries api back from bulk add: ', groceries)
     res.json(groceries)
   })
   .catch(next);
@@ -42,9 +41,7 @@ router.post('/:userId/bulk', (req, res, next) => {
 
 router.put('/:userId/bulk', (req, res, next) => {
   let editedGroceries = req.body;
-  console.log('editedGroceries in api route', editedGroceries)
   Promise.map(editedGroceries, grocery => {
-    console.log('groceryItem: ', grocery)
     return Grocery.findById(grocery.editedId)
     .then(oldGrocery => oldGrocery.update({title: grocery.content}))
   })
@@ -88,7 +85,6 @@ router.post('/:userId/email', (req, res, next) => {
     if (error) {
       return console.log(error);
     }
-    console.log('Message %s sent: %s', info.messageId, info.response);
     res.json(transporter.sendMail);
   });
 });
