@@ -1,6 +1,7 @@
 const sanitizeHtml = require('sanitize-html')
 const html2json = require('html2json').html2json;
 const axios = require('axios');
+const _ = require('lodash');
 
 module.exports = function getJsonFromUrl(source_url, picture_url) {
   return axios.get(source_url)
@@ -16,7 +17,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
           'img': ['src', 'data-src']
         }
       }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&');
-      
+
       // custom replacements for AllRecipes.com
       sanitizedHtml = sanitizedHtml.replace(/Serving size has been adjusted!(.*?)\(uses your location\)/g, '').replace(/{{model.addEditText}}(.*?)<\/ul>/g, '').replace(/ADVERTISEMENT/g, '').replace(/<li> Add all ingredients to list <\/li>/g, '').replace(/ +/g, ' ');
       
@@ -135,13 +136,63 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
         let sanitizedHtmlAlt = sanitizeHtml(rawHtml, {
           allowedTags: ['div', 'p', 'br'],
           allowedAttributes: []
-        }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&');
-        directions = html2json(sanitizedHtmlAlt);
+        // }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&').replace(/> +/g, '>').replace(/(<div>)+/g, '<div>').replace(/(<\/div>)+/g, '</div>');
+        }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&').replace(/<div><\/div>/g, '');
+      
+        let directionsKeyword = directionsKeywords.find(el => !!findDirectionsAlt(sanitizedHtmlAlt, el))
+        directions = findDirectionsAlt(sanitizedHtmlAlt, directionsKeyword);
       }
 
-      function freeformDirections(html){
-        return html2json(html);
+      function findDirectionsAlt(html, section){
+        let clippedText = clipText(html, section);        
+        function clipText(html, section){
+          let idx = html.indexOf(section);
+          if (idx === -1) return;
+          return html.slice(idx);
+        }
+        if (!clippedText) {
+          return;
+        }
+
+        let list = startList(clippedText)
+        function startList(html, resultObj={}){
+          for (let i = 0; i < html.length; i++){
+            let substring = html.slice(i);
+            if (substring.startsWith('<')){
+              if (substring[1] === '/') continue;
+              resultObj.start = i;
+              resultObj.listType = substring.slice(1,3);
+              return resultObj
+            }
+          }
+        }
+
+        list = endList(clippedText, list)
+        function endList(html, resultObj){
+          let openEls = 1;
+          for (let i = resultObj.start; i < html.length; i++){
+            substring = html.slice(i);
+            if (substring.startsWith(`<${resultObj.listType}`)) openEls++;
+            if (substring.startsWith(`</${resultObj.listType}`)){
+              if (openEls === 1){
+                resultObj.end = i;
+                resultObj.text = html.slice(resultObj.start, resultObj.end + 6);
+                return resultObj;
+              } else {
+                openEls--;
+              }
+            }
+          }
+        }
+
+        let sanitizedResult = sanitizeHtml(list.text, {allowedTags: [], allowedAttributes: []})
+        list.text = sanitizedResult;
+
+        return list;
       }
+
+
+
 
       const obj = {
         title,
