@@ -47,7 +47,6 @@ export const bulkAddGroceries = (userId, groceryContents) =>
     })
     axios.post(`/api/groceries/${userId}/bulk`, groceryObjects)
     .then(res => {
-      console.log('res.data from bulk add: ', res.data)
       dispatch(addMultipleGroceries(res.data))
     })
     .catch(err => console.log(err))
@@ -55,10 +54,8 @@ export const bulkAddGroceries = (userId, groceryContents) =>
 
 export const bulkUpdateGroceries = (userId, editedGroceries) =>
   dispatch => {
-    console.log('edited groceries in reducer: ', editedGroceries)
     axios.put(`/api/groceries/${userId}/bulk`, editedGroceries)
     .then(res => {
-      console.log('bulk updated groceries back from reducer: ', res.data)
       dispatch(updateMultipleGroceries(res.data))
     })
     .catch(err => console.log(err))
@@ -80,7 +77,6 @@ const updateMultipleHelper = (updatedGroceries, stateGroceries) => {
       }
     }
   }
-  console.log('originalGroceries: ', originalGroceries)
   return originalGroceries;
 }
 
