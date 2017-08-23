@@ -315,7 +315,6 @@ export const Controls = styled.div`
 `
 //user profile styles
 export const ProfileUpperArea = styled.div`
-  height: 35vh;
   flex: 1;
   display: flex;
   padding: 2vw;

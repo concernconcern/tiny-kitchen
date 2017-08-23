@@ -13,44 +13,37 @@ class UserNav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editName: false,
-      editEmail: false,
+      editing: false,
       name: '',
       email: ''
     }
-
-    this.handleNameClick = this.handleNameClick.bind(this);
-    this.handleEmailClick = this.handleEmailClick.bind(this);
-    this.handleDone = this.handleDone.bind(this);
-
+  }
+  componentWillReceiveProps(props) {
+    this.setState({
+      name: props.user.first_name + " " + props.user.last_name,
+      email: props.user.email
+    })
   }
 
-  handleNameClick(event) {
+  handleEdit = (event) => {
     const { value } = event.target;
-    const editName = value === 'edit' ? true : false;
-    this.setState({ editName });
+    this.setState({ editing: true });
   }
 
-  handleEmailClick(event) {
-    const { value } = event.target;
-    const editEmail = value === 'edit' ? true : false;
-    this.setState({ editEmail });
-  }
-
-  handleChange(event, type) {
+  handleChange = (event, type) => {
     let newState = this.state;
     newState[type] = event.target.value
     this.setState(newState);
   }
 
-  handleDone(event, type) {
-    let newState = this.state;
-    let field = type === 'name' ? 'editName' : 'editEmail';
-    newState[field] = false;
-    this.setState(newState);
-
-    let info = this.state[type];
-    this.props.updateUser(info, type);
+  handleDone = (event) => {
+    let name = this.state.name.split(" ");
+    let first_name = name[0];
+    let last_name = name[1];
+    let email = this.state.email;
+    let info = { first_name, last_name, email }
+    this.props.updateUser(info);
+    this.setState({ editing: false })
   }
 
   componentDidMount() {
@@ -71,29 +64,28 @@ class UserNav extends React.Component {
             </ProfilePicArea>
             <ProfileInfoArea>
               <div>
-                {this.state.editName ?
-                  <ControlPanel profile>
-                    <input onChange={(e) => this.handleChange(e, 'name')}></input>
-                    <AccentButton small type="submit" onClick={(e) => this.handleDone(e, 'name')}>Done</AccentButton>
-                  </ControlPanel>
+                {this.state.editing ?
+                  <div>
+                    <ControlPanel profile>
+                      <input value={this.state.name} onChange={(e) => this.handleChange(e, 'name')}></input>
+                    </ControlPanel>
+                    <ControlPanel profile>
+                      <input value={this.state.email} onChange={(e) => this.handleChange(e, 'email')}></input>
+                    </ControlPanel>
+                    <AccentButton small type="submit" onClick={this.handleDone}>Done</AccentButton>
+                    <ImgUpload type='userImg' style={{ marginTop: "3px" }} />
+                  </div>
                   :
-                  <ControlPanel profile>
-                    <Heading>{user.first_name + ' ' + user.last_name}</Heading>
-                    <AccentButton small value="edit" onClick={this.handleNameClick}>Edit</AccentButton>
-                  </ControlPanel>
+                  <div>
+                    <ControlPanel profile>
+                      <Heading>{this.state.name}</Heading>
+                    </ControlPanel>
+                    <ControlPanel profile>
+                      <Heading secondary>{this.state.email}</Heading>
+                    </ControlPanel>
+                    <AccentButton small value="edit" name="email" onClick={this.handleEdit}>Edit</AccentButton>
+                  </div>
                 }
-                {this.state.editEmail ?
-                  <ControlPanel profile>
-                    <input onChange={(e) => this.handleChange(e, 'email')}></input>
-                    <AccentButton small type="submit" onClick={(e) => this.handleDone(e, 'email')}>Done</AccentButton>
-                  </ControlPanel>
-                  :
-                  <ControlPanel profile>
-                    <Heading secondary>{user.email}</Heading>
-                    <AccentButton small value="edit" name="email" onClick={this.handleEmailClick}>Edit</AccentButton>
-                  </ControlPanel>
-                }
-                <ImgUpload type='userImg' />
               </div>
             </ProfileInfoArea>
           </ProfileCard>
@@ -121,7 +113,7 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     fetchUserRecipes: (userId) => dispatch(action.fetchUserRecipes(userId)),
-    updateUser: (info, type) => dispatch(action.updateUser(info, type))
+    updateUser: (info) => dispatch(action.updateUser(info))
   }
 }
 
