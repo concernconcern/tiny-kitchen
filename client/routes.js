@@ -4,7 +4,7 @@ import { Router } from 'react-router'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import history from './history'
-import { Main, Login, Signup, UserHome, ViewRecipe, CookRecipe, AddRecipe, AllRecipes, ImgUpload } from './components'
+import { Main, Login, Signup, UserHome, ViewRecipe, CookRecipe, AddRecipe, AllRecipes } from './components'
 import { me } from './store'
 /**`
  * COMPONENT
@@ -24,8 +24,6 @@ class Routes extends Component {
             <Route exact path='/' component={AllRecipes} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/signup' component={Signup} />
-
-            <Route exact path='/img' component={ImgUpload} />
             <Route exact path='/recipe/:recipeid' component={ViewRecipe} />
             <Route exact path='/recipe/:recipeid/cook' component={CookRecipe} />
             <Route path='/add-recipe' component={AddRecipe} />
