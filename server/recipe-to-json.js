@@ -11,7 +11,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
       if (typeof rawHtml !== 'string') return {};
 
       let sanitizedHtml = sanitizeHtml(rawHtml, {
-        allowedTags: ['title', 'img', 'ul', 'ol', 'li', 'br'],
+        allowedTags: ['title', 'img', 'ul', 'ol', 'li'],
         allowedAttributes: {
           'img': ['src', 'data-src']
         }
@@ -129,8 +129,18 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
 
       let directions = clipSection(sanitizedHtml, directionsKeywords.find(el => !!findList(sanitizedHtml, el)));
       if (directions) {
-        directions = html2json(directions)
+        directions = html2json(directions);
         directions = createArray(directions);
+      } else {
+        let sanitizedHtmlAlt = sanitizeHtml(rawHtml, {
+          allowedTags: ['div', 'p', 'br'],
+          allowedAttributes: []
+        }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&');
+        directions = html2json(sanitizedHtmlAlt);
+      }
+
+      function freeformDirections(html){
+        return html2json(html);
       }
 
       const obj = {
