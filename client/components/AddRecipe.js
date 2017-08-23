@@ -7,7 +7,7 @@ import * as action from '../store'
 import history from '../history'
 import { GridList, GridTile } from 'material-ui/GridList'
 import { Login } from './auth-form'
-// import ImgUpload from './ImgUpload';
+import ImgUpload from './ImgUpload';
 
 class AddRecipe extends React.Component {
   constructor(props) {
@@ -23,7 +23,6 @@ class AddRecipe extends React.Component {
     this.handleClose = this.handleChange.bind(this);
   }
   componentDidMount() {
-    console.log('PROPS', this.props);
     let recipeUrl = this.props.location.search.slice(5);
     this.props.chromeRecipe(recipeUrl);
   }
