@@ -73,11 +73,16 @@ class UserGroceries extends React.Component{
     e.preventDefault();
     console.log('event id', e.target.id)
     let fieldId = Number(e.target.id)
-    //if user removed an empty field
-    if (fieldId > this.props.userGroceries.length - 1){
-      this.setState({displayedFields: this.state.displayedFields.slice(this.state.displayedFields.length - 1)})
-    }
-    else {
+    console.log('fieldid: ', fieldId)
+    let firstPart = this.state.displayedFields.slice(0, fieldId);
+    console.log('first part: ', firstPart)
+    let secondPart = this.state.displayedFields.slice(fieldId+1, -1);
+    console.log('secondPart: ', secondPart);
+    let newDisplayedFields = firstPart.concat(secondPart);
+    this.setState({displayedFields: newDisplayedFields});
+    console.log('still displayed fields: ', this.state.displayedFields)
+    //if it's actually removing something
+    if (fieldId <= this.props.userGroceries.length - 1){
       let inEditId = this.state.editedIds.indexOf(fieldId);
       if (inEditId !== -1)
         this.setState({editedIds: this.state.editedIds.slice(inEditId, inEditId+1)})
@@ -122,7 +127,7 @@ class UserGroceries extends React.Component{
         this.state.displayedFields.map((grocery, i) =>
          <div key={i}>
            <Modify x href="#" onClick={this.removeField} name="groceries" id={i}>x</Modify>
-           <Input type="text" key={i.toString()} id={i} name="groceries" value={grocery.title} style={{ height: "auto", width: "auto" }} onChange={this.handleChange} />
+           <Input type="text" key={i.toString()} id={i} name="groceries" value={grocery.title || grocery} style={{ height: "auto", width: "auto" }} onChange={this.handleChange} />
          </div>)
       }
       <IconButton
