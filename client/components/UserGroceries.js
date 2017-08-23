@@ -52,8 +52,6 @@ class UserGroceries extends React.Component{
   handleSubmit(e){
     e.preventDefault();
     let addedGroceryContents = this.state.displayedFields.filter((content, i) => i >= this.props.userGroceries.length)
-    console.log('addedGroceryContents, ', addedGroceryContents)
-    console.log('edited ids: ', this.state.editedIds)
     let editedGroceries = this.state.editedIds.length ? this.state.editedIds.map(fieldId => {
       return {
         editedId: this.props.userGroceries[fieldId].id,
@@ -61,7 +59,6 @@ class UserGroceries extends React.Component{
       }
     }) : [];
 
-    console.log('editedGroceries: ', editedGroceries)
     this.props.makeGroceryList(this.props.user.id, editedGroceries, addedGroceryContents);
     this.setState({edit: false, editedIds: []})
 
@@ -71,7 +68,6 @@ class UserGroceries extends React.Component{
 
   removeField(e) {
     e.preventDefault();
-    console.log('event id', e.target.id)
     let fieldId = Number(e.target.id)
     //if user removed an empty field
     if (fieldId > this.props.userGroceries.length - 1){
@@ -94,14 +90,12 @@ class UserGroceries extends React.Component{
 
   helperChangeField(fieldId, content){
     //records which fields were changed
-    console.log('helperchangefield: ', fieldId + content)
     let numId = Number(fieldId)
     if (numId < this.props.userGroceries.length && this.state.editedIds.indexOf(numId) === -1){
       this.setState({
         editedIds: this.state.editedIds.concat(numId),
       })
     }
-    console.log('edited ids: ', this.state.editedIds)
     let newDisplayedFields = [...this.state.displayedFields];
     newDisplayedFields[numId] = content;
     this.setState({
