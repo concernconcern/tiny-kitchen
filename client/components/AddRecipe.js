@@ -14,6 +14,7 @@ class AddRecipe extends React.Component {
     super(props);
     this.state = {
       highlighted: null,
+      newRecipe: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,6 +26,10 @@ class AddRecipe extends React.Component {
   componentDidMount() {
     let recipeUrl = this.props.location.search.slice(5);
     if (recipeUrl !== '') this.props.chromeRecipe(recipeUrl);
+    else {
+      if(this.state.newRecipe === false) this.setState({newRecipe: true});
+    }
+
   }
   handleChange(evt) {
     let recipe = Object.assign({}, this.props.recipe);
@@ -75,8 +80,29 @@ class AddRecipe extends React.Component {
         {recipe.parseError ? <ErrorModal /> : null}
           <Form onSubmit={this.handleSubmit}>
             <Input title type="text" name="title" onChange={this.handleChange} value={recipe && recipe.title} />
-            {recipe.parseError ?
-              <div><Title secondary>Upload a Picture:</Title> </div> :
+            {(recipe.parseError || this.state.newRecipe) ?
+               <div><Title secondary>Upload a Picture:</Title> <ImgUpload type="addRecipe" />
+               <div style={styles.root}>
+                  {recipe.picture_url &&
+                    <GridList style={styles.gridList} cols={2.2}>
+                      {recipe.picture_url.map((pic, i) => {
+                        return (<GridTile
+                          onClick={this.selectPic}
+                          rows={1.1}
+                          key={i}
+                          id={i}
+                        >
+                          {i === this.state.highlighted ?
+                            <img id={i} src={pic} style={{ "objectFit": "cover", "height": "200px", "width": "auto", "border": "5px solid #db3434" }} />
+                            : <img id={i} src={pic} style={{ "objectFit": "cover", "height": "200px", "width": "auto", "border": "5px solid transparent" }} />
+                          }  </GridTile>)
+                      })
+                      }
+                    </GridList>
+                  }
+                </div>
+
+               </div> :
               <div>
                 <Title secondary>Choose the Correct Picture:</Title>
                 <div style={styles.root}>

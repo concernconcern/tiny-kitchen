@@ -60,6 +60,7 @@ class ImgUpload extends React.Component {
       } else if (this.props.type === 'addRecipe') {
         let recipe = {};
         recipe.picture_url = [this.state.imgUrl];
+        recipe.selected_pic = this.state.imgUrl;
         this.props.getRecipeSuccess(recipe);
       }
       this.handleClose();
