@@ -158,9 +158,6 @@ export const Input = styled.input`
   height: auto;
   margin: 5px;
   border: 1px solid #db7d7d;
-  &:active {
-    background-color: green;
-}
 `
 export const Box = styled.div`
   padding: 10px;
