@@ -16,8 +16,7 @@ class UserNav extends React.Component {
       editName: false,
       editEmail: false,
       name: '',
-      email: '',
-      editImg: false
+      email: ''
     }
 
     this.handleNameClick = this.handleNameClick.bind(this);
