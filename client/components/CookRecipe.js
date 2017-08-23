@@ -58,12 +58,6 @@ class CookRecipe extends React.Component {
       indexes: ['mochi *'],
        action: (i, wildcard) => this.sendUserInput(wildcard)
      }]);
-
-    if (this.state.onFirstStep && this.props.recipe){
-      console.log('on first step and recipe')
-      this.props.changeStepTo(this.props.step, this.props.recipe.directions)
-    }
-
     window.addEventListener("keydown", event => {
       if (event.defaultPrevented) {
         return; // Do nothing if the event was already processed
@@ -82,6 +76,11 @@ class CookRecipe extends React.Component {
         else return;
       }
     });
+    if (this.state.onFirstStep && this.props.recipe){
+      console.log('on first step and recipe')
+      this.props.changeStepTo(this.props.step, this.props.recipe.directions)
+    }
+
 
   }
 
