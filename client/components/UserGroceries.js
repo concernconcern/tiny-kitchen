@@ -81,10 +81,6 @@ class UserGroceries extends React.Component {
   removeField(e) {
     e.preventDefault();
     let fieldId = Number(e.target.id)
-<<<<<<< HEAD
-=======
-
->>>>>>> 58d63962e642b88873b511133863602cbebd968e
     let firstPart = this.state.displayedFields.slice(0, fieldId);
     let secondPart = this.state.displayedFields.slice(fieldId+1, -1);
     let newDisplayedFields = firstPart.concat(secondPart);
@@ -94,10 +90,7 @@ class UserGroceries extends React.Component {
       let inEditId = this.state.editedIds.indexOf(fieldId);
       if (inEditId !== -1)
         this.setState({editedIds: this.state.editedIds.slice(inEditId, inEditId+1)})
-<<<<<<< HEAD
 
-=======
->>>>>>> 58d63962e642b88873b511133863602cbebd968e
       let toRemoveId = this.props.userGroceries[fieldId].id
       this.props.deleteGrocery(toRemoveId)
       this.setState({
