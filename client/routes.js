@@ -4,7 +4,7 @@ import { Router } from 'react-router'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import history from './history'
-import { Main, Login, Signup, UserHome, ViewRecipe, CookRecipe, AddRecipe, AllRecipes, Search } from './components'
+import { Main, Login, Signup, UserHome, ViewRecipe, CookRecipe, AddRecipe, AllRecipes } from './components'
 import { me } from './store'
 /**`
  * COMPONENT
@@ -42,9 +42,7 @@ class Routes extends Component {
   }
 }
 
-/**
- * CONTAINER
- */
+
 const mapState = (state) => {
   return {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.

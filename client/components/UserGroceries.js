@@ -1,22 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import * as action from '../store'
 import axios from 'axios';
-import { List, AccentButton, Box, Modify, Input, Form, Button } from './styled-components'
+import { List, AccentButton, Box, Modify, Title, Input, Form, Button, Wrapper, CenterWrap } from './styled-components'
 import IconButton from 'material-ui/IconButton';
+import Snackbar from 'material-ui/Snackbar';
 /**
  * COMPONENT
  */
-class UserGroceries extends React.Component{
-  constructor(props){
+class UserGroceries extends React.Component {
+  constructor(props) {
     super(props)
     this.handleClick = this.handleClick.bind(this);
     this.state = {
       edit: false,
-      totalFields: [],
-      editedGroceries: []
+      displayedFields: [],
+      editedIds: [],
+      open: false,
+      message: '',
     }
     this.handleEdit = this.handleEdit.bind(this);
     this.addField = this.addField.bind(this);
@@ -25,97 +28,132 @@ class UserGroceries extends React.Component{
     this.handleSubmit = this.handleSubmit.bind(this);
     this.helperChangeField = this.helperChangeField.bind(this);
   }
-
-  componentDidMount(){
+  handleRequestClose = () => {
+    this.setState({
+      open: false,
+    });
+  }
+  componentDidMount() {
     this.props.fetchGroceries(this.props.user.id)
   }
 
-  handleClick(e){
-    const {user, userGroceries} = this.props;
-    axios.post(`/api/groceries/${user.id}/email`, {user, userGroceries})
-    .then(res => {
-      console.log(res.data);
+  handleClick(e) {
+    const { user, userGroceries } = this.props;
+    axios.post(`/api/groceries/${user.id}/email`, { user, userGroceries })
+      .then(res => {
+        console.log(res.data);
+      })
+    this.setState({
+      open: true,
+      message: `Your grocery list was emailed to ${user.email}!`
     })
   }
 
-  handleEdit(){
-    this.setState({edit: true,
-      totalFields: [...this.props.userGroceries]
+  handleEdit() {
+    this.setState({
+      edit: true,
+      displayedFields: [...this.props.userGroceries]
     })
   }
-
-  handleSubmit(e){
+  //rendering another field to on the front end
+  addField(e) {
     e.preventDefault();
-    let editedGroceries = this.state.editedGroceries;
-    let newGroceryList = [...this.state.totalFields];
-    this.props.makeGroceryList(this.props.user.id, editedGroceries);
-    this.setState({edit: false, totalFields: []})
+    this.setState({ displayedFields: this.state.displayedFields.concat('') })
   }
 
-  //rendering another field to add grocery
-  addField(e){
+  handleSubmit(e) {
     e.preventDefault();
-    this.setState({totalFields: this.state.totalFields.concat('')})
+    let addedGroceryContents = this.state.displayedFields.filter((content, i) => i >= this.props.userGroceries.length)
+    console.log('addedGroceryContents, ', addedGroceryContents)
+    console.log('edited ids: ', this.state.editedIds)
+    let editedGroceries = this.state.editedIds.length ? this.state.editedIds.map(fieldId => {
+      return {
+        editedId: this.props.userGroceries[fieldId].id,
+        content: this.state.displayedFields[fieldId]
+      }
+    }) : [];
+
+    console.log('editedGroceries: ', editedGroceries)
+    this.props.makeGroceryList(this.props.user.id, editedGroceries, addedGroceryContents);
+    this.setState({ edit: false, editedIds: [] })
+
   }
+
+
 
   removeField(e) {
     e.preventDefault();
-    this.props.deleteGroceryFromUser(this.props.user.id, e.target.id);
-    this.setState({
-      totalFields: this.state.totalFields.filter((grocery, i) =>
-      Number(i) !== Number(e.target.id))
-    })
+    console.log('event id', e.target.id)
+    let fieldId = Number(e.target.id)
+    //if user removed an empty field
+    if (fieldId > this.props.userGroceries.length - 1) {
+      this.setState({ displayedFields: this.state.displayedFields.slice(this.state.displayedFields.length - 1) })
+    }
+    else {
+      let toRemoveId = this.props.userGroceries[fieldId].id
+      this.props.deleteGrocery(toRemoveId)
+      this.setState({
+        displayedFields: this.state.displayedFields.filter((grocery, i) =>
+          Number(i) !== fieldId)
+      })
+    }
   }
 
-  handleChange(e){
+  handleChange(e) {
     e.preventDefault();
     this.helperChangeField(e.target.id, e.target.value)
   }
 
-  helperChangeField(fieldId, content){
-    let newTotalFields = [...this.state.totalFields];
-    newTotalFields[fieldId].title = content;
-
-    let field = newTotalFields[fieldId];
-
-    let editedGroceries = this.state.editedGroceries;
-    if (!editedGroceries.find(el => el.id === field.id)) editedGroceries.push(field);
-    this.setState({totalFields: newTotalFields, editedGroceries});
+  helperChangeField(fieldId, content) {
+    //records which fields were changed
+    console.log('helperchangefield: ', fieldId + content)
+    let numId = Number(fieldId)
+    if (numId < this.props.userGroceries.length && this.state.editedIds.indexOf(numId) === -1) {
+      this.setState({
+        editedIds: this.state.editedIds.concat(numId),
+      })
+    }
+    console.log('edited ids: ', this.state.editedIds)
+    let newDisplayedFields = [...this.state.displayedFields];
+    newDisplayedFields[numId] = content;
+    this.setState({
+      displayedFields: newDisplayedFields,
+    });
   }
 
-  render(){
-    const {user, userGroceries} = this.props;
+  render() {
+    const { user, userGroceries } = this.props;
     return (
       this.state.edit ?
-      <Form onSubmit={this.handleSubmit}>
-      <Box>
-      {
-        this.state.totalFields.map((grocery, i) =>
-         <div key={grocery.id}>
-           <Modify x href="#" onClick={this.removeField} name="groceries" id={grocery.id}>x</Modify>
-           <Input type="text" key={grocery.id} id={i} name="groceries" value={grocery.title} style={{ height: "auto", width: "auto" }} onChange={this.handleChange} />
-         </div>)
-      }
-      <IconButton
-        style={{ width: "28px", height: "28px" }}
-        iconStyle={{ fontSize: "20px", color: "#59a5f6" }}
-        iconClassName="material-icons"
-        tooltip="Add Grocery"
-        tooltipPosition="bottom-right"
-        onClick={this.addField}>
-        add
-      </IconButton>
-      <Button type="submit">Done</Button>
-      </Box>
-      </Form>
-      :
-      <div>
-        <AccentButton small value="edit" onClick={this.handleEdit}>Edit</AccentButton>
-        <List>
-        {userGroceries && userGroceries.map((grocery, i) => <li key={grocery.id}>{grocery.title}</li>)}
-        </List>
-        <button onClick={this.handleClick}>Email Me</button>        
-      </div>
+        <Form onSubmit={this.handleSubmit} style={{ padding: "0" }}>
+          {
+            this.state.displayedFields.map((grocery, i) =>
+              <div key={i}>
+                <Modify x href="#" onClick={this.removeField} name="groceries" id={i}>x</Modify>
+                <Input style={{ width: "20vw" }} type="text" key={i.toString()} id={i} name="groceries" value={grocery.title} onChange={this.handleChange} />
+              </div>)
+          }
+          <div>
+            <AccentButton small style={{ margin: "10px" }} onClick={this.addField}>Add</AccentButton>
+            <AccentButton type="submit" small style={{ margin: "10px" }} >Done</AccentButton>
+          </div>
+        </Form>
+        :
+        <Wrapper column center>
+          <div style={{ padding: "0 30px" }}>
+            <List>
+              {userGroceries.length && userGroceries.map((grocery, i) => <li key={i.toString()}>{grocery.title}</li>)}
+            </List>
+            <AccentButton small style={{ margin: "10px" }} value="edit" onClick={this.handleEdit}>Edit</AccentButton>
+            <AccentButton small style={{ margin: "10px" }} onClick={this.handleClick}>Email Me</AccentButton>
+          </div>
+          <Snackbar
+            open={this.state.open}
+            message={this.state.message}
+            autoHideDuration={4000}
+            onRequestClose={this.handleRequestClose}
+          />
+        </Wrapper>
     )
   }
 
@@ -134,10 +172,11 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     fetchGroceries: (userId) => dispatch(action.fetchGroceries(userId)),
-    makeGroceryList: (userId, newGroceryList) => {
-      dispatch(action.submitGroceryList(userId, newGroceryList))
+    makeGroceryList: (userId, editedGroceries, addedGroceries) => {
+      if (editedGroceries.length) dispatch(action.bulkUpdateGroceries(userId, editedGroceries))
+      if (addedGroceries.length) dispatch(action.bulkAddGroceries(userId, addedGroceries))
     },
-    deleteGroceryFromUser: (userId, groceryId) => dispatch(action.deleteGroceryFromUser(userId, groceryId))
+    deleteGrocery: (groceryId) => dispatch(action.reallyDeleteGrocery(groceryId))
   }
 }
 
