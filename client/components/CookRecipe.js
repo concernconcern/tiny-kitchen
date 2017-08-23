@@ -39,7 +39,7 @@ class CookRecipe extends React.Component {
 
     Mochi.addCommands({
       smart: true,
-      indexes: ["*"],
+      indexes: ["Mochi *"],
       action: (i, wildcard) => {
         let startWords = ['start cooking', 'start', 'stop', 'pause', 'play', 'read'];
         let options = ['help', 'options', 'what can you do', 'commands'];
