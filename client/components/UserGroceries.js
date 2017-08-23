@@ -15,8 +15,8 @@ class UserGroceries extends React.Component{
     this.handleClick = this.handleClick.bind(this);
     this.state = {
       edit: false,
-      totalFields: [],
-      editedGroceries: []
+      displayedFields: [],
+      editedIds: [],
     }
     this.handleEdit = this.handleEdit.bind(this);
     this.addField = this.addField.bind(this);
@@ -40,31 +40,51 @@ class UserGroceries extends React.Component{
 
   handleEdit(){
     this.setState({edit: true,
-      totalFields: [...this.props.userGroceries]
+      displayedFields: [...this.props.userGroceries]
     })
+  }
+//rendering another field to on the front end
+  addField(e){
+    e.preventDefault();
+    this.setState({displayedFields: this.state.displayedFields.concat('')})
   }
 
   handleSubmit(e){
     e.preventDefault();
-    let editedGroceries = this.state.editedGroceries;
-    let newGroceryList = [...this.state.totalFields];
-    this.props.makeGroceryList(this.props.user.id, editedGroceries);
-    this.setState({edit: false, totalFields: []})
+    let addedGroceryContents = this.state.displayedFields.filter((content, i) => i >= this.props.userGroceries.length)
+    console.log('addedGroceryContents, ', addedGroceryContents)
+    console.log('edited ids: ', this.state.editedIds)
+    let editedGroceries = this.state.editedIds.length ? this.state.editedIds.map(fieldId => {
+      return {
+        editedId: this.props.userGroceries[fieldId].id,
+        content: this.state.displayedFields[fieldId]
+      }
+    }) : [];
+
+    console.log('editedGroceries: ', editedGroceries)
+    this.props.makeGroceryList(this.props.user.id, editedGroceries, addedGroceryContents);
+    this.setState({edit: false, editedIds: []})
+
   }
 
-  //rendering another field to add grocery
-  addField(e){
-    e.preventDefault();
-    this.setState({totalFields: this.state.totalFields.concat('')})
-  }
+
 
   removeField(e) {
     e.preventDefault();
-    this.props.deleteGroceryFromUser(this.props.user.id, e.target.id);
-    this.setState({
-      totalFields: this.state.totalFields.filter((grocery, i) =>
-      Number(i) !== Number(e.target.id))
-    })
+    console.log('event id', e.target.id)
+    let fieldId = Number(e.target.id)
+    //if user removed an empty field
+    if (fieldId > this.props.userGroceries.length - 1){
+      this.setState({displayedFields: this.state.displayedFields.slice(this.state.displayedFields.length - 1)})
+    }
+    else {
+      let toRemoveId = this.props.userGroceries[fieldId].id
+      this.props.deleteGrocery(toRemoveId)
+      this.setState({
+        displayedFields: this.state.displayedFields.filter((grocery, i) =>
+        Number(i) !== fieldId)
+      })
+    }
   }
 
   handleChange(e){
@@ -73,14 +93,20 @@ class UserGroceries extends React.Component{
   }
 
   helperChangeField(fieldId, content){
-    let newTotalFields = [...this.state.totalFields];
-    newTotalFields[fieldId].title = content;
-
-    let field = newTotalFields[fieldId];
-
-    let editedGroceries = this.state.editedGroceries;
-    if (!editedGroceries.find(el => el.id === field.id)) editedGroceries.push(field);
-    this.setState({totalFields: newTotalFields, editedGroceries});
+    //records which fields were changed
+    console.log('helperchangefield: ', fieldId + content)
+    let numId = Number(fieldId)
+    if (numId < this.props.userGroceries.length && this.state.editedIds.indexOf(numId) === -1){
+      this.setState({
+        editedIds: this.state.editedIds.concat(numId),
+      })
+    }
+    console.log('edited ids: ', this.state.editedIds)
+    let newDisplayedFields = [...this.state.displayedFields];
+    newDisplayedFields[numId] = content;
+    this.setState({
+      displayedFields: newDisplayedFields,
+    });
   }
 
   render(){
@@ -90,10 +116,10 @@ class UserGroceries extends React.Component{
       <Form onSubmit={this.handleSubmit}>
       <Box>
       {
-        this.state.totalFields.map((grocery, i) =>
-         <div key={grocery.id}>
-           <Modify x href="#" onClick={this.removeField} name="groceries" id={grocery.id}>x</Modify>
-           <Input type="text" key={grocery.id} id={i} name="groceries" value={grocery.title} style={{ height: "auto", width: "auto" }} onChange={this.handleChange} />
+        this.state.displayedFields.map((grocery, i) =>
+         <div key={i}>
+           <Modify x href="#" onClick={this.removeField} name="groceries" id={i}>x</Modify>
+           <Input type="text" key={i.toString()} id={i} name="groceries" value={grocery.title} style={{ height: "auto", width: "auto" }} onChange={this.handleChange} />
          </div>)
       }
       <IconButton
@@ -112,9 +138,9 @@ class UserGroceries extends React.Component{
       <div>
         <AccentButton small value="edit" onClick={this.handleEdit}>Edit</AccentButton>
         <List>
-        {userGroceries && userGroceries.map((grocery, i) => <li key={grocery.id}>{grocery.title}</li>)}
+        {userGroceries.length && userGroceries.map((grocery, i) => <li key={i.toString()}>{grocery.title}</li>)}
         </List>
-        <button onClick={this.handleClick}>Email Me</button>        
+        <button onClick={this.handleClick}>Email Me</button>
       </div>
     )
   }
@@ -134,10 +160,11 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     fetchGroceries: (userId) => dispatch(action.fetchGroceries(userId)),
-    makeGroceryList: (userId, newGroceryList) => {
-      dispatch(action.submitGroceryList(userId, newGroceryList))
+    makeGroceryList: (userId, editedGroceries, addedGroceries) => {
+      if (editedGroceries.length) dispatch(action.bulkUpdateGroceries(userId, editedGroceries))
+      if (addedGroceries.length) dispatch(action.bulkAddGroceries(userId, addedGroceries))
     },
-    deleteGroceryFromUser: (userId, groceryId) => dispatch(action.deleteGroceryFromUser(userId, groceryId))
+    deleteGrocery: (groceryId) => dispatch(action.reallyDeleteGrocery(groceryId))
   }
 }
 

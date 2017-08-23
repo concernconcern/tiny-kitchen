@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const db = require('../db/db');
 const Grocery = db.model('grocery');
-const GroceryUser = db.model('groceryUser');
 const User = db.model('user');
 const Promise = require('bluebird');
 const nodemailer = require('nodemailer');
@@ -11,41 +10,46 @@ module.exports = router;
 //get groceries from a user
 router.get('/:userId', (req, res, next) => {
   const id = req.params.userId;
-  GroceryUser.findAll({
-    where: { userId: id }
+  Grocery.findAll({
+    where: {userId: id}
   })
-    .then(groceryusers =>
-      Promise.map(groceryusers, groceryuser => {
-        return Grocery.findById(groceryuser.groceryId)
-      }))
-    .then(userGroceries => res.json(userGroceries))
-    .catch(next);
+  .then(groceries => res.json(groceries))
+  .catch(next);
 });
 
 // POST
 router.post('/:userId', (req, res, next) => {
-  const { title, quantity, unit } = req.body;
-  const userId = req.params.userId;
-  let addedGrocery;
-  Grocery.findOrCreate({
-    where: {
-      title: title
-    }
+  return Grocery.create(req.body)
+  .then((grocery) => res.json(grocery))
+  .catch(next);
+})
+
+//returns all groceries from a user regardless
+router.post('/:userId/bulk', (req, res, next) => {
+  const id = req.params.userId;
+  return Grocery.bulkCreate(req.body)
+  .then(Grocery.findAll({
+      where: {
+        userId: id
+      }
+    }))
+  .then(groceries => {
+    console.log('groceries api back from bulk add: ', groceries)
+    res.json(groceries)
   })
-    .spread((grocery, created) => {
-      addedGrocery = grocery;
-      return GroceryUser.findOrCreate({
-        where: {
-          groceryId: grocery.id,
-          userId: userId
-        }
-      })
-    })
-    .spread((groceryUser, created) => {
-      res.json(addedGrocery);
-    })
-    .catch(next);
-});
+  .catch(next);
+})
+
+router.put('/:userId/bulk', (req, res, next) => {
+  let editedGroceries = req.body;
+  console.log('editedGroceries in api route', editedGroceries)
+  Promise.map(editedGroceries, grocery => {
+    console.log('groceryItem: ', grocery)
+    return Grocery.findById(grocery.editedId)
+    .then(oldGrocery => oldGrocery.update({title: grocery.content}))
+  })
+  .then(updatedGroceries => res.json(updatedGroceries))
+})
 
 // POST
 router.post('/:userId/email', (req, res, next) => {
@@ -89,41 +93,18 @@ router.post('/:userId/email', (req, res, next) => {
   });
 });
 
-router.put('/:userId/list', (req, res, next) => {
-  let { updatedGroceries } = req.body;
+router.put('/:groceryId', (req, res, next) =>
+    Grocery.findById(req.params.groceryId)
+    .then(grocery => grocery.update(req.body))
+    .then((grocery) => res.json(grocery))
+    .catch(next)
+  )
 
-  const userId = req.params.userId;
-  User.findById(userId)
-    .then(user => {
-      return user.getGroceries()
-    })
-    .then(groceries => {
-      groceries = groceries.map(grocery => {
-        let updatedGrocery = updatedGroceries.find(g => g.id === grocery.id);
-        if (updatedGrocery) grocery.newTitle = updatedGrocery.title;
-        return grocery;
-      }).filter(g => !!g.newTitle);
-
-      let promises = groceries.map(grocery => {
-        return grocery.update({ title: grocery.newTitle })
-      })
-
-      return Promise.all(promises);
-    })
-    .then(results => {
-      res.send(results);
-    })
-})
 
 // DELETE
-router.delete('/:userId/:groceryId', (req, res, next) => {
-  console.log('delete')
-  const userId = req.params.userId;
-  const groceryId = req.params.groceryId;
-  GroceryUser.findOne({
-    where: { userId, groceryId }
-  })
-    .then(groceryUser => groceryUser.destroy())
-    .then(destroyed => { res.send(groceryId) })
-    .catch(next);
-});
+router.delete('/:groceryId', (req, res, next) =>
+  Grocery.findById(req.params.groceryId)
+  .then((grocery) => grocery.destroy())
+  .then(res.send(req.params.groceryId + ' grocery deleted from list'))
+  .catch(next))
+
