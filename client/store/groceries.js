@@ -5,9 +5,9 @@ import history from '../history'
 const GET_GROCERIES = 'GET_GROCERIES';
 const ADD_GROCERY = 'ADD_GROCERY';
 const DELETE_GROCERY = 'DELETE_GROCERY';
-//const UPDATE_GROCERY = 'UPDATE_GROCERY';
 const UPDATE_GROCERY_MULTIPLE = 'UPDATE_GROCERY_MULTIPLE';
 const ADD_GROCERY_MULTIPLE = 'ADD_GROCERY_MULTIPLE';
+
 //Initial State
 const groceries = [];
 
@@ -18,6 +18,7 @@ const addGrocery = (grocery) => ({type: ADD_GROCERY, grocery});
 const addMultipleGroceries = (addedGroceries) => ({type: ADD_GROCERY_MULTIPLE, groceries: addedGroceries})
 const deleteGrocery = (groceryId) => ({type: DELETE_GROCERY, groceryId});
 const updateMultipleGroceries = (updatedGroceries) => ({type: UPDATE_GROCERY_MULTIPLE, groceries: updatedGroceries})
+
 
 //THUNK
 //get all groceries from a user
@@ -62,15 +63,6 @@ export const bulkUpdateGroceries = (userId, editedGroceries) =>
     })
     .catch(err => console.log(err))
   }
-
-
-// export const reallyUpdateGrocery = (editedGrocery) =>
-//   dispatch => {
-//     axios.put(`/api/groceries/${editedGrocery.editedId}`, editedGrocery)
-//     .then(res => dispatch(updateGrocery(res.data)))
-//     .catch(err => console.log(err))
-//   }
-
 
 export const reallyDeleteGrocery = (groceryId) =>
   dispatch => {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 import * as action from '../store'
+import axios from 'axios';
 import { List, AccentButton, Box, Modify, Input, Form, Button } from './styled-components'
 import IconButton from 'material-ui/IconButton';
 /**
@@ -11,6 +12,7 @@ import IconButton from 'material-ui/IconButton';
 class UserGroceries extends React.Component{
   constructor(props){
     super(props)
+    this.handleClick = this.handleClick.bind(this);
     this.state = {
       edit: false,
       displayedFields: [],
@@ -26,6 +28,14 @@ class UserGroceries extends React.Component{
 
   componentDidMount(){
     this.props.fetchGroceries(this.props.user.id)
+  }
+
+  handleClick(e){
+    const {user, userGroceries} = this.props;
+    axios.post(`/api/groceries/${user.id}/email`, {user, userGroceries})
+    .then(res => {
+      console.log(res.data);
+    })
   }
 
   handleEdit(){
@@ -130,6 +140,7 @@ class UserGroceries extends React.Component{
         <List>
         {userGroceries.length && userGroceries.map((grocery, i) => <li key={i.toString()}>{grocery.title}</li>)}
         </List>
+        <button onClick={this.handleClick}>Email Me</button>
       </div>
     )
   }

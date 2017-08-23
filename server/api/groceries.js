@@ -3,6 +3,8 @@ const db = require('../db/db');
 const Grocery = db.model('grocery');
 const User = db.model('user');
 const Promise = require('bluebird');
+const nodemailer = require('nodemailer');
+require('../../secrets');
 module.exports = router;
 
 //get groceries from a user
@@ -49,6 +51,48 @@ router.put('/:userId/bulk', (req, res, next) => {
   .then(updatedGroceries => res.json(updatedGroceries))
 })
 
+// POST
+router.post('/:userId/email', (req, res, next) => {
+  // create reusable transporter object using the default SMTP transport
+  const { user, userGroceries } = req.body;
+  let buildEmail = function (groceries) {
+    let message = '<h3>Your groceries:</h3><ul>';
+    groceries.forEach(grocery => {
+      message = message.concat(`<li>${grocery.title}</li>`)
+    })
+    message = message.concat('</ul>')
+    return message;
+  }
+
+  let transporter = nodemailer.createTransport({
+    service: "Gmail",
+    port: 465,
+    secure: true, // secure:true for port 465, secure:false for port 587
+    auth: {
+      user: process.env.TK_GMAIL_ADDRESS,
+      pass: process.env.TK_GMAIL_PASSWORD
+    }
+  });
+
+  // setup email data with unicode symbols
+  let mailOptions = {
+    from: `"Tiny Kitchen" <${process.env.TK_GMAIL_ADDRESS}>`, // sender address
+    to: user.email, // list of receivers
+    subject: 'Your Grocery List', // Subject line
+    text: buildEmail(userGroceries), // plain text body
+    html: buildEmail(userGroceries) // html body
+  };
+
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log('Message %s sent: %s', info.messageId, info.response);
+    res.json(transporter.sendMail);
+  });
+});
+
 router.put('/:groceryId', (req, res, next) =>
     Grocery.findById(req.params.groceryId)
     .then(grocery => grocery.update(req.body))
@@ -63,28 +107,4 @@ router.delete('/:groceryId', (req, res, next) =>
   .then((grocery) => grocery.destroy())
   .then(res.send(req.params.groceryId + ' grocery deleted from list'))
   .catch(next))
-// router.post('/:userId/bulk', (req, res, next) => {
-
-//   const userId = req.params.userId;
-//   Grocery.bulkCreate(req.body)
-//   .then(() => {
-//     return Grocery.update({
-
-//     })
-//   })
-//   User.findById(userId)
-//   .then(user => {
-//     return user.getGroceries()
-//   })
-//   .then(groceries => {
-//     let promises = groceries.map(grocery => {
-//       return grocery.update({title: 'foo'})
-//     })
-//     return Promise.all(promises)
-//   })
-//   .then(results => {
-//     console.log('results', results);
-//   })
-// })
-
 
