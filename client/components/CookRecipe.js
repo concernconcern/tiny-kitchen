@@ -24,8 +24,13 @@ class CookRecipe extends React.Component {
     this.state = {
       stopped: true,
       forwardDisable: forward,
-      backDisable: back
+      backDisable: back,
+      stepSaid:false
     }
+    this.toggleMochi = this.toggleMochi.bind(this);
+    this.stepForward = this.stepForward.bind(this);
+    this.stepBackward = this.stepBackward.bind(this);
+    this.exit = this.exit.bind(this);
 
   }
 
@@ -33,28 +38,27 @@ class CookRecipe extends React.Component {
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(true);
 
-    Mochi.addCommands({
-      smart: true,
-      indexes: ["*"],
-      action: (i, wildcard) => {
-        let startWords = ['start cooking', 'start', 'stop', 'pause', 'play', 'read'];
-        let options = ['help', 'options', 'what can you do', 'commands'];
-        if (wildcard === 'next' || wildcard === 'next step') {
+    Mochi.addCommands([{
+      indexes: ['start cooking', 'start', 'stop', 'pause', 'play', 'read', 'next', 'nextStep', 'back', 'previous', 'go back', 'exit'],
+      action: (i) => {
+        if (i >= 0 && i < 6){
+          this.toggleMochi()
+        } else if (i >= 6 && i < 8){
           this.stepForward();
-        } else if (wildcard === 'go back' || wildcard === 'back' || wildcard === 'previous') {
+        }
+        else if (i >= 8 && i < 11) {
           this.stepBackward();
-        } else if (options.includes(wildcard)) {
-          Mochi.say(helpMenu);
-        } else if (wildcard === 'exit') {
+        }
+        else if (i === 11) {
           Mochi.shutUp();
-        } else if (startWords.includes(wildcard)) {
-          this.toggleMochi();
-        } else if (!Mochi.isSpeaking()) {
-          //doesn't send the things it says itself
-          this.sendUserInput(wildcard);
         }
       }
-    });
+    }, {
+      smart: true,
+      indexes: ['mochi *'],
+      action: (i, wildcard) => this.sendUserInput(wildcard)
+    }]);
+
     window.addEventListener("keydown", event => {
       if (event.defaultPrevented) {
         return; // Do nothing if the event was already processed
@@ -72,32 +76,40 @@ class CookRecipe extends React.Component {
   }
 
   componentDidUpdate() {
-
+    console.log('updated store state: ', this.state)
     if (this.props.mochiSays !== '') {
       Mochi.say(this.props.mochiSays)
     }
-    if (this.props.recipe && this.props.stepToSay !== '' && !this.state.stopped)
+    if (this.props.recipe && this.props.step === 0 && !this.state.stopped){
+      console.log('beginning ')
+      this.props.changeStepTo(0, this.props.recipe.directions)
       Mochi.say(this.props.stepToSay)
+
+    }
+    if (this.props.stepToSay !== '' && !this.state.stopped && this.props.step !== 0 && !this.state.stepSaid){
+      Mochi.say(this.props.stepToSay)
+    }
 
   }
 
-  sendUserInput = (userInput) => {
+  sendUserInput (userInput) {
     return this.props.submitUserInput(userInput)
   }
 
-  toggleMochi = () => {
+  toggleMochi () {
     if (!this.state.stopped) {
       Mochi.shutUp()
-      this.setState({ stopped: true })
+      this.setState({ stopped: true, stepSaid: false})
     }
     else {
-      Mochi.say(this.props.recipe.directions[this.props.step])
-      this.setState({ stopped: false })
+      Mochi.say(this.props.stepToSay)
+      this.setState({ stopped: false, stepSaid: true })
     }
   }
 
 
-  stepForward = () => {
+  stepForward () {
+    this.setState({stepSaid: false})
     let newStep = this.props.step + 1;
     if (this.props.recipe && newStep < this.props.recipe.directions.length) {
       Mochi.shutUp();
@@ -108,11 +120,16 @@ class CookRecipe extends React.Component {
         forwardDisable,
         backDisable
       });
+      if (!this.state.stepSaid){
+        this.setState({stepSaid: true})
+
+      }
+
     }
   }
 
-  stepBackward = () => {
-
+  stepBackward () {
+    this.setState({stepSaid: false})
     let newStep = this.props.step - 1;
     if (newStep >= 0) {
       Mochi.shutUp();
@@ -123,10 +140,15 @@ class CookRecipe extends React.Component {
         forwardDisable,
         backDisable
       });
+      if (!this.state.stepSaid){
+        //Mochi.say(this.props.stepToSay)
+        this.setState({stepSaid: true})
+      }
+
     }
   }
 
-  exit = (e, link) => {
+  exit (e, link) {
     Mochi.shutUp();
     if (link) history.push(link)
   }
