@@ -5,7 +5,7 @@ import history from '../history'
 const GET_GROCERIES = 'GET_GROCERIES';
 const ADD_GROCERY = 'ADD_GROCERY';
 const DELETE_GROCERY = 'DELETE_GROCERY';
-const UPDATE_GROCERY = 'UPDATE_GROCERY';
+//const UPDATE_GROCERY = 'UPDATE_GROCERY';
 const UPDATE_GROCERY_MULTIPLE = 'UPDATE_GROCERY_MULTIPLE';
 //Initial State
 const groceries = [];
@@ -13,7 +13,7 @@ const groceries = [];
 // Action Creators
 const getGroceries = (groceries) => ({type: GET_GROCERIES, groceries});
 const addGrocery = (grocery) => ({type: ADD_GROCERY, grocery});
-const updateGrocery = (grocery) => ({type: UPDATE_GROCERY, grocery})
+//const updateGrocery = (grocery) => ({type: UPDATE_GROCERY, grocery})
 const deleteGrocery = (groceryId) => ({type: DELETE_GROCERY, groceryId});
 const updateMultipleGroceries = (updatedGroceries) => ({type: UPDATE_GROCERY_MULTIPLE, groceries: updatedGroceries})
 
@@ -51,17 +51,20 @@ export const bulkUpdateGroceries = (userId, editedGroceries) =>
   dispatch => {
     console.log('edited groceries in reducer: ', editedGroceries)
     axios.put(`/api/groceries/${userId}/bulk`, editedGroceries)
-    .then(res => dispatch(updateMultipleGroceries(res.data)))
+    .then(res => {
+      console.log('bulk updated groceries back from reducer: ', res.data)
+      dispatch(updateMultipleGroceries(res.data))
+    })
     .catch(err => console.log(err))
   }
 
 
-export const reallyUpdateGrocery = (editedGrocery) =>
-  dispatch => {
-    axios.put(`/api/groceries/${editedGrocery.editedId}`, editedGrocery)
-    .then(res => dispatch(updateGrocery(res.data)))
-    .catch(err => console.log(err))
-  }
+// export const reallyUpdateGrocery = (editedGrocery) =>
+//   dispatch => {
+//     axios.put(`/api/groceries/${editedGrocery.editedId}`, editedGrocery)
+//     .then(res => dispatch(updateGrocery(res.data)))
+//     .catch(err => console.log(err))
+//   }
 
 
 export const reallyDeleteGrocery = (groceryId) =>
@@ -70,6 +73,19 @@ export const reallyDeleteGrocery = (groceryId) =>
     .then(dispatch(deleteGrocery(groceryId)))
     .catch(err => console.log(err))
   }
+
+const updateMultipleHelper = (updatedGroceries, stateGroceries) => {
+  let originalGroceries = [...stateGroceries]
+  for (var i = 0; i < originalGroceries.length; i++) {
+    for (var j = 0; j < updatedGroceries.length; j++){
+      if (originalGroceries[i].id === updatedGroceries[j].id){
+        originalGroceries[i] = updatedGroceries[j]
+      }
+    }
+  }
+  console.log('originalGroceries: ', originalGroceries)
+  return originalGroceries;
+}
 
 // Reducer
 export default function(state = groceries, action){
@@ -81,14 +97,7 @@ export default function(state = groceries, action){
     case DELETE_GROCERY:
       return state.filter(grocery => grocery.id !== action.groceryId);
     case UPDATE_GROCERY_MULTIPLE:
-      return state.map((grocery, i) => {
-        for (var j = 0; j < action.groceries.length; j++){
-          if (grocery.id === action.groceries[j].id) {
-            return action.groceries[j];
-          }
-        }
-        return grocery
-      })
+      return updateMultipleHelper(action.groceries, state);
     default: return state;
   }
 }
