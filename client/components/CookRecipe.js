@@ -64,7 +64,12 @@ class CookRecipe extends React.Component {
           this.stepBackward()
         else if (event.key === 'ArrowUp' || event.key === 'ArrowRight')
           this.stepForward()
-        else if (event.key === 'Escape') this.exit();
+        else if (event.key === 'Escape'){
+          let recipe = this.props.recipe;
+          let userId = this.props.userId;
+          let link = recipe.id == 1 ? "/" : `/recipe/${recipe.id}/user/${userId}`
+         this.exit(null, link);
+       }
         else return;
       }
     });
