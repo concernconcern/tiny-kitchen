@@ -8,8 +8,8 @@ import { NavLink, Input, ControlPanel, AccentButton } from './styled-components'
 import * as action from '../store';
 
 var divStyle = {
-  width: '300px',
-  height: '300px',
+  width: '200px',
+  height: '200px',
   border: '1px solid #db7d7d',
   alignContent: "center",
   justifyContent: "center",
@@ -54,7 +54,9 @@ class ImgUpload extends React.Component {
       this.setState({ error: 'Please upload image or add image url' });
     } else {
       if (this.props.type === 'userImg') {
-        this.props.updateUser(this.state.imgUrl, 'picture_url');
+
+        let picture = {picture_url: this.state.imgUrl}
+        this.props.updateUser(picture);
       } else if (this.props.type === 'addRecipe') {
         let recipe = {};
         recipe.picture_url = [this.state.imgUrl];
@@ -197,10 +199,16 @@ class ImgUpload extends React.Component {
 }
 
 
-const mapState = null;
+const mapState = (state) => {
+  return {
+    recipe: state.recipe,
+    user: state.user
+  }
+}
+
 const mapDispatch = (dispatch) => {
   return {
-    updateUser: (info, type) => dispatch(action.updateUser(info, type)),
+    updateUser: (info) => dispatch(action.updateUser(info)),
     getRecipeSuccess: (recipe) => dispatch(action.getRecipeSuccess(recipe))
 
   }
