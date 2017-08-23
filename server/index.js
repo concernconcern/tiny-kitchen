@@ -10,6 +10,7 @@ const sessionStore = new SequelizeStore({ db })
 const PORT = process.env.PORT || 8080
 const app = express()
 module.exports = app
+const aws = require('aws-sdk');
 
 /**
  * In your development environment, you can keep all of your
@@ -53,6 +54,37 @@ const createApp = () => {
   // static file-serving middleware
   app.use(express.static(path.join(__dirname, '..', 'public')))
 
+
+  // Image upload route
+  aws.config.region = 'us-east-2';
+
+  app.get('/sign-s3', (req, res) => {
+    const s3 = new aws.S3();
+    const fileName = req.query['file-name'];
+    const fileType = req.query['file-type'];
+    const s3Params = {
+      Bucket: 'tiny-kitchen',
+      Key: fileName,
+      Expires: 60,
+      ContentType: fileType,
+      ACL: 'public-read'
+    };
+
+    s3.getSignedUrl('putObject', s3Params, (err, data) => {
+      if (err) {
+        console.log(err);
+        return res.end();
+      }
+      const returnData = {
+        signedRequest: data,
+        url: `https://tiny-kitchen.s3.amazonaws.com/${fileName}`
+      };
+      res.write(JSON.stringify(returnData));
+      res.end();
+    });
+  });
+
+
   // sends index.html
   app.use('*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public/index.html'))
@@ -64,7 +96,6 @@ const createApp = () => {
     console.error(err.stack)
     res.status(err.status || 500).send(err.message || 'Internal server error.')
   })
-
 }
 
 const startListening = () => {
@@ -88,3 +119,4 @@ if (require.main === module) {
 } else {
   createApp()
 }
+
