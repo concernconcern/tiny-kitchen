@@ -7,6 +7,7 @@ const ADD_GROCERY = 'ADD_GROCERY';
 const DELETE_GROCERY = 'DELETE_GROCERY';
 //const UPDATE_GROCERY = 'UPDATE_GROCERY';
 const UPDATE_GROCERY_MULTIPLE = 'UPDATE_GROCERY_MULTIPLE';
+const ADD_GROCERY_MULTIPLE = 'ADD_GROCERY_MULTIPLE';
 //Initial State
 const groceries = [];
 
@@ -14,6 +15,7 @@ const groceries = [];
 const getGroceries = (groceries) => ({type: GET_GROCERIES, groceries});
 const addGrocery = (grocery) => ({type: ADD_GROCERY, grocery});
 //const updateGrocery = (grocery) => ({type: UPDATE_GROCERY, grocery})
+const addMultipleGroceries = (addedGroceries) => ({type: ADD_GROCERY_MULTIPLE, groceries: addedGroceries})
 const deleteGrocery = (groceryId) => ({type: DELETE_GROCERY, groceryId});
 const updateMultipleGroceries = (updatedGroceries) => ({type: UPDATE_GROCERY_MULTIPLE, groceries: updatedGroceries})
 
@@ -43,7 +45,10 @@ export const bulkAddGroceries = (userId, groceryContents) =>
       }
     })
     axios.post(`/api/groceries/${userId}/bulk`, groceryObjects)
-    .then(res => dispatch(getGroceries(res.data)))
+    .then(res => {
+      console.log('res.data from bulk add: ', res.data)
+      dispatch(addMultipleGroceries(res.data))
+    })
     .catch(err => console.log(err))
   }
 
@@ -98,6 +103,8 @@ export default function(state = groceries, action){
       return state.filter(grocery => grocery.id !== action.groceryId);
     case UPDATE_GROCERY_MULTIPLE:
       return updateMultipleHelper(action.groceries, state);
+    case ADD_GROCERY_MULTIPLE:
+      return [...state, ...action.groceries]
     default: return state;
   }
 }

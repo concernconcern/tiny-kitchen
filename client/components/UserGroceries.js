@@ -53,7 +53,7 @@ class UserGroceries extends React.Component{
 
     console.log('editedGroceries: ', editedGroceries)
     this.props.makeGroceryList(this.props.user.id, editedGroceries, addedGroceryContents);
-    this.setState({edit: false})
+    this.setState({edit: false, editedIds: []})
 
   }
 
@@ -84,13 +84,14 @@ class UserGroceries extends React.Component{
 
   helperChangeField(fieldId, content){
     //records which fields were changed
+    console.log('helperchangefield: ', fieldId + content)
     let numId = Number(fieldId)
-    if (!this.state.editedIds.indexOf(numId === -1)){
+    if (numId < this.props.userGroceries.length && this.state.editedIds.indexOf(numId) === -1){
       this.setState({
         editedIds: this.state.editedIds.concat(numId),
       })
     }
-
+    console.log('edited ids: ', this.state.editedIds)
     let newDisplayedFields = [...this.state.displayedFields];
     newDisplayedFields[numId] = content;
     this.setState({

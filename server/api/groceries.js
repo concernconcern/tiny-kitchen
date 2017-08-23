@@ -24,15 +24,17 @@ router.post('/:userId', (req, res, next) => {
 
 //returns all groceries from a user regardless
 router.post('/:userId/bulk', (req, res, next) => {
+  const id = req.params.userId;
   return Grocery.bulkCreate(req.body)
-  .then(() => {
-    return Grocery.findAll({
+  .then(Grocery.findAll({
       where: {
-        userId: req.body.userId
+        userId: id
       }
-    })
+    }))
+  .then(groceries => {
+    console.log('groceries api back from bulk add: ', groceries)
+    res.json(groceries)
   })
-  .then(groceries => res.redirect('/home/groceries'))
   .catch(next);
 })
 
