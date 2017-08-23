@@ -27,7 +27,6 @@ class AddRecipe extends React.Component {
     let recipeUrl = this.props.location.search.slice(5);
     if (recipeUrl !== '') this.props.chromeRecipe(recipeUrl);
     else {
-      this.props.recipe.source_url = 'none';
       if(this.state.newRecipe === false) this.setState({newRecipe: true});
     }
 

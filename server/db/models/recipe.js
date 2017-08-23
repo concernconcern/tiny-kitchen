@@ -8,9 +8,7 @@ const Recipe = db.define('recipe', {
     allowNull: false
   },
   source_url: {
-    type: Sequelize.TEXT,
-    allowNull: false,
-    unique: true
+    type: Sequelize.TEXT
   },
   picture_url: {
     type: Sequelize.TEXT
@@ -21,7 +19,8 @@ const Recipe = db.define('recipe', {
   },
   directions: {
     type: Sequelize.ARRAY(Sequelize.TEXT),
-    allowNull: false
+    allowNull: false,
+    unique: true
   }
 })
 
