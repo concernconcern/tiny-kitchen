@@ -78,6 +78,9 @@ class UserGroceries extends React.Component{
       this.setState({displayedFields: this.state.displayedFields.slice(this.state.displayedFields.length - 1)})
     }
     else {
+      let inEditId = this.state.editedIds.indexOf(fieldId);
+      if (inEditId !== -1)
+        this.setState({editedIds: this.state.editedIds.slice(inEditId, inEditId+1)})
       let toRemoveId = this.props.userGroceries[fieldId].id
       this.props.deleteGrocery(toRemoveId)
       this.setState({
