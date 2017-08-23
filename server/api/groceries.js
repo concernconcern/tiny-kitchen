@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const db = require('../db/db');
 const Grocery = db.model('grocery');
-const GroceryUser = db.model('groceryUser');
 const User = db.model('user');
 const Promise = require('bluebird');
 module.exports = router;
@@ -9,64 +8,81 @@ module.exports = router;
 //get groceries from a user
 router.get('/:userId', (req, res, next) => {
   const id = req.params.userId;
-  GroceryUser.findAll({
+  Grocery.findAll({
     where: {userId: id}
   })
-  .then(groceryusers =>
-    Promise.map(groceryusers, groceryuser => {
-      return Grocery.findById(groceryuser.groceryId)
-    }))
-  .then(userGroceries => res.json(userGroceries))
+  .then(groceries => res.json(groceries))
   .catch(next);
 });
 
 // POST
 router.post('/:userId', (req, res, next) => {
-  const {title, quantity, unit} = req.body;
-  const userId = req.params.userId;
-  let addedGrocery;
-  Grocery.findOrCreate({where: {
-    title: title
-  }})
-  .spread((grocery, created) => {
-    addedGrocery = grocery;
-    return GroceryUser.findOrCreate({where: {
-      groceryId: grocery.id,
-      userId: userId
-    }})
-  })
-  .spread((groceryUser, created) => {
-    res.json(addedGrocery);
-  })
+  return Grocery.create(req.body)
+  .then((grocery) => res.json(grocery))
   .catch(next);
-});
-
-router.post('/:userId/list', (req, res, next) => {
-  const {groceryList} = req.body;
-  const userId = req.params.userId;
-  User.findById(userId)
-  .then(user => {
-    return user.getGroceries()
-  })
-  .then(groceries => {
-    let promises = groceries.map(grocery => {
-      return grocery.update({title: 'foo'})
-    })
-    return Promise.all(promises)
-  })
-  .then(results => {
-    console.log('results', results);
-  })
 })
 
-// DELETE
-router.delete('/:userId/:groceryId', (req, res, next) => {
-  const userId = req.params.userId;
-  const groceryId = req.params.groceryId;
-  GroceryUser.findOne({
-    where: {userId, groceryId}
+//returns all groceries from a user regardless
+router.post('/:userId/bulk', (req, res, next) => {
+  return Grocery.bulkCreate(req.body)
+  .then(() => {
+    return Grocery.findAll({
+      where: {
+        userId: req.body.userId
+      }
+    })
   })
-  .then(groceryUser => groceryUser.destroy())
-  .then(res.send(groceryId + ' grocery deleted from list'))
+  .then(groceries => res.redirect('/home/groceries'))
   .catch(next);
-});
+})
+
+router.put('/:userId/bulk', (req, res, next) => {
+  let editedGroceries = req.body;
+  console.log('editedGroceries in api route', editedGroceries)
+  Promise.map(editedGroceries, grocery => {
+    console.log('groceryItem: ', grocery)
+    return Grocery.findById(grocery.editedId)
+    .then(oldGrocery => oldGrocery.update({title: grocery.content}))
+  })
+  .then(updatedGroceries => res.json(updatedGroceries))
+})
+
+router.put('/:groceryId', (req, res, next) =>
+    Grocery.findById(req.params.groceryId)
+    .then(grocery => grocery.update(req.body))
+    .then((grocery) => res.json(grocery))
+    .catch(next)
+  )
+
+
+// DELETE
+router.delete('/:groceryId', (req, res, next) =>
+  Grocery.findById(req.params.groceryId)
+  .then((grocery) => grocery.destroy())
+  .then(res.send(req.params.groceryId + ' grocery deleted from list'))
+  .catch(next))
+// router.post('/:userId/bulk', (req, res, next) => {
+
+//   const userId = req.params.userId;
+//   Grocery.bulkCreate(req.body)
+//   .then(() => {
+//     return Grocery.update({
+
+//     })
+//   })
+//   User.findById(userId)
+//   .then(user => {
+//     return user.getGroceries()
+//   })
+//   .then(groceries => {
+//     let promises = groceries.map(grocery => {
+//       return grocery.update({title: 'foo'})
+//     })
+//     return Promise.all(promises)
+//   })
+//   .then(results => {
+//     console.log('results', results);
+//   })
+// })
+
+
