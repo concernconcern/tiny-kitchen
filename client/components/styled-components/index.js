@@ -346,7 +346,8 @@ export const ProfileWarning = styled.h2`
   font-family: 'Playfair Display', serif;
 `
 export const ProfilePic = styled.img`
-  max-height: 80px;
+  height: 100px;
+  width: 100px;
   border-radius: 50%;
 `
 
@@ -372,4 +373,14 @@ display: flex;
 flex-direction: column;
 align-items: center;
 padding: 10px;
+`
+
+// Image upload
+export const ImageUploadCard = styled.div`
+  height: 400px;
+  width 400px;
+  flex-direction: column;
+  display: flex;
+
+  padding: 10px;
 `

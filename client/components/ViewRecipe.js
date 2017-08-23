@@ -39,6 +39,7 @@ class ViewRecipe extends React.Component {
       message: 'Added to your Recipe Box'
     })
   }
+
   handleRemoveRecipeBox = (e) => {
     e.preventDefault()
     this.setState({
@@ -76,7 +77,7 @@ class ViewRecipe extends React.Component {
           <Title>{recipe && recipe.title}</Title>
           {isLoggedIn ?
             <ControlPanel style={{ padding: "0px" }}>
-              <a href={`/recipe/${recipe.id}/cook`} >
+              <Link to={`/recipe/${recipe.id}/cook`} >
                 <IconButton
                   iconStyle={controlPanel}
                   iconClassName="material-icons"
@@ -84,7 +85,7 @@ class ViewRecipe extends React.Component {
                   tooltipPosition="bottom-right">
                   play_circle_outline
                 </IconButton>
-              </a>&nbsp;&nbsp;
+              </Link>&nbsp;&nbsp;
 
               {recipebox && recipebox.hasOwnProperty("notes") ?
                 <div style={{ display: "flex" }}>
@@ -147,8 +148,7 @@ class ViewRecipe extends React.Component {
                     iconClassName="material-icons"
                     tooltip="Add Grocery"
                     tooltipPosition="bottom-right"
-                    onClick={this.handleAddGrocery.bind(this, ingredient)}
-                  >
+                    onClick={this.handleAddGrocery.bind(this, ingredient)}>
                     add
                 </IconButton> : <span> - &nbsp;&nbsp;</span>
                 }
