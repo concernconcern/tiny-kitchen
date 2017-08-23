@@ -8,10 +8,14 @@ import { NavLink, Input, ControlPanel, AccentButton } from './styled-components'
 import * as action from '../store';
 
 var divStyle = {
-  width: '250px',
-  height: '250px',
-  border: '1px solid grey',
-  textAlign: 'center'
+  width: '300px',
+  height: '300px',
+  border: '1px solid #db7d7d',
+  alignContent: "center",
+  justifyContent: "center",
+  alignItems: "center",
+  margin: "10px 5px",
+  display: 'flex',
 };
 
 class ImgUpload extends React.Component {
@@ -26,16 +30,9 @@ class ImgUpload extends React.Component {
       imgUrl: ''
     };
 
-    this.handleImageChange = this.handleImageChange.bind(this); //shows img preview
-    this.handleUpload = this.handleUpload.bind(this); //triggers get signed request if a file is chosen
-    this.getSignedRequest = this.getSignedRequest.bind(this); //gets amazon url
-    this.uploadFile = this.uploadFile.bind(this); //actually uploads to amazon
-    this.handleClose = this.handleClose.bind(this); //closes modal
-    this.handleOpen = this.handleOpen.bind(this); //opens modal
-    this.handleSubmit = this.handleSubmit.bind(this); //submits the url to db
   }
-
-  handleClose() {
+  //closes modal
+  handleClose = () => {
     this.setState({
       file: '',
       imagePreviewUrl: '',
@@ -46,11 +43,13 @@ class ImgUpload extends React.Component {
     });
   }
 
-  handleOpen() {
+  //opens modal
+  handleOpen = () => {
     this.setState({ open: true });
   }
 
-  handleSubmit() {
+  //submits the url to db
+  handleSubmit = () => {
     if (this.state.imgUrl === '') {
       this.setState({ error: 'Please upload image or add image url' });
     } else {
@@ -65,7 +64,8 @@ class ImgUpload extends React.Component {
     }
   }
 
-  uploadFile(file, signedRequest, url) {
+  //actually uploads to amazon
+  uploadFile = (file, signedRequest, url) => {
     const xhr = new XMLHttpRequest();
     xhr.open('PUT', signedRequest);
     xhr.onreadystatechange = () => {
@@ -82,8 +82,8 @@ class ImgUpload extends React.Component {
     xhr.send(file);
   }
 
-
-  getSignedRequest(file) {
+  //gets amazon url
+  getSignedRequest = (file) => {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
     xhr.onreadystatechange = () => {
@@ -100,8 +100,8 @@ class ImgUpload extends React.Component {
     xhr.send();
   }
 
-
-  handleUpload(event) {
+  //triggers get signed request if a file is chosen
+  handleUpload = (event) => {
     event.preventDefault();
     this.setState({ error: '' });
     if (this.state.file !== '') { this.getSignedRequest(this.state.file); }
@@ -110,7 +110,8 @@ class ImgUpload extends React.Component {
     }
   }
 
-  handleImageChange(event) {
+  //shows img preview
+  handleImageChange = (event) => {
     event.preventDefault();
 
     this.setState({ error: '' });
@@ -143,7 +144,7 @@ class ImgUpload extends React.Component {
     if (imagePreviewUrl) {
       imagePreview = (<img style={divStyle} src={imagePreviewUrl} />);
     } else {
-      imagePreview = (<div className="previewText">Please select an image for preview</div>);
+      imagePreview = "Please select an image for preview"
     }
 
     const actions = [
@@ -163,6 +164,7 @@ class ImgUpload extends React.Component {
 
     return (
       <div style={{ display: "inline", margin: "0 3px" }}>
+
         <AccentButton small onClick={this.handleOpen}>Change Profile Pic</AccentButton>
         <Dialog
           contentStyle={{ width: "30%", display: "flex" }}
@@ -172,13 +174,12 @@ class ImgUpload extends React.Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          <ImageUploadCard>
+          <ImageUploadCard >
             Image Url:<Input type="text" name='textbox' onChange={this.handleImageChange} />
             Image Upload:<Input
               name='imgfile'
               type="file"
               onChange={this.handleImageChange} />
-            <br />
             <div className="imgPreview" style={divStyle}>
               {imagePreview}
             </div>
