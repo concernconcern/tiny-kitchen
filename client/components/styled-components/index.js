@@ -121,7 +121,7 @@ export const Links = styled.div`
   font-size: 20px;
   display: flex;
   align-items: center;
-  width: 35vw;
+  width: 40vw;
   justify-content: space-around;
 `
 export const List = styled.ul`
