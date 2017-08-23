@@ -32,7 +32,6 @@ passport.deserializeUser((id, done) =>
 const createApp = () => {
   // logging middleware
   app.use(morgan('dev'))
-  app.engine('html', require('ejs').renderFile);
 
   // body parsing middleware
   app.use(bodyParser.json())
