@@ -11,11 +11,12 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
       if (typeof rawHtml !== 'string') return {};
 
       let sanitizedHtml = sanitizeHtml(rawHtml, {
-        allowedTags: ['title', 'img', 'ul', 'ol', 'li', 'br'],
+        allowedTags: ['title', 'img', 'ul', 'ol', 'li'],
         allowedAttributes: {
           'img': ['src', 'data-src']
         }
       }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&');
+      // return sanitizedHtml;
       
       // custom replacements for AllRecipes.com
       sanitizedHtml = sanitizedHtml.replace(/Serving size has been adjusted!(.*?)\(uses your location\)/g, '').replace(/{{model.addEditText}}(.*?)<\/ul>/g, '').replace(/ADVERTISEMENT/g, '').replace(/<li> Add all ingredients to list <\/li>/g, '').replace(/ +/g, ' ');

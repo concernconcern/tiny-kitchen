@@ -28,6 +28,7 @@ class AllRecipes extends React.Component {
   }
   render() {
     let { input, recipes, isLoggedIn, userId } = this.props;
+    recipes = this.filterRecipes(recipes, this.props.input);
     return (
       <Wrapper>
         {
