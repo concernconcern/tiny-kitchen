@@ -172,27 +172,23 @@ class ImgUpload extends React.Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          <center>
-            <ImageUploadCard>
+          <ImageUploadCard>
+            Image Url:<Input type="text" name='textbox' onChange={this.handleImageChange} />
+            Image Upload:<Input
+              name='imgfile'
+              type="file"
+              onChange={this.handleImageChange} />
+            <br />
+            <div className="imgPreview" style={divStyle}>
+              {imagePreview}
+            </div>
+            <FlatButton label="Upload Image" onClick={this.handleUpload}><i className="material-icons" style={{ color: "black", cursor: "pointer" }}>file_upload</i></FlatButton>
 
-              <form> Image Url:<input type="text" name='textbox' onChange={this.handleImageChange} /></form>
+            {this.state.error !== '' ? <p style={{ color: "red" }}>{this.state.error}</p> : null}
+            {this.state.successMsg !== '' ? <p style={{ color: "green" }}>{this.state.successMsg}</p> : null}
 
-              <form>
-                Image Upload:<input
-                  name='imgfile'
-                  type="file"
-                  onChange={this.handleImageChange} />
-                <br />
-                <div className="imgPreview" style={divStyle}>
-                  {imagePreview}
-                </div>
-                <FlatButton label="Upload Image" onClick={this.handleUpload}><i className="material-icons" style={{ color: "black", cursor: "pointer" }}>file_upload</i></FlatButton>
+          </ImageUploadCard>
 
-                {this.state.error !== '' ? <p style={{ color: "red" }}>{this.state.error}</p> : null}
-                {this.state.successMsg !== '' ? <p style={{ color: "green" }}>{this.state.successMsg}</p> : null}
-              </form>
-            </ImageUploadCard>
-          </center>
         </Dialog>
       </div>
     )

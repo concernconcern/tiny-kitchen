@@ -6,6 +6,7 @@ import * as action from '../store'
 import axios from 'axios';
 import { List, AccentButton, Box, Modify, Title, Input, Form, Button, Wrapper, CenterWrap } from './styled-components'
 import IconButton from 'material-ui/IconButton';
+import Snackbar from 'material-ui/Snackbar';
 /**
  * COMPONENT
  */
@@ -17,6 +18,8 @@ class UserGroceries extends React.Component {
       edit: false,
       displayedFields: [],
       editedIds: [],
+      open: false,
+      message: '',
     }
     this.handleEdit = this.handleEdit.bind(this);
     this.addField = this.addField.bind(this);
@@ -25,7 +28,11 @@ class UserGroceries extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.helperChangeField = this.helperChangeField.bind(this);
   }
-
+  handleRequestClose = () => {
+    this.setState({
+      open: false,
+    });
+  }
   componentDidMount() {
     this.props.fetchGroceries(this.props.user.id)
   }
@@ -36,6 +43,10 @@ class UserGroceries extends React.Component {
       .then(res => {
         console.log(res.data);
       })
+    this.setState({
+      open: true,
+      message: `Your grocery list was emailed to ${user.email}!`
+    })
   }
 
   handleEdit() {
@@ -136,6 +147,12 @@ class UserGroceries extends React.Component {
             <AccentButton small style={{ margin: "10px" }} value="edit" onClick={this.handleEdit}>Edit</AccentButton>
             <AccentButton small style={{ margin: "10px" }} onClick={this.handleClick}>Email Me</AccentButton>
           </div>
+          <Snackbar
+            open={this.state.open}
+            message={this.state.message}
+            autoHideDuration={4000}
+            onRequestClose={this.handleRequestClose}
+          />
         </Wrapper>
     )
   }
