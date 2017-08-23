@@ -4,7 +4,7 @@ const axios = require('axios');
 const Promise = require('bluebird');
 const getJsonFromUrl = require('./server/recipe-to-json');
 
-if (process.env.NODE_ENV !== 'production') require('../secrets');
+if (process.env.NODE_ENV !== 'production') require('./secrets');
 
 const walkthrough = {
   title: 'Welcome to Tiny Kitchen',
