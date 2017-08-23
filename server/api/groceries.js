@@ -4,7 +4,7 @@ const Grocery = db.model('grocery');
 const User = db.model('user');
 const Promise = require('bluebird');
 const nodemailer = require('nodemailer');
-require('../../secrets');
+if (process.env.NODE_ENV !== 'production') require('../../secrets');
 module.exports = router;
 
 //get groceries from a user
