@@ -185,14 +185,22 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
           }
         }
 
-        let sanitizedResult = sanitizeHtml(list.text, {allowedTags: [], allowedAttributes: []})
-        list.text = sanitizedResult;
+        function filterList(el){
+          return el !== 'div' &&
+          el !== '/div' &&
+          el !== 'p' &&
+          el !== '/p' &&
+          el !== 'br/' &&
+          el !== 'br /' &&
+          el !== 'br' &&
+          el !== '' &&
+          el !== ' ';
+        }
+
+        list.text = list.text.split(/<(.*?)>/).filter(filterList);
 
         return list;
       }
-
-
-
 
       const obj = {
         title,
