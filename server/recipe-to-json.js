@@ -1,7 +1,6 @@
 const sanitizeHtml = require('sanitize-html')
 const html2json = require('html2json').html2json;
 const axios = require('axios');
-const _ = require('lodash');
 
 module.exports = function getJsonFromUrl(source_url, picture_url) {
   return axios.get(source_url)
@@ -104,7 +103,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
             else return acc;
           }, []))
         }, [])
-        return elements.filter(el => el !== ' ');
+        return elements.filter(el => el !== ' ').filter(el => !el.includes('Nutritional Information'));
       }
 
       // GET TITLE AND PICTURE URL
@@ -136,7 +135,6 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
         let sanitizedHtmlAlt = sanitizeHtml(rawHtml, {
           allowedTags: ['div', 'p', 'br'],
           allowedAttributes: []
-        // }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&').replace(/> +/g, '>').replace(/(<div>)+/g, '<div>').replace(/(<\/div>)+/g, '</div>');
         }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&').replace(/<div><\/div>/g, '');
       
         let directionsKeyword = directionsKeywords.find(el => !!findDirectionsAlt(sanitizedHtmlAlt, el))
