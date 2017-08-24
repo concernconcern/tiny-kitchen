@@ -74,6 +74,8 @@ class AddRecipe extends React.Component {
   render() {
     let recipe = this.props.recipe;
     let recipeUrl = this.props.location.search.slice(5);
+    console.log('state', this.state);
+    console.log('props', this.props);
     return (
       this.props.user.id ?
       <div>

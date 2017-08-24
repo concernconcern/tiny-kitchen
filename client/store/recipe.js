@@ -52,14 +52,16 @@ export const chromeRecipe = (url) =>
       .catch(err => console.log(err))
 
 export const submitRecipe = (recipe, userId) =>
-  (dispatch, getState) =>
+  (dispatch, getState) => {
+  console.log('submit recipe');
     axios.post(`/api/recipes`, recipe)
       .then(res => {
         let userId = getState().user.id;
         history.push(`/recipe/${res.data.id}/user/${userId}`)
         dispatch(getRecipeSuccess(res.data))
       })
-      .catch(err => { dispatch(getRecipeFail()) })
+      .catch(err => { console.error(err); dispatch(getRecipeFail()) })
+    }
 
 /**
  * REDUCER
