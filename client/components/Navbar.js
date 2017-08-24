@@ -5,6 +5,7 @@ import Search from './SearchBar'
 import { Link } from 'react-router-dom'
 import { Login, Signup } from './auth-form'
 import Mochi from './styled-components/mochi'
+import IconButton from 'material-ui/IconButton';
 
 const Navbar = (props) => {
   const { children, isLoggedIn, handleClick } = props;
@@ -30,6 +31,22 @@ const Navbar = (props) => {
             <Search />
             <Login />
             <Signup />
+            <a href="https://chrome.google.com/webstore/detail/tiny-kitchen/pgpcblkokcddbnlifngkfpjanehlpaoi/reviews?hl=en">
+              <IconButton
+                iconStyle={{ fontSize: "20px", padding: "0", color: "white" }}
+                iconClassName="fa fa-chrome"
+                tooltip="Chrome extension"
+                tooltipPosition="bottom-right">
+              </IconButton>
+            </a>
+            <a href="https://github.com/concernconcern/tiny-kitchen">
+              <IconButton
+                iconStyle={{ fontSize: "24px", padding: "0", color: "white" }}
+                iconClassName="fa fa-github"
+                tooltip="Github"
+                tooltipPosition="bottom-right">
+              </IconButton>
+            </a>
           </Links>
       }
     </Bar >
