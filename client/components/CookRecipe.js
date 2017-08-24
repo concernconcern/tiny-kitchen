@@ -61,9 +61,24 @@ class CookRecipe extends React.Component {
       },
       {
       smart: true,
-      indexes: ['help me *', 'mochi *', 'what is *'],
+      indexes: ['help me *'],
        action: (i, wildcard) => this.sendUserInput(wildcard)
-     }]);
+     },
+     {
+       smart: true,
+       indexes: ['mochi *', 'what is *'],
+       action: (i, wildcard) => this.sendUserInput(wildcard)
+     },
+     {
+       smart: true,
+       indexes: ['what is *'],
+       action: (i, wildcard) => this.sendUserInput(wildcard)
+     },
+     {
+       indexes: ['don\'t listen to me'],
+       action: (i) => Mochi.dontObey()
+     }
+    ]);
 
     window.addEventListener("keydown", event => {
       if (event.defaultPrevented) {
