@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import { Login, Signup } from './auth-form'
 import Mochi from './styled-components/mochi'
 import IconButton from 'material-ui/IconButton';
+import Badge from 'material-ui/Badge';
 
 const Navbar = (props) => {
   const { children, isLoggedIn, handleClick } = props;
@@ -37,6 +38,10 @@ const Navbar = (props) => {
                 iconClassName="fa fa-chrome"
                 tooltip="Chrome extension"
                 tooltipPosition="bottom-right">
+                <Badge
+                  badgeStyle={{width: '8px', height: '8px'}}
+                >
+                </Badge>
               </IconButton>
             </a>
             <a href="https://github.com/concernconcern/tiny-kitchen">
