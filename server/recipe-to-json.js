@@ -109,7 +109,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
       // GET TITLE AND PICTURE URL
       const title = findTitle(sanitizedHtml);
 
-      // Not needed for NY TIMES response - uncomment where necessary
+      // Not needed for NY TIMES response
       if (!picture_url) picture_url = findImages(sanitizedHtml);
 
       // GET INGREDIENTS

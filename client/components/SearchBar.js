@@ -17,7 +17,7 @@ class Search extends React.Component {
     this.props.newInput(event);
   }
   render() {
-    return (<SearchBar
+    return (<SearchBar style={{ margin: "10px" }}
       onRequestSearch={() => console.log("searching")}
       onChange={this.handleChange} />)
   }
