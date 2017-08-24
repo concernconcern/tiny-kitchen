@@ -40,24 +40,28 @@ class CookRecipe extends React.Component {
   componentDidMount() {
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(true);
-
+    initializeMochi();
     Mochi.addCommands([
       {
-      indexes: ['start cooking', 'start', 'stop', 'pause', 'play', 'read', 'next', 'nextStep', 'back', 'previous', 'go back', 'exit'],
-       action: (i) => {
-         if (i >= 0 && i < 6){
-          this.toggleMochi()
-        } else if (i >= 6 && i < 8){
+        indexes: ['repeat', 'start', 'stop', 'pause', 'play', 'read', 'next', 'nextStep', 'back', 'previous', 'go back', 'exit'],
+         action: (i) => {
+           if (i >= 0 && i < 6){
+            this.toggleMochi()
+          } else if (i >= 6 && i < 8){
             this.stepForward();
-            }
-        else if (i >= 8 && i < 11) {
+          } else if (i >= 8 && i < 11) {
             this.stepBackward();
+          } else if (i === 11) {
+            let recipe = this.props.recipe;
+            let userId = this.props.userId;
+            let link = recipe.id === 1 ? "/" : `/recipe/${recipe.id}/user/${userId}`
+            this.exit(null, link);
+          }
         }
-      }
       },
       {
       smart: true,
-      indexes: ['mochi *'],
+      indexes: ['help me *', 'mochi *', 'what is *'],
        action: (i, wildcard) => this.sendUserInput(wildcard)
      }]);
 
@@ -73,7 +77,7 @@ class CookRecipe extends React.Component {
         else if (event.key === 'Escape'){
           let recipe = this.props.recipe;
           let userId = this.props.userId;
-          let link = recipe.id == 1 ? "/" : `/recipe/${recipe.id}/user/${userId}`
+          let link = recipe.id === 1 ? "/" : `/recipe/${recipe.id}/user/${userId}`
          this.exit(null, link);
        }
         else return;
@@ -85,9 +89,9 @@ class CookRecipe extends React.Component {
     }
   }
 
-  // componentWillUnmount(){
-  //   Mochi.fatality();
-  // }
+  componentWillUnmount(){
+    Mochi.fatality();
+  }
 
   componentDidUpdate() {
     console.log('updated store state: ', this.state)
@@ -99,7 +103,7 @@ class CookRecipe extends React.Component {
       this.props.changeStepTo(this.props.step, this.props.recipe.directions)
       Mochi.say(this.props.stepToSay)
     }
-    if (this.props.stepToSay !== '' && !this.state.stopped && this.props.step !== 0 && !this.state.stepSaid){
+    if (this.props.stepToSay !== '' && this.props.mochiSays === '' && !this.state.stopped && this.props.step !== 0 && !this.state.stepSaid){
       Mochi.say(this.props.stepToSay)
     }
   }
