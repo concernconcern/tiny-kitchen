@@ -1,16 +1,12 @@
 # Tiny Kitchen
 
-Mochi the mouse is your personal cooking assistant
+Tiny Kitchen is a recipe organizer and intelligent kitchen assistant. Our app guides you through the cooking process by providing an AI cooking assistant named Mochi.  Mochi can read recipe steps, sets timers, and performs unit conversions based on voice commands. Users can add recipes to their own personal recipe boxes, add notes to recipes, and manage a grocery list. With our chrome extension users can add recipes from their favorite cooking sites to their recipe boxes.
+
+Capstone Project at Grace Hopper Academy by Sarah Charles, Kait Moreno, Jessica Blake, and Danni Liu.
 
 ## Chrome Extension
-To try our chrome extension:
-  - Download the "chrome" folder
-  - Visit chrome://extensions in your browser (or open up the Chrome menu by clicking the icon to the far right of the Omnibox:  The menu's icon is three horizontal bars. and select Extensions under the Tools menu to get to the same place).
-  - Ensure that the Developer mode checkbox in the top right-hand corner is checked.
-  - Click Load unpacked extension… to pop up a file-selection dialog.
-  - Find the "chrome" folder you downloaded and select it
-  - Navigate to a recipe website and hit the pizza to try it out 
-  - WARNING: Right now if the recipe can't be scraped, it will just be an empty form 
+To get our chrome extension:
+  -
 ## Controls
   - To control Mochi's reading, you can say: 'start cooking', 'start', 'stop', or 'pause'
   - You can ask him unit conversion questions: e.g. 'what is one tablespoon to teaspoons', or 'convert one tablespoon to teaspoons'
