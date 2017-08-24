@@ -11,12 +11,12 @@ const RESET_RECIPE = 'RESET_RECIPE'
  * INITIAL STATE
  */
 const recipe = {
-  title: 'New Recipe',
+  title: '',
   source_url: '',
   picture_url: '',
   selected_pic: '',
-  ingredients: ['New Ingredient'],
-  directions: ['New Direction'],
+  ingredients: [],
+  directions: [],
   error: false,
   rating: 0.0
 }
