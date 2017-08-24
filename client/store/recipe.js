@@ -53,7 +53,6 @@ export const chromeRecipe = (url) =>
 
 export const submitRecipe = (recipe, userId) =>
   (dispatch, getState) => {
-  console.log('submit recipe');
     axios.post(`/api/recipes`, recipe)
       .then(res => {
         let userId = getState().user.id;
