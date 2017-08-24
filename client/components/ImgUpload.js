@@ -167,8 +167,10 @@ class ImgUpload extends React.Component {
 
     return (
       <div style={{ display: "inline", margin: "0 3px" }}>
-        <AccentButton small onClick={this.handleOpen}>Upload Image</AccentButton>
-        <Dialog
+        <AccentButton small onClick={this.handleOpen} style={{
+          margin: "10px"
+        }}>Upload Image</AccentButton>
+        < Dialog
           contentStyle={{ width: "30%", display: "flex" }}
           title='Image Upload'
           actions={actions}
@@ -193,7 +195,7 @@ class ImgUpload extends React.Component {
           </ImageUploadCard>
 
         </Dialog>
-      </div>
+      </div >
     )
   }
 }

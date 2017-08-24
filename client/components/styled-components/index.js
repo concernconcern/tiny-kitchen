@@ -32,31 +32,14 @@ export const RecipeText = styled.div`
   overflow: auto;
 `
 
-export const NavLink = styled.a`
-color: white;
-font-family: Roboto, 'sans-serif';
-text-transform: uppercase;
-transition: border-bottom 1s linear;
-border-bottom: 1px solid transparent;
-font-size: 14px;
-padding: 10px;
-cursor: pointer;
-font-weight:bold;
-&:hover{
-  text-decoration: none;
-  color: white;
-  border-bottom: 1px solid white;
-}
-&:focus{
-    text-decoration: none;
-    color: white;
-}
-`
 
-export const NavLinkR = styled(Link) `
+
+export const NavLink = styled(Link) `
   color: white;
   font-family: Roboto, 'sans-serif';
   text-transform: uppercase;
+  transition: border-bottom 1s linear;
+  border-bottom: 1px solid transparent;
   font-size: 14px;
   padding: 10px;
   cursor: pointer;
@@ -64,11 +47,24 @@ export const NavLinkR = styled(Link) `
   &:hover{
     text-decoration: none;
     color: white;
+    border-bottom: 1px solid white;
   }
   &:focus{
       text-decoration: none;
       color: white;
   }
+`
+export const TextButton = styled.button`
+  color: #db3434;
+  font-family: Roboto, 'sans-serif';
+  text-transform: uppercase;
+  background-color: transparent;
+  font-size: 14px;
+  padding: 10px;
+  cursor: pointer;
+  float: right;
+  border:none;
+  font-weight:bold;
 `
 
 export const Title = styled.h1`
@@ -160,7 +156,7 @@ cursor:pointer;
 export const Input = styled.input`
   font-family: ${props => props.title ? 'Playfair Display, serif' : 'Roboto, sans-serif'};
   font-size: ${props => props.title ? '50px' : '14px'};
-  width: ${props => props.title ? '775px' : '300px'};
+  width: ${props => props.title ? '825px' : '300px'};
   padding: 5px;
   display: inline;
   height: auto;
@@ -177,6 +173,7 @@ export const TextArea = styled.textarea`
   width: 400px;
   height: 100px;
   padding: 5px;
+  margin: 5px;
   border: 1px solid #db7d7d;
 `
 export const Form = styled.form`
@@ -388,6 +385,6 @@ export const ImageUploadCard = styled.div`
   flex-direction: column;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-inpdetems: center;
   padding: 10px;
 `
