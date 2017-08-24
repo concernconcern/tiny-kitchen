@@ -385,6 +385,6 @@ export const ImageUploadCard = styled.div`
   flex-direction: column;
   display: flex;
   justify-content: center;
-  align-inpdetems: center;
+  align-items: center;
   padding: 10px;
 `
