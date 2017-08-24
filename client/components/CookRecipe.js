@@ -5,7 +5,7 @@ import { Router, withRouter, Link } from 'react-router-dom';
 import { fetchOutput } from '../store';
 import { Wrapper, IngredientsView, AccentButton, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
 import * as action from '../store';
-import Mochi, { helpMenu } from '../mochi';
+import Mochi, {initializeMochi} from '../mochi';
 import { Textfit } from 'react-textfit';
 import ReactTestUtils from 'react-dom/test-utils';
 import InfoModal from './InfoModal';
@@ -41,7 +41,8 @@ class CookRecipe extends React.Component {
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(true);
 
-    Mochi.addCommands([{
+    Mochi.addCommands([
+      {
       indexes: ['start cooking', 'start', 'stop', 'pause', 'play', 'read', 'next', 'nextStep', 'back', 'previous', 'go back', 'exit'],
        action: (i) => {
          if (i >= 0 && i < 6){
@@ -53,11 +54,13 @@ class CookRecipe extends React.Component {
             this.stepBackward();
         }
       }
-      }, {
+      },
+      {
       smart: true,
       indexes: ['mochi *'],
        action: (i, wildcard) => this.sendUserInput(wildcard)
      }]);
+
     window.addEventListener("keydown", event => {
       if (event.defaultPrevented) {
         return; // Do nothing if the event was already processed
@@ -80,9 +83,11 @@ class CookRecipe extends React.Component {
       console.log('on first step and recipe')
       this.props.changeStepTo(this.props.step, this.props.recipe.directions)
     }
-
-
   }
+
+  // componentWillUnmount(){
+  //   Mochi.fatality();
+  // }
 
   componentDidUpdate() {
     console.log('updated store state: ', this.state)
