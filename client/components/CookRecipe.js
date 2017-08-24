@@ -66,7 +66,7 @@ class CookRecipe extends React.Component {
      },
      {
        smart: true,
-       indexes: ['mochi *', 'what is *'],
+       indexes: ['mochi *'],
        action: (i, wildcard) => this.sendUserInput(wildcard)
      },
      {
