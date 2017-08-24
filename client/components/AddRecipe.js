@@ -139,6 +139,7 @@ class AddRecipe extends React.Component {
                         onClick={this.deleteField.bind(this, i, "ingredients")}
                         id={i}> remove_circle_outline</IconButton> <Input type="text" key={i} id={i} name="ingredients" value={ingredient} style={{ height: "auto" }} onChange={this.handleChange} /></div>)
                   })}
+
                 <TextButton onClick={this.addField} name="ingredients">+ Ingredient</TextButton>
               </Box>
               <Box>
