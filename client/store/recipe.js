@@ -11,12 +11,12 @@ const RESET_RECIPE = 'RESET_RECIPE'
  * INITIAL STATE
  */
 const recipe = {
-  title: '',
+  title: 'New Recipe',
   source_url: '',
   picture_url: '',
   selected_pic: '',
-  ingredients: [],
-  directions: [],
+  ingredients: ['New Ingredient'],
+  directions: ['New Direction'],
   error: false,
   rating: 0.0
 }
@@ -52,14 +52,15 @@ export const chromeRecipe = (url) =>
       .catch(err => console.log(err))
 
 export const submitRecipe = (recipe, userId) =>
-  (dispatch, getState) =>
+  (dispatch, getState) => {
     axios.post(`/api/recipes`, recipe)
       .then(res => {
         let userId = getState().user.id;
         history.push(`/recipe/${res.data.id}/user/${userId}`)
         dispatch(getRecipeSuccess(res.data))
       })
-      .catch(err => { dispatch(getRecipeFail()) })
+      .catch(err => { console.error(err); dispatch(getRecipeFail()) })
+    }
 
 /**
  * REDUCER

@@ -49,7 +49,7 @@ class AuthForm extends React.Component {
     ];
     return (
       <div>
-        <NavLink href="#" onClick={this.handleOpen}>{displayName}</NavLink>
+        <NavLink to="/" onClick={this.handleOpen}>{displayName}</NavLink>
         <Dialog
           contentStyle={{ width: "30%", display: "flex" }}
           title={displayName}

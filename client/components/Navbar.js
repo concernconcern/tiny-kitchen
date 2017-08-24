@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { Bar, Logo, Links, SearchInput, NavLink, NavLinkR, LogoWrap } from './styled-components'
+import { Bar, Logo, Links, SearchInput, NavLink, LogoWrap } from './styled-components'
 import Search from './SearchBar'
 import { Link } from 'react-router-dom'
 import { Login, Signup } from './auth-form'
@@ -22,8 +22,8 @@ const Navbar = (props) => {
             <Link to='/home'>
               <i className="material-icons" style={{ color: "white", fontSize: "45px" }}>account_circle</i>
             </Link>
-            <NavLinkR to="/add-recipe" >Add Recipe</NavLinkR>
-            <NavLink href="/" onClick={handleClick}>Logout</NavLink>
+            <NavLink to="/add-recipe" >Add Recipe</NavLink>
+            <NavLink to="/" onClick={handleClick}>Logout</NavLink>
           </Links>
           :
           <Links>
