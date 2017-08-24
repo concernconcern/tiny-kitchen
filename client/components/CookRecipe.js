@@ -185,6 +185,7 @@ class CookRecipe extends React.Component {
   exit(e, link) {
     Mochi.shutUp();
     if (link) history.push(link)
+
   }
 
 

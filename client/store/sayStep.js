@@ -10,7 +10,10 @@ const stepToSay = ''
 /**
  * ACTION CREATORS
  */
-export const sayStep = (step, directions) => ({type: SAY_STEP, step: directions[step]})
+export const sayStep = (step, directions) =>{
+  if (directions[step]) return ({type: SAY_STEP, step: directions[step]})
+  else return ({type: SAY_STEP, step: null})
+}
 
 /**
  * REDUCER
