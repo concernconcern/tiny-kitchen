@@ -25,7 +25,23 @@ const Navbar = (props) => {
             </Link>
             <NavLinkR to="/add-recipe" >Add Recipe</NavLinkR>
             <NavLink href="/" onClick={handleClick}>Logout</NavLink>
-          </Links>
+            <a href="https://chrome.google.com/webstore/detail/tiny-kitchen/pgpcblkokcddbnlifngkfpjanehlpaoi/reviews?hl=en">
+            <IconButton
+              iconStyle={{ fontSize: "20px", padding: "0", color: "white" }}
+              iconClassName="fa fa-chrome"
+              tooltip="Chrome extension"
+              tooltipPosition="bottom-right">
+            </IconButton>
+            </a>
+            <a href="https://github.com/concernconcern/tiny-kitchen">
+              <IconButton
+                iconStyle={{ fontSize: "24px", padding: "0", color: "white" }}
+                iconClassName="fa fa-github"
+                tooltip="Github"
+                tooltipPosition="bottom-right">
+              </IconButton>
+            </a>
+            </Links>
           :
           <Links>
             <Search />
