@@ -7,10 +7,14 @@ const passport = require('passport')
 const SequelizeStore = require('connect-session-sequelize')(session.Store)
 const db = require('./db')
 const sessionStore = new SequelizeStore({ db })
+const aws = require('aws-sdk');
+const Chance = require('chance');
+let chance = new Chance;
+
 const PORT = process.env.PORT || 8080
 const app = express()
 module.exports = app
-const aws = require('aws-sdk');
+
 
 /**
  * In your development environment, you can keep all of your
@@ -59,12 +63,13 @@ const createApp = () => {
   aws.config.region = 'us-east-2';
 
   app.get('/sign-s3', (req, res) => {
+    let random = chance.hash({length: 15});
     const s3 = new aws.S3();
     const fileName = req.query['file-name'];
     const fileType = req.query['file-type'];
     const s3Params = {
       Bucket: 'tiny-kitchen',
-      Key: fileName,
+      Key: random,
       Expires: 60,
       ContentType: fileType,
       ACL: 'public-read'
@@ -77,7 +82,7 @@ const createApp = () => {
       }
       const returnData = {
         signedRequest: data,
-        url: `https://tiny-kitchen.s3.amazonaws.com/${fileName}`
+        url: `https://tiny-kitchen.s3.amazonaws.com/${random}`
       };
       res.write(JSON.stringify(returnData));
       res.end();
