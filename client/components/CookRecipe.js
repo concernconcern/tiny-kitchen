@@ -5,7 +5,7 @@ import { Router, withRouter, Link } from 'react-router-dom';
 import { fetchOutput } from '../store';
 import { Wrapper, IngredientsView, AccentButton, UpNext, ExitLink, Directions, SecondaryWrap, Controls, Sidebar, CurrentStep, ControlPanel, Title, List } from './styled-components';
 import * as action from '../store';
-import Mochi, { helpMenu } from '../mochi';
+import Mochi, {initializeMochi} from '../mochi';
 import { Textfit } from 'react-textfit';
 import ReactTestUtils from 'react-dom/test-utils';
 import InfoModal from './InfoModal';
@@ -25,7 +25,7 @@ class CookRecipe extends React.Component {
       stopped: true,
       forwardDisable: forward,
       backDisable: back,
-      stepSaid:false,
+      stepSaid: false,
       onFirstStep: true
     }
 
@@ -41,23 +41,46 @@ class CookRecipe extends React.Component {
     this.props.getRecipe(this.props.match.params.recipeid);
     this.props.isCooking(true);
 
-    Mochi.addCommands([{
-      indexes: ['start cooking', 'start', 'stop', 'pause', 'play', 'read', 'next', 'nextStep', 'back', 'previous', 'go back', 'exit'],
-       action: (i) => {
-         if (i >= 0 && i < 6){
-          this.toggleMochi()
-        } else if (i >= 6 && i < 8){
+    initializeMochi();
+    Mochi.addCommands([
+      {
+        indexes: ['repeat', 'start', 'stop', 'pause', 'play', 'read', 'next', 'nextStep', 'back', 'previous', 'go back', 'exit'],
+         action: (i) => {
+           if (i >= 0 && i < 6){
+            this.toggleMochi()
+          } else if (i >= 6 && i < 8){
             this.stepForward();
-            }
-        else if (i >= 8 && i < 11) {
+          } else if (i >= 8 && i < 11) {
             this.stepBackward();
+          } else if (i === 11) {
+            let recipe = this.props.recipe;
+            let userId = this.props.userId;
+            let link = recipe.id === 1 ? "/" : `/recipe/${recipe.id}/user/${userId}`
+            this.exit(null, link);
+          }
         }
-      }
-      }, {
+      },
+      {
       smart: true,
-      indexes: ['mochi *'],
+      indexes: ['help me *'],
        action: (i, wildcard) => this.sendUserInput(wildcard)
-     }]);
+     },
+     {
+       smart: true,
+       indexes: ['mochi *'],
+       action: (i, wildcard) => this.sendUserInput(wildcard)
+     },
+     {
+       smart: true,
+       indexes: ['what is *'],
+       action: (i, wildcard) => this.sendUserInput(wildcard)
+     },
+     {
+       indexes: ['don\'t listen to me'],
+       action: (i) => Mochi.dontObey()
+     }
+    ]);
+
     window.addEventListener("keydown", event => {
       if (event.defaultPrevented) {
         return; // Do nothing if the event was already processed
@@ -67,47 +90,54 @@ class CookRecipe extends React.Component {
           this.stepBackward()
         else if (event.key === 'ArrowUp' || event.key === 'ArrowRight')
           this.stepForward()
-        else if (event.key === 'Escape'){
+        else if (event.key === 'Escape') {
           let recipe = this.props.recipe;
           let userId = this.props.userId;
-          let link = recipe.id == 1 ? "/" : `/recipe/${recipe.id}/user/${userId}`
+
+          let link = recipe.id === 1 ? "/" : `/recipe/${recipe.id}/user/${userId}`
          this.exit(null, link);
        }
+
         else return;
       }
     });
-    if (this.state.onFirstStep && this.props.recipe){
+    if (this.state.onFirstStep && this.props.recipe) {
       console.log('on first step and recipe')
       this.props.changeStepTo(this.props.step, this.props.recipe.directions)
     }
+  }
 
-
+  componentWillUnmount(){
+    this.props.clearStep();
+    Mochi.fatality();
   }
 
   componentDidUpdate() {
-    console.log('updated store state: ', this.state)
+    // console.log('updated store state: ', this.state)
     if (this.props.mochiSays !== '') {
       Mochi.say(this.props.mochiSays)
     }
-    if (this.state.onFirstStep && this.props.recipe && !this.state.stopped){
-      console.log('on first step and recipe')
+    if (this.state.onFirstStep && this.props.recipe && !this.state.stopped) {
+      // console.log('on first step and recipe')
       this.props.changeStepTo(this.props.step, this.props.recipe.directions)
       Mochi.say(this.props.stepToSay)
     }
-    if (this.props.stepToSay !== '' && !this.state.stopped && this.props.step !== 0 && !this.state.stepSaid){
+
+    if (this.props.stepToSay !== '' && this.props.mochiSays === '' && !this.state.stopped && this.props.step !== 0 && !this.state.stepSaid){
       Mochi.say(this.props.stepToSay)
     }
   }
 
-  sendUserInput (userInput) {
+  sendUserInput(userInput) {
     return this.props.submitUserInput(userInput)
   }
 
-  toggleMochi () {
+  toggleMochi() {
     if (!this.state.stopped) {
+      this.setState({ stopped: true, stepSaid: false})
       Mochi.shutUp()
       //this.changeStepTo(this.prop.step, this.props.recipe.directions)
-      this.setState({ stopped: true, stepSaid: false})
+
     }
     else {
       if (this.props.stepToSay !== '') Mochi.say(this.props.stepToSay)
@@ -116,9 +146,8 @@ class CookRecipe extends React.Component {
   }
 
 
-  stepForward () {
-    this.setState({stepSaid: true, onFirstStep: false})
-
+  stepForward() {
+    this.setState({ stepSaid: true, onFirstStep: false })
     let newStep = this.props.step + 1;
     if (this.props.recipe && newStep < this.props.recipe.directions.length) {
       Mochi.shutUp();
@@ -129,14 +158,14 @@ class CookRecipe extends React.Component {
         forwardDisable,
         backDisable
       });
-      if (this.state.stepSaid){
-        this.setState({stepSaid: false, stopped: false})
+      if (this.state.stepSaid) {
+        this.setState({ stepSaid: false, stopped: false })
       }
     }
   }
 
-  stepBackward (){
-    this.setState({stepSaid: true, onFirstStep: false})
+  stepBackward() {
+    this.setState({ stepSaid: true, onFirstStep: false })
     let newStep = this.props.step - 1;
     if (newStep >= 0) {
       Mochi.shutUp();
@@ -147,22 +176,25 @@ class CookRecipe extends React.Component {
         forwardDisable,
         backDisable
       });
-      if (this.state.stepSaid){
+      if (this.state.stepSaid) {
         //Mochi.say(this.props.stepToSay)
-        this.setState({stepSaid: false, stopped: false})
+        this.setState({ stepSaid: false, stopped: false })
       }
     }
   }
 
-  exit (e, link) {
+  exit(e, link) {
     Mochi.shutUp();
     if (link) history.push(link)
+
   }
 
 
   render() {
     let { forwardDisable, backDisable } = this.state
     let { recipe, userId } = this.props;
+    let link = recipe.id == 1 ? "/" : userId ? `/recipe/${recipe.id}/user/${userId}` : `/recipe/${recipe.id}`
+
     return (
 
       <Wrapper column height>
@@ -175,7 +207,7 @@ class CookRecipe extends React.Component {
           </CurrentStep>
           <Sidebar>
             <InfoModal />
-            <ExitLink to={recipe.id == 1 ? "/" : `/recipe/${recipe.id}/user/${userId}`} onClick={this.exit}><i className="material-icons" style={{ fontSize: "45px" }}>clear</i></ExitLink>
+            <ExitLink to={link} onClick={this.exit}><i className="material-icons" style={{ fontSize: "45px" }}>clear</i></ExitLink>
             <Title secondary>Ingredients</Title>
 
             <List>
@@ -262,6 +294,9 @@ const mapDispatch = (dispatch) => {
       dispatch(action.getStep(newStep))
       dispatch(action.sayStep(newStep, directions))
     },
+    clearStep() {
+      dispatch(action.getStep(0))
+    }
 
   };
 };
