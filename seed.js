@@ -23,6 +23,7 @@ const walkthrough = {
 }
 
 const recipeLinks = [
+  {type: 'link', web_url: 'https://cooking.nytimes.com/recipes/1018889-thai-style-spare-ribs?mcubz=0', picture_url: 'https://static01.nyt.com/images/2017/08/16/dining/16kitchenrex/16Kitchen-recs-articleLarge.jpg'},  
   {type: 'link', web_url: 'https://cooking.nytimes.com/recipes/1016833-spaghetti-and-drop-meatballs-with-tomato-sauce?action=click&module=Collection%20Page%20Recipe%20Card&region=Our%20Most%20Popular%20Weeknight%20Recipes%20of%202015&pgType=collection&rank=1', picture_url: 'https://static01.nyt.com/images/2015/09/25/dining/drop-meatballs/drop-meatballs-articleLarge.jpg'},
   {type: 'link', web_url: 'https://cooking.nytimes.com/recipes/1016841-rigatoni-and-cauliflower-al-forno?action=click&module=Collection%20Page%20Recipe%20Card&region=Our%20Most%20Popular%20Weeknight%20Recipes%20of%202015&pgType=collection&rank=2', picture_url: 'https://static01.nyt.com/images/2014/10/01/dining/01KITCHEN3/01KITCHEN3-articleLarge.jpg'},
   {type: 'link', web_url: 'https://cooking.nytimes.com/recipes/9558-takeout-style-sesame-noodles?action=click&module=Collection%20Page%20Recipe%20Card&region=Our%20Most%20Popular%20Weeknight%20Recipes%20of%202015&pgType=collection&rank=3', picture_url: 'https://static01.nyt.com/images/2014/03/17/dining/takeoutnoodles/takeoutnoodles-articleLarge.jpg'},
@@ -48,8 +49,7 @@ const recipeLinks = [
   {type: 'link', web_url: 'https://cooking.nytimes.com/recipes/1857-thomas-kellers-butternut-squash-soup-with-brown-butter?action=click&module=Collection%20Page%20Recipe%20Card&region=Not%20Really%20Seasonal%2C%20But%20We%20Can%27t%20Stop%20Eating%20Them%20Anyway&pgType=collection&rank=11', picture_url: 'https://static01.nyt.com/images/2014/05/23/dining/SquashSoup/SquashSoup-articleLarge.jpg'},
   {type: 'link', web_url: 'https://cooking.nytimes.com/recipes/7588-roasted-cauliflower?action=click&module=Collection%20Page%20Recipe%20Card&region=Not%20Really%20Seasonal%2C%20But%20We%20Can%27t%20Stop%20Eating%20Them%20Anyway&pgType=collection&rank=12', picture_url: 'https://static01.nyt.com/images/2015/10/15/dining/15COOKING-CAULIFLOWER1/15COOKING-CAULIFLOWER-articleLarge.jpg'},
   {type: 'link', web_url: 'https://cooking.nytimes.com/recipes/1017703-roasted-vegetables?action=click&module=Collection%20Page%20Recipe%20Card&region=Not%20Really%20Seasonal%2C%20But%20We%20Can%27t%20Stop%20Eating%20Them%20Anyway&pgType=collection&rank=14', picture_url: 'https://static01.nyt.com/images/2015/09/23/dining/23ROASTEDVEGETABLES/23ROASTEDVEGETABLES-articleLarge.jpg'},
-  {type: 'link', web_url: 'https://cooking.nytimes.com/recipes/1018032-caramelized-citrus?action=click&module=Collection%20Page%20Recipe%20Card&region=Not%20Really%20Seasonal%2C%20But%20We%20Can%27t%20Stop%20Eating%20Them%20Anyway&pgType=collection&rank=15', picture_url: 'https://static01.nyt.com/images/2016/03/20/magazine/20eat1/20mag-20eat-t_CA1-articleLarge.jpg'},
-  {type: 'link', web_url: 'https://cooking.nytimes.com/recipes/1018889-thai-style-spare-ribs?mcubz=0', picture_url: 'https://static01.nyt.com/images/2017/08/16/dining/16kitchenrex/16Kitchen-recs-articleLarge.jpg'}
+  {type: 'link', web_url: 'https://cooking.nytimes.com/recipes/1018032-caramelized-citrus?action=click&module=Collection%20Page%20Recipe%20Card&region=Not%20Really%20Seasonal%2C%20But%20We%20Can%27t%20Stop%20Eating%20Them%20Anyway&pgType=collection&rank=15', picture_url: 'https://static01.nyt.com/images/2016/03/20/magazine/20eat1/20mag-20eat-t_CA1-articleLarge.jpg'}
 ]
 
 function getRecipes(){
