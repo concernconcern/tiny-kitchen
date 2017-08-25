@@ -80,7 +80,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
 
       // trim html string to only the specified 'section' (e.g. Ingredients, Preparation, etc.)
       function clipSection(html, section) {
-        if (!findList(html, section)) return;
+        if (findList(html, section) === undefined) return;
         let clip = html.slice(findList(html, section));
 
         // find whether ol or ul is used in the DOM
@@ -126,8 +126,10 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
 
       // run clipSection for the first instruction keyword that is followed by ordered or unordered list
       const directionsKeywords = ['Preparation', 'Instructions', 'Method', 'Directions', 'How to Make It'];
+      let directionsKeyword = directionsKeywords.find(el => findList(sanitizedHtml, el) !== undefined);
+      let directions = clipSection(sanitizedHtml, directionsKeyword);
 
-      let directions = clipSection(sanitizedHtml, directionsKeywords.find(el => !!findList(sanitizedHtml, el)));
+      // check whether directions list was found or not. If not, use alternative method for unstructured lists.
       if (directions) {
         directions = html2json(directions);
         directions = createArray(directions);
@@ -136,6 +138,8 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
           allowedTags: ['div', 'p', 'br'],
           allowedAttributes: []
         }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&').replace(/<div><\/div>/g, '');
+        let indregrientsIdx = sanitizedHtmlAlt.indexOf(ingredients[ingredients.length-1]);
+        if (indregrientsIdx !== -1) sanitizedHtmlAlt = sanitizedHtmlAlt.slice(indregrientsIdx);
       
         let directionsKeyword = directionsKeywords.find(el => !!findDirectionsAlt(sanitizedHtmlAlt, el))
         directions = findDirectionsAlt(sanitizedHtmlAlt, directionsKeyword);
@@ -192,7 +196,12 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
           el !== 'br /' &&
           el !== 'br' &&
           el !== '' &&
-          el !== ' ';
+          el !== ' '
+        }
+
+        function filterSteps(el){
+          let includesStep = el.slice(0, 5).includes('Step') || el.slice(0, 5).includes('step')
+          return !(includesStep && el.length < 9);
         }
 
         function mapList(el){
@@ -202,7 +211,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
           return el;
         }
 
-        list.text = list.text.split(/<(.*?)>/).filter(filterList).map(mapList);
+        list.text = list.text.split(/<(.*?)>/).filter(filterList).filter(filterSteps).map(mapList);
 
         return list.text;
       }
@@ -218,6 +227,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
       return obj;
     })
     .catch(err => {
+      console.log(err);
       return {};
     })
 }
