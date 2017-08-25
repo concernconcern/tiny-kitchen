@@ -58,7 +58,7 @@ class ImgUpload extends React.Component {
         let picture = { picture_url: this.state.imgUrl }
         this.props.updateUser(picture);
       } else if (this.props.type === 'addRecipe') {
-        let recipe = {};
+        let recipe = Object.assign({}, this.props.recipe);
         recipe.picture_url = [this.state.imgUrl];
         recipe.selected_pic = this.state.imgUrl;
         this.props.getRecipeSuccess(recipe);
@@ -167,7 +167,9 @@ class ImgUpload extends React.Component {
 
     return (
       <div style={{ display: "inline", margin: "0 3px" }}>
-        <AccentButton small onClick={this.handleOpen}>Upload Image</AccentButton>
+        <AccentButton small type='button' onClick={this.handleOpen} style={{
+          margin: "10px"
+        }}>Upload Image</AccentButton>
         <Dialog
           contentStyle={{ width: "30%", display: "flex" }}
           title='Image Upload'
@@ -193,7 +195,7 @@ class ImgUpload extends React.Component {
           </ImageUploadCard>
 
         </Dialog>
-      </div>
+      </div >
     )
   }
 }

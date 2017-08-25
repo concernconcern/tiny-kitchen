@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
-import { Wrapper, SecondaryWrap, Button, Modify, Message, RecipeImg, RecipeText, Form, Title, List, Input, Box, TextArea } from './styled-components'
+import { Wrapper, SecondaryWrap, TextButton, Button, Message, RecipeImg, RecipeText, Form, Title, List, Input, Box, TextArea } from './styled-components'
 import ErrorModal from './ErrorModal';
 import * as action from '../store'
 import history from '../history'
 import { GridList, GridTile } from 'material-ui/GridList'
 import { Login } from './auth-form'
 import ImgUpload from './ImgUpload';
+import IconButton from 'material-ui/IconButton';
 
 class AddRecipe extends React.Component {
   constructor(props) {
@@ -19,7 +20,6 @@ class AddRecipe extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.addField = this.addField.bind(this);
-    this.deleteField = this.deleteField.bind(this);
     this.selectPic = this.selectPic.bind(this);
     this.handleClose = this.handleChange.bind(this);
   }
@@ -27,7 +27,7 @@ class AddRecipe extends React.Component {
     let recipeUrl = this.props.location.search.slice(5);
     if (recipeUrl !== '') this.props.chromeRecipe(recipeUrl);
     else {
-      if(this.state.newRecipe === false) this.setState({newRecipe: true});
+      if (this.state.newRecipe === false) this.setState({ newRecipe: true });
     }
 
   }
@@ -56,10 +56,9 @@ class AddRecipe extends React.Component {
     recipe[e.target.name] = [...recipe[e.target.name], `New ${e.target.name.slice(0, -1)}`];
     this.props.getRecipeSuccess(recipe)
   }
-  deleteField(e) {
-    e.preventDefault();
+  deleteField(i, name) {
     let recipe = Object.assign({}, this.props.recipe);
-    recipe[e.target.name].splice(+e.target.id, 1);
+    recipe[name].splice(+i, 1);
     this.props.getRecipeSuccess(recipe)
   }
   selectPic(e) {
@@ -74,15 +73,18 @@ class AddRecipe extends React.Component {
   render() {
     let recipe = this.props.recipe;
     let recipeUrl = this.props.location.search.slice(5);
+    const iconStyle = { fontSize: "20px", color: "#db3434" };
     return (
       this.props.user.id ?
-      <div>
-        {recipe.parseError ? <ErrorModal /> : null}
+        <div>
+          {recipe.parseError ? <ErrorModal /> : null}
           <Form onSubmit={this.handleSubmit}>
             <Input title type="text" name="title" onChange={this.handleChange} value={recipe && recipe.title} />
             {(recipe.parseError || this.state.newRecipe) ?
-               <div><Title secondary>Upload a Picture:</Title> <ImgUpload type="addRecipe" />
-               <div style={styles.root}>
+              <div>
+                <Title secondary>Upload a Picture:</Title>
+                <ImgUpload type="addRecipe" />
+                <div style={styles.root}>
                   {recipe.picture_url &&
                     <GridList style={styles.gridList} cols={2.2}>
                       {recipe.picture_url.map((pic, i) => {
@@ -102,7 +104,7 @@ class AddRecipe extends React.Component {
                   }
                 </div>
 
-               </div> :
+              </div> :
               <div>
                 <Title secondary>Choose the Correct Picture:</Title>
                 <div style={styles.root}>
@@ -129,16 +131,33 @@ class AddRecipe extends React.Component {
             <SecondaryWrap>
               <Box>
                 <Title secondary>Ingredients</Title> {
-                  recipe.ingredients && recipe.ingredients.map((ingredient, i) =>
-                  { return (<div key={i}><Modify x href="#" onClick={this.deleteField} name="ingredients" id={i}>x</Modify> <Input type="text" key={i} id={i} name="ingredients" value={ingredient} style={{ height: "auto" }} onChange={this.handleChange} /></div>) })}
-                <Modify onClick={this.addField} name="ingredients">+</Modify>
+                  recipe.ingredients && recipe.ingredients.map((ingredient, i) => {
+                    return (<div key={i} style={{ display: "flex" }}>
+                      <IconButton
+                        iconStyle={iconStyle}
+                        iconClassName="material-icons"
+                        onClick={this.deleteField.bind(this, i, "ingredients")}
+                        id={i}> remove_circle_outline</IconButton> <Input type="text" key={i} id={i} name="ingredients" value={ingredient} style={{ height: "auto" }} onChange={this.handleChange} /></div>)
+                  })}
+
+                <TextButton onClick={this.addField} name="ingredients">+ Ingredient</TextButton>
               </Box>
               <Box>
                 <Title secondary>Directions</Title> {
-                  recipe.directions && recipe.directions.map((direction, i) =>
-                  { return (<div key={i}><Modify x href="#" onClick={this.deleteField} name="directions" id={i}>x</Modify>  <TextArea type="text" key={i} id={i} name="directions" value={direction} onChange={this.handleChange} /></div>) })
+                  recipe.directions && recipe.directions.map((direction, i) => {
+                    return (<div key={i} style={{ display: "flex" }}>
+                      <IconButton
+                        iconStyle={iconStyle}
+                        iconClassName="material-icons"
+                        onClick={this.deleteField.bind(this, i, "directions")}
+                        id={i}>
+                        remove_circle_outline
+                </IconButton>
+                      <TextArea type="text" key={i} id={i} name="directions" value={direction} onChange={this.handleChange} />
+                    </div>)
+                  })
                 }
-                <Modify onClick={this.addField} name="directions">+</Modify>
+                <TextButton onClick={this.addField} name="directions">+ Direction</TextButton>
               </Box>
             </SecondaryWrap>
             <SecondaryWrap>
@@ -159,13 +178,13 @@ const styles = {
     flexWrap: 'wrap',
     alignItems: 'center',
     cellHeight: '250px',
-    width: '790px'
+    width: '820px'
   },
   gridList: {
     display: 'flex',
     flexWrap: 'nowrap',
     overflowX: 'auto',
-    cellHeight: '350px'
+    cellHeight: '370px'
   }
 };
 
