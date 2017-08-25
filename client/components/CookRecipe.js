@@ -108,16 +108,17 @@ class CookRecipe extends React.Component {
   }
 
   componentWillUnmount(){
+    this.props.clearStep();
     Mochi.fatality();
   }
 
   componentDidUpdate() {
-    console.log('updated store state: ', this.state)
+    // console.log('updated store state: ', this.state)
     if (this.props.mochiSays !== '') {
       Mochi.say(this.props.mochiSays)
     }
     if (this.state.onFirstStep && this.props.recipe && !this.state.stopped) {
-      console.log('on first step and recipe')
+      // console.log('on first step and recipe')
       this.props.changeStepTo(this.props.step, this.props.recipe.directions)
       Mochi.say(this.props.stepToSay)
     }
@@ -293,6 +294,9 @@ const mapDispatch = (dispatch) => {
       dispatch(action.getStep(newStep))
       dispatch(action.sayStep(newStep, directions))
     },
+    clearStep() {
+      dispatch(action.getStep(0))
+    }
 
   };
 };
