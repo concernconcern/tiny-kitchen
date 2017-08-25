@@ -199,7 +199,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
 
         function filterSteps(el){
           let includesStep = el.slice(0, 5).includes('Step') || el.slice(0, 5).includes('step')
-          return !(includesStep && el.length < 9);
+          return !(includesStep && el.length <= 10);
         }
 
         function mapList(el){
