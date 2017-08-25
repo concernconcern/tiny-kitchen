@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
-import { Wrapper, RecipeImg, ControlPanel, Message, AccentButton, TextArea, RecipeText, Notes, Title, List } from './styled-components'
+import { Wrapper, RecipeImg, ControlPanel, Message, AccentButton, Button, TextArea, RecipeText, Notes, Title, List } from './styled-components'
 import history from '../history'
 import * as action from '../store'
 import Snackbar from 'material-ui/Snackbar';
@@ -74,68 +74,70 @@ class ViewRecipe extends React.Component {
       <Wrapper >
         <RecipeImg src={recipe.picture_url} />
         <RecipeText>
-          <Title>{recipe && recipe.title}</Title>
-          {isLoggedIn ?
-            <ControlPanel style={{ padding: "0px" }}>
-              <Link to={`/recipe/${recipe.id}/cook`} >
+          <Title><a href={recipe.source_url} target="_blank" style={{ color: "black", textDecoration: "none" }}>{recipe && recipe.title}</a></Title>
+          <ControlPanel style={{ padding: "0px" }}>
+            <Link to={`/recipe/${recipe.id}/cook`} >
+              <IconButton
+                touch
+                iconStyle={controlPanel}
+                iconClassName="material-icons"
+                tooltip="Cooking Mode"
+                tooltipPosition="top-right">
+                play_circle_outline
+                </IconButton>
+            </Link>&nbsp;&nbsp;
+              {recipebox && recipebox.hasOwnProperty("notes") ?
+              <div>
                 <IconButton
+                  touch
+                  onClick={this.handleRemoveRecipeBox}
                   iconStyle={controlPanel}
                   iconClassName="material-icons"
-                  tooltip="Cooking Mode"
-                  tooltipPosition="bottom-right">
-                  play_circle_outline
-                </IconButton>
-              </Link>&nbsp;&nbsp;
-
-              {recipebox && recipebox.hasOwnProperty("notes") ?
-                <div style={{ display: "flex" }}>
-                  <a href="#" onClick={this.handleRemoveRecipeBox} >
-                    <IconButton
-                      iconStyle={controlPanel}
-                      iconClassName="material-icons"
-                      tooltip="Remove from Recipe Box"
-                      tooltipPosition="bottom-right">
-                      remove_circle_outline
-              </IconButton>
-                  </a>&nbsp;&nbsp;
-                  <a href="#" onClick={() => this.setState({ showGrocery: !this.state.showGrocery })}>
-                    <IconButton
-                      iconStyle={controlPanel}
-                      iconClassName="material-icons"
-                      tooltip="Toggle Grocery Mode"
-                      tooltipPosition="bottom-right">
-                      add_shopping_cart
-                </IconButton>
-                  </a>
-                </div>
-                :
-                <a href="#" onClick={this.handleCreateRecipeBox}>
+                  tooltip="Remove from Recipe Box"
+                  tooltipPosition="top-right">
+                  remove_circle_outline
+                    </IconButton>
+                &nbsp;&nbsp;
                   <IconButton
-                    iconStyle={controlPanel}
-                    iconClassName="material-icons"
-                    tooltip="Add to Box"
-                    tooltipPosition="bottom-right">
-                    add
+                  touch
+                  iconStyle={controlPanel}
+                  iconClassName="material-icons"
+                  tooltip="Toggle Grocery Mode"
+                  tooltipPosition="top-right"
+                  onClick={() => this.setState({ showGrocery: !this.state.showGrocery })}
+                >
+                  add_shopping_cart
                 </IconButton>
-                </a>
+              </div>
+              :
+              <div>
+                <IconButton
+                  touch
+                  disabled={!isLoggedIn}
+                  iconStyle={controlPanel}
+                  iconClassName="material-icons"
+                  tooltip={!isLoggedIn ? 'Login to add to your recipes!' : 'Add To Recipe Box'}
+                  onClick={this.handleCreateRecipeBox}
+                  tooltipPosition="top-right">
+                  add
+                </IconButton>
+              </div>
+            }
 
-              }
-
-            </ControlPanel> : ''
-          }
+          </ControlPanel>
           {
             recipebox && recipebox.hasOwnProperty("notes") ?
-              <div><div style={{ display: "flex", alignItems: "center" }}> <Title secondary>Notes
-              </Title>
-                {permissions ? <NotesModal
-                  notes={this.props.recipebox.notes}
-                  user={this.props.match.params.userid}
-                  recipe={this.props.match.params.recipeid}
-                  saveNote={this.props.saveNote} /> : ''}
-              </div>
-
+              <div>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Title secondary>Notes</Title>
+                  {permissions ? <NotesModal
+                    notes={this.props.recipebox.notes}
+                    user={this.props.match.params.userid}
+                    recipe={this.props.match.params.recipeid}
+                    saveNote={this.props.saveNote} /> : null}
+                </div>
                 <Notes>{this.props.recipebox.notes}</Notes>
-              </div> : ''
+              </div> : null
           }
           <Title secondary>Ingredients</Title>
           <List>
@@ -150,7 +152,7 @@ class ViewRecipe extends React.Component {
                     tooltipPosition="bottom-right"
                     onClick={this.handleAddGrocery.bind(this, ingredient)}>
                     add
-                </IconButton> : <span> - &nbsp;&nbsp;</span>
+                </IconButton> : <span style={{ padding: "0 15px" }}> -</span>
                 }
                 {ingredient}
               </li>)}

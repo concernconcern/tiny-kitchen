@@ -1,17 +1,17 @@
 # Tiny Kitchen
 
-Mochi the mouse is your personal cooking assistant
+Deployed at: [tiny-kitchen.herokuapp.com](http://tiny-kitchen.herokuapp.com)
+
+Tiny Kitchen is a recipe organizer and intelligent kitchen assistant. Our app guides the user through the cooking process by providing an AI cooking assistant named Mochi. Mochi can read recipe steps, sets timers, and performs unit conversions based on voice commands. Users can add recipes to their own personal recipe boxes, add notes to recipes, and manage a grocery list. With our Chrome extension users can add recipes from their favorite cooking sites.
+
+Capstone Project at [Grace Hopper Academy](http://www.gracehopper.com/) by [Kait Moreno](https://github.com/kaitmore), [Jessica Blake](https://github.com/jcblake14), [Danni Liu](https://github.com/mathildapurr), and [Sarah Charles](https://github.com/sarmchar)
 
 ## Chrome Extension
-To try our chrome extension:
-  - Download the "chrome" folder
-  - Visit chrome://extensions in your browser (or open up the Chrome menu by clicking the icon to the far right of the Omnibox:  The menu's icon is three horizontal bars. and select Extensions under the Tools menu to get to the same place).
-  - Ensure that the Developer mode checkbox in the top right-hand corner is checked.
-  - Click Load unpacked extension… to pop up a file-selection dialog.
-  - Find the "chrome" folder you downloaded and select it
-  - Navigate to a recipe website and hit the pizza to try it out 
-  - WARNING: Right now if the recipe can't be scraped, it will just be an empty form 
+  * Get our Chrome extension [here](https://chrome.google.com/webstore/detail/tiny-kitchen/pgpcblkokcddbnlifngkfpjanehlpaoi) or click the chrome link on our site!
+  * To use: Go to the site of the recipe you want to add and then click the Chrome extension to add. You must be logged in to add a recipe.
+
 ## Controls
-  - To control Mochi's reading, you can say: 'start cooking', 'start', 'stop', or 'pause'
-  - You can ask him unit conversion questions: e.g. 'what is one tablespoon to teaspoons', or 'convert one tablespoon to teaspoons'
-  - You can also set a timer: e.g. 'set a timer for 5 minutes'
+  * While in cooking mode you can converse with Mochi or give him instructions:
+    * To control Mochi's reading, you can say: 'start cooking', 'start', 'stop', or 'pause'
+    * You can ask him unit conversion questions: e.g. 'what is one tablespoon to teaspoons', or 'convert one tablespoon to teaspoons'
+    * You can also set a timer: e.g. 'set a timer for 5 minutes'
