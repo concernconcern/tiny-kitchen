@@ -195,7 +195,14 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
           el !== ' ';
         }
 
-        list.text = list.text.split(/<(.*?)>/).filter(filterList);
+        function mapList(el){
+          if (el.slice(el.length-2) === ' t') el = el.slice(0, el.length-2);
+          if (el[el.length-1] === ' ') el = el.slice(0, el.length-1);
+          if (el[0] === ' ') el = el.slice(1);
+          return el;
+        }
+
+        list.text = list.text.split(/<(.*?)>/).filter(filterList).map(mapList);
 
         return list.text;
       }
