@@ -136,7 +136,9 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
           allowedTags: ['div', 'p', 'br'],
           allowedAttributes: []
         }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&').replace(/<div><\/div>/g, '');
-      
+        let indregrientsIdx = sanitizedHtmlAlt.indexOf(ingredients[ingredients.length-1]);
+        if (indregrientsIdx !== -1) sanitizedHtmlAlt = sanitizedHtmlAlt.slice(indregrientsIdx);
+        
         let directionsKeyword = directionsKeywords.find(el => findDirectionsAlt(sanitizedHtmlAlt, el) !== undefined)
         directions = findDirectionsAlt(sanitizedHtmlAlt, directionsKeyword);
       }
