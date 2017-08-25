@@ -147,7 +147,6 @@ class CookRecipe extends React.Component {
 
   stepForward() {
     this.setState({ stepSaid: true, onFirstStep: false })
-
     let newStep = this.props.step + 1;
     if (this.props.recipe && newStep < this.props.recipe.directions.length) {
       Mochi.shutUp();
