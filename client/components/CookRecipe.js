@@ -129,9 +129,10 @@ class CookRecipe extends React.Component {
 
   toggleMochi () {
     if (!this.state.stopped) {
+      this.setState({ stopped: true, stepSaid: false})
       Mochi.shutUp()
       //this.changeStepTo(this.prop.step, this.props.recipe.directions)
-      this.setState({ stopped: true, stepSaid: false})
+
     }
     else {
       if (this.props.stepToSay !== '') Mochi.say(this.props.stepToSay)
