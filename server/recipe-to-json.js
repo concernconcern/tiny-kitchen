@@ -19,7 +19,13 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
 
       // custom replacements for AllRecipes.com
       sanitizedHtml = sanitizedHtml.replace(/Serving size has been adjusted!(.*?)\(uses your location\)/g, '').replace(/{{model.addEditText}}(.*?)<\/ul>/g, '').replace(/ADVERTISEMENT/g, '').replace(/<li> Add all ingredients to list <\/li>/g, '').replace(/ +/g, ' ');
-      
+
+      // for use if Ingredients/Directions sections cannot be found using lists
+      let sanitizedHtmlAlt = sanitizeHtml(rawHtml, {
+        allowedTags: ['div', 'p', 'br'],
+        allowedAttributes: []
+      }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&').replace(/<div><\/div>/g, '');
+
       function findTitle(html) {
         const idx1 = html.indexOf('<title>');
         const idx2 = html.indexOf('</title>');
@@ -67,15 +73,27 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
         }
       }
 
-      // find whether a list section is immediately followed by the same list (e.g. allrecipes.co.uk)
+      // find whether a list section is immediately followed by the same list (e.g. allrecipes.co.uk), but not separated by a preparation keyword
       function listContinuation(html, closeList){
         for (let i = 0; i < html.length; i++){
           let substring = html.slice(i);
+          if (startDirections(substring)) return false;
           if (substring.startsWith('<')){
             if (substring[1] === closeList[2]) return true;
             else return false;
           }
         }
+      }
+
+      function startDirections(string){
+        if (string.startsWith('Preparation') ||
+          string.startsWith('Instructions') ||
+          string.startsWith('Method') ||
+          string.startsWith('Directions') ||
+          string.startsWith('How to Make It') ||
+          string.startsWith('Nutritional Information')
+        ) return true;
+        return false;
       }
 
       // trim html string to only the specified 'section' (e.g. Ingredients, Preparation, etc.)
@@ -94,14 +112,20 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
         return clip;
       };
 
+      function liReducer(acc, el){
+        // check whether the element is 'more' than just a node (e.g. another list)
+        if (el.child && el.child[0].tag) return acc.concat(createArray(el))
+        else if (el.child) return acc.concat(el.child[0].text);
+        else return acc;
+      }
+
       // convert ingredients and directions sections to array
       function createArray(section) {
+        const hasPretext = section.child[0].node === 'text' && section.child[0].text && section.child[0].text.length > 300;       
+        if (hasPretext) return [];
         const lists = section.child.filter(el => el.tag === 'ul' || el.tag === 'ol');
         const elements = lists.reduce((acc, list) => {
-          return acc.concat(list.child.reduce((acc, el) => {
-            if (el.child) return acc.concat(el.child[0].text);
-            else return acc;
-          }, []))
+          return acc.concat(list.child.reduce(liReducer, []))
         }, [])
         return elements.filter(el => el !== ' ').filter(el => !el.includes('Nutritional Information'));
       }
@@ -119,6 +143,12 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
       if (ingredients) {
         ingredients = html2json(ingredients);
         ingredients = createArray(ingredients);
+        if (!ingredients.length){        
+          ingredients = findDirectionsAlt(sanitizedHtmlAlt, ingredientKeyword)
+        }
+      }
+      else {
+        ingredients = findDirectionsAlt(sanitizedHtmlAlt, ingredientKeyword)
       }
 
       // slice the html string to begin where ingredients list ends before moving on to directions
@@ -131,11 +161,14 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
       if (directions) {
         directions = html2json(directions);
         directions = createArray(directions);
+        if (!directions.length){
+          let indregrientsIdx = sanitizedHtmlAlt.indexOf(ingredients[ingredients.length-1]);
+          if (indregrientsIdx !== -1) sanitizedHtmlAlt = sanitizedHtmlAlt.slice(indregrientsIdx);
+          
+          let directionsKeyword = directionsKeywords.find(el => findDirectionsAlt(sanitizedHtmlAlt, el) !== undefined)
+          directions = findDirectionsAlt(sanitizedHtmlAlt, directionsKeyword);
+        }
       } else {
-        let sanitizedHtmlAlt = sanitizeHtml(rawHtml, {
-          allowedTags: ['div', 'p', 'br'],
-          allowedAttributes: []
-        }).replace(/\n/g, ' ').replace(/\r |\t/g, '').replace(/ +/g, ' ').replace(/&amp;/g, '&').replace(/<div><\/div>/g, '');
         let indregrientsIdx = sanitizedHtmlAlt.indexOf(ingredients[ingredients.length-1]);
         if (indregrientsIdx !== -1) sanitizedHtmlAlt = sanitizedHtmlAlt.slice(indregrientsIdx);
         
@@ -225,6 +258,7 @@ module.exports = function getJsonFromUrl(source_url, picture_url) {
       return obj;
     })
     .catch(err => {
+      console.log(err);
       return {};
     })
 }
